@@ -20,7 +20,7 @@ in
       #"${modulesPath}/profiles/minimal.nix"
       ./hardware-configuration.nix
       <home-manager/nixos>
-      ./home.nix
+#      ./home.nix
     ];
 
   # Bootloader.

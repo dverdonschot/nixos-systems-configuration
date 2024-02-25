@@ -1,7 +1,6 @@
 { config, pkgs, ... }:
 
 {
-  home-manager.users.ewt = { pkgs, ... }: {
     home.stateVersion = "23.11";
     home.username = "ewt";
     home.homeDirectory = "/home/ewt";
@@ -9,6 +8,7 @@
     home.packages = with pkgs; [
       curl
       nnn
+      lynx
     ];
 
     home.sessionVariables.GTK_THEME = "palenight";
@@ -111,5 +111,4 @@
         }
       ];
     };
-  };
 }
