@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs, inputs, ... }:
 
 {
     home.stateVersion = "23.11";
@@ -9,6 +9,7 @@
       curl
       nnn
       lynx
+      cargo
     ];
 
     home.sessionVariables.GTK_THEME = "palenight";
@@ -36,7 +37,7 @@
 #          "sha256-BvVE9qupMjw7JRqFUj1J0a4ys6kc9fOLBPx2bGaapTk="
 #          "Fuchsia-Pop";
     xdg.configFile.oh-my-posh = {
-      source = ./config;
+      source = ../../config;
       recursive = true;
     };
 

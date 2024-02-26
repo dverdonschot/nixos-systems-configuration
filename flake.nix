@@ -23,15 +23,14 @@
             inherit system;
             specialArgs = {inherit inputs; };
             modules = [ 
-              ./configuration.nix
+              ./hosts/workstation/configuration.nix
               {
                 home-manager.useGlobalPkgs = true;
                 home-manager.useUserPackages = true;
-                home-manager.users.ewt = import ./home.nix;
+                home-manager.users.ewt = import hosts/workstation/home.nix;
               }
             ];
           };
-          workstation = import ./hosts/workstation { inherit inputs ; };
         };
     };
 }
