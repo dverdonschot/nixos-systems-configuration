@@ -9,7 +9,6 @@
       curl
       nnn
       lynx
-      cargo
     ];
 
     home.sessionVariables.GTK_THEME = "palenight";
@@ -54,6 +53,10 @@
       vimAlias = true;
       plugins = with pkgs.vimPlugins; [
         dracula-nvim
+        nerdtree
+        LazyVim
+        nnn-vim
+        (nvim-treesitter.withPlugins (p: [p.rust p.python p.nix p.json p.yaml p.toml ]))
       ];
       extraConfig = ''
         set number relativenumber
@@ -65,6 +68,13 @@
         set expandtab
         set softtabstop=4
         set ruler
+        set hlsearch
+        set showmatch
+        set clipboard=unnamedplus
+        set cursorline
+        packadd! nvim-treesitter
+        packadd! nerdtree
+        packadd! LazyVim
       '';
     };
     programs.tmux = {
@@ -95,6 +105,7 @@
         bbenoist.nix
         jnoortheen.nix-ide
         ms-toolsai.jupyter
+        rust-lang.rust-analyzer
         eamodio.gitlens
         redhat.vscode-yaml
         wholroyd.jinja

@@ -26,6 +26,7 @@ in
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
+  boot.kernelPackages = pkgs.linuxPackages_latest;
 
   networking.hostName = "nixos"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
@@ -197,6 +198,12 @@ in
   programs.virt-manager.enable = true;
   services.spice-vdagentd.enable = true;
 
+  # fixing libstdc++.so.6 issue
+  programs.nix-ld.enable = true;
+  programs.nix-ld.libraries = with pkgs; [
+    stdenv.cc.cc.lib
+  ];
+
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
@@ -217,10 +224,14 @@ in
     tmux
     wl-clipboard
     libstdcxx5 ## fooocus
+    libz
     lshw
     nix-software-center
+    nix-index
     stdenv.cc.cc
+    gcc-unwrapped
     vscode-fhs
+    super-productivity
     #images
     pinta
     tiv
@@ -238,14 +249,13 @@ in
     hack-font
     powerline-fonts
     font-awesome
-    # rust
-    #rustc
-    #rustup
-    #rustfmt
-    #rustycli
+    # compiling
+    gnumake
+    pkgsCross.avr.buildPackages.gcc
     # Python
     jupyter-all
     python311
+    virtualenv
     poetry
     # node / typescript
     nodejs
@@ -261,6 +271,8 @@ in
     spice-protocol
     win-virtio
     win-spice
+    quickemu
+    quickgui
     gnome.adwaita-icon-theme
     # services
     tailscale
@@ -285,7 +297,7 @@ in
   programs.bash = {
     interactiveShellInit = ''
       # initializing Tmux
-      # [ "$EUID" -ne 0 ] && [ -z "$TMUX"  ] && { tmux attach || exec tmux new-session && exit;}
+      [ "$EUID" -ne 0 ] && [ -z "$TMUX"  ] && { tmux attach || exec tmux new-session && exit;}
       # Loading ohh my posh config
       eval "$(oh-my-posh --init --shell bash --config /home/ewt/.config/oh-my-posh/posh-dverdonschot.omp.json)"
     '';
@@ -317,6 +329,8 @@ in
 
   # vscode wayland support
   environment.sessionVariables.NIXOS_OZONE_WL = "1";
+  environment.sessionVariables.RUST_SRC_PATH = "${pkgs.rust.packages.stable.rustPlatform.rustLibSrc}";
+  environment.sessionVariables.LD_LIBRARY_PATH = "${pkgs.stdenv.cc.cc.lib}/lib/:$LD_LIBRARY_PATH";
 
   # List services that you want to enable:
 
