@@ -20,9 +20,12 @@ in
       #"${modulesPath}/profiles/minimal.nix"
       ./hardware-configuration.nix
       <home-manager/nixos>
+      ./user.nix
 #      ./home.nix
     ];
 
+  main-user.enable = true;
+  main-user.userName = "dennis";
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
