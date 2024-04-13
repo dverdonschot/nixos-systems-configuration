@@ -15,7 +15,8 @@ cd nixos-workstation
 Now you can run the rebuild switch by running the flake.
 
 ```bash
-sudo nixos-rebuild switch --flake . --impure
+sudo nixos-rebuild switch --flake .#workstation --impure
+sudo nixos-rebuild switch --flake /home/user/nixos-workstation#wsl --impure
 ```
 
 Remeber this uses the lock file and uses that stage, so you may want to update.
