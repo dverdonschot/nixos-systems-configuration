@@ -16,7 +16,6 @@
   config = lib.mkIf config.main-user.enable {
     users.users.${config.main-user.userName} = {
       isNormalUser = true;
-      initialPassword = "12345";
       description = "main user";
       shell = pkgs.bash;
     };

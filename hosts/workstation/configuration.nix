@@ -24,8 +24,7 @@ in
 #      ./home.nix
     ];
 
-  main-user.enable = true;
-  main-user.userName = "dennis";
+  main-user.userName = "test-user";
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
