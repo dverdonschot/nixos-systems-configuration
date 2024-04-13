@@ -31,6 +31,13 @@
               }
             ];
           };
+          nixos-wsl = lib.nixosSystem {
+            inherit system;
+            specialArgs = {inherit inputs; };
+            modules = [ 
+              ./hosts/wsl/configuration.nix
+            ];
+          };
         };
     };
 }
