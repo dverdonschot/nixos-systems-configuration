@@ -38,6 +38,13 @@
               ./hosts/wsl/configuration.nix
             ];
           };
-        };
+          media-server = lib.nixosSystem {
+            inherit system;
+            specialArgs = {inherit inputs; };
+            modules = [ 
+              ./hosts/media-server/configuration.nix
+            ];
+          };
+         };
     };
 }
