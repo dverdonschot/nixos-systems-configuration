@@ -18,6 +18,21 @@
   # Define on which hard drive you want to install Grub.
   boot.loader.grub.device = "/dev/sda"; # or "nodev" for efi only
 
+  # 1. enable vaapi on OS-level
+  nixpkgs.config.packageOverrides = pkgs: {
+    vaapiIntel = pkgs.vaapiIntel.override { enableHybridCodec = true; };
+  };
+  hardware.opengl = {
+    enable = true;
+    extraPackages = with pkgs; [
+      intel-media-driver
+      vaapiIntel
+      vaapiVdpau
+      libvdpau-va-gl
+      intel-compute-runtime # OpenCL filter support (hardware tonemapping and subtitle burn-in)
+    ];
+  };
+
   networking.hostName = "media"; # Define your hostname.
   # Pick only one of the below networking options.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
@@ -40,7 +55,7 @@
     }];
     defaultGateway = {
       address = "192.168.50.1";
-      interface = "eth0";
+      interface = "ens18";
     };
     nameservers = [ "192.168.50.110" ];
   };
@@ -67,6 +82,9 @@
     bind
     jq
     zip
+    #jellyfin
+    #jellyfin-web
+    #jellyfin-ffmpeg
     openssl
     duplicati
     parted
@@ -111,6 +129,13 @@
         workstation = true;
       };
   };
+
+  services.jellyfin = {
+    enable = true;
+    openFirewall = true;
+    user="ewt";
+  };
+
   services.duplicati = {
     enable = true;
     interface = "any";
