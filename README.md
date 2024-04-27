@@ -19,7 +19,7 @@ Now you can run the rebuild switch by running the flake.
 # Install from folder . and select profile workstation
 sudo nixos-rebuild switch --flake .#workstation --impure
 
-#Install from full folder path (can be used anywhere) and select profile wsl
+#Install from full folder path and select profile wsl (change user for your username) (can be used anywhere)
 sudo nixos-rebuild switch --flake /home/user/nixos-systems-configuration#wsl --impure
 ```
 
