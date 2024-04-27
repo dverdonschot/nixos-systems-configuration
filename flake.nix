@@ -19,7 +19,7 @@
         };
       in rec {
         nixosConfigurations = {
-          nixos = lib.nixosSystem {
+          workstation = lib.nixosSystem {
             inherit system;
             specialArgs = {inherit inputs; };
             modules = [ 
@@ -31,7 +31,7 @@
               }
             ];
           };
-          nixos-wsl = lib.nixosSystem {
+          wsl = lib.nixosSystem {
             inherit system;
             specialArgs = {inherit inputs; };
             modules = [ 
