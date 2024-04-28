@@ -34,11 +34,6 @@
     ];
   };
 
-  networking.hostName = "media"; # Define your hostname.
-  # Pick only one of the below networking options.
-  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
-  # networking.networkmanager.enable = true;  # Easiest to use and most distros use this by default.
-
   # Set your time zone.
   time.timeZone = "Europe/Amsterdam";
 
@@ -49,6 +44,8 @@
     "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCchj6sbAoMdefpGxb/NSi1oO+Nxj8HFvp3b8RjIJP+vLs5OtwMEksd+QB9Ssbl0ovs5HiUcT6Il0p4Qrir8xf7tvTGblQGQAaYcGSsgw0NMmCgSAYuDYrwn6yTR1d9dtIugl4kcU8xUikBkrmTbNiA0bP0LOXvkuwkl/SaUowznBbQK7Q2uLVRWEi6RmfSil+3UPF7o/UWLTyOrE4RW0Ggr5GTvvQPmjg0Mj7aSZwMBz9PMJTJgVoRq/R/OY7PDuF+Y8KlTvpIRutTCgE7Jt+i2IOYLEmQkdfjrq8yvHxbsWSLM8Fj+l6n3VJUhmfH/U5GTm/i/ZcvnVDjbNLHu4YN07ExX9sXh8ZZPHBjImUTXO7Db5NRo+AVZ/Kr8F1yjLB4hwTP33avfi0yqM+niLFb2eRHQN3P0+db5skSi6S5IDpqHKcPPrux2cLXT4+8DoRIQO+ICkTei9qvd424kF6IhrfVJxHm+wlUCbY2fWbnUH/r36uJSrbqemMkGgOa0lE= ewt@fedora"
   ];
   networking = {
+    hostName = "media";
+    networkmanager.enable = true;
     usePredictableInterfaceNames = false;
     interfaces.ens18.ipv4.addresses = [{
       address = "192.168.50.11";
