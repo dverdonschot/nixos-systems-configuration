@@ -138,7 +138,7 @@
   services.jellyfin = {
     enable = true;
     openFirewall = true;
-    user=userName;
+    user=inputs.userName;
   };
 
   services.duplicati = {
