@@ -89,6 +89,7 @@
     bind
     jq
     zip
+    oh-my-posh
     #jellyfin
     #jellyfin-web
     #jellyfin-ffmpeg
