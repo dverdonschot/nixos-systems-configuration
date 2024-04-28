@@ -9,7 +9,8 @@
 
     outputs = {self, nixpkgs, ...}@inputs:
       let
-        username = "ewt";
+        userName = "ewt";
+        userEmail = "36795362+dverdonschot@users.noreply.github.com";
         lib = nixpkgs.lib;
         system = "x86_64-linux";
         pkgs = import nixpkgs {
@@ -27,7 +28,7 @@
               {
                 home-manager.useGlobalPkgs = true;
                 home-manager.useUserPackages = true;
-                home-manager.users.ewt = import hosts/workstation/home.nix;
+                home-manager.users.${userName} = import home-manager/home.nix;
               }
             ];
           };
@@ -46,7 +47,7 @@
               {
                 home-manager.useGlobalPkgs = true;
                 home-manager.useUserPackages = true;
-                home-manager.users.ewt = import home-manager/home.nix;
+                home-manager.users.${userName} = import home-manager/home-minimal.nix;
               }
             ];
           };
