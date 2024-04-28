@@ -36,7 +36,7 @@
 #          "sha256-BvVE9qupMjw7JRqFUj1J0a4ys6kc9fOLBPx2bGaapTk="
 #          "Fuchsia-Pop";
     xdg.configFile.oh-my-posh = {
-      source = ../../config;
+      source = ../config;
       recursive = true;
     };
 
