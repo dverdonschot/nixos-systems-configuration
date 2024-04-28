@@ -62,8 +62,14 @@
   };
 
 
+  # Allow unfree packages
+  nixpkgs.config.allowUnfree = true;
+  # Allow Nix Flakes
+  nix.package = pkgs.nixFlakes;
+  # Enable experimentatl features
   nix.settings.experimental-features = [ "nix-command" "flakes" ];  
 
+  
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.ewt = {
     isNormalUser = true;
