@@ -5,11 +5,9 @@
       nixpkgs.url = "nixpkgs/nixos-unstable";
       home-manager.url = "github:nix-community/home-manager/master";
       home-manager.inputs.nixpkgs.follows = "nixpkgs"; # Use system packages list where available
+      userName = "ewt";
+      userEmail = "36795362+dverdonschot@users.noreply.github.com";
     };
-
-
-    userName = "ewt";
-    userEmail = "36795362+dverdonschot@users.noreply.github.com";
 
     outputs = {self, nixpkgs, ...}@inputs:
       let
@@ -45,7 +43,7 @@
           };
           media-server = lib.nixosSystem {
             inherit system;
-            specialArgs = {inherit inputs userName userEmail; };
+            specialArgs = {inherit inputs ; };
             modules = [ 
               ./hosts/media-server/configuration.nix
               {
