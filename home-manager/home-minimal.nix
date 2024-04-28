@@ -2,7 +2,7 @@
 
 {
     home.stateVersion = "23.11";
-    home.username = ${inputs.userName};
+    home.username = inputs.userName;
     home.homeDirectory = "/home/${inputs.userName}";
     nixpkgs.config.allowUnfree = true;
     home.packages = with pkgs; [
