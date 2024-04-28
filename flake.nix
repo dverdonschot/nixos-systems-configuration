@@ -47,7 +47,7 @@
               {
                 home-manager.useGlobalPkgs = true;
                 home-manager.useUserPackages = true;
-                home-manager.users.inputs.userName = import home-manager/home-minimal.nix;
+                home-manager.users.userName = import home-manager/home-minimal.nix;
               }
             ];
           };
