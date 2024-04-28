@@ -40,7 +40,7 @@
             ];
           };
           media-server = lib.nixosSystem {
-            inherit system;
+            inherit system userName userEmail;
             specialArgs = {inherit inputs userName userEmail; };
             modules = [ 
               ./hosts/media-server/configuration.nix
