@@ -2,8 +2,8 @@
 
 {
     home.stateVersion = "23.11";
-    home.username = inputs.userName;
-    home.homeDirectory = "/home/${inputs.userName}";
+    home.username = userName;
+    home.homeDirectory = "/home/${userName}";
     nixpkgs.config.allowUnfree = true;
     home.packages = with pkgs; [
       curl
@@ -18,8 +18,8 @@
 
     programs.git = {
       enable = true;
-      userName = inputs.userName;
-      userEmail = inputs.userEmail;
+      userName = userName;
+      userEmail = userEmail;
     };
     
     programs.neovim = {
