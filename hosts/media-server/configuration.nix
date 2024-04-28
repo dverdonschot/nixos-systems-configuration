@@ -68,7 +68,7 @@
 
   
   # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users.userName = {
+  users.users.${userName} = {
     isNormalUser = true;
     extraGroups = [ "wheel" "docker" "podman"  ]; # Enable ‘sudo’ for the user.
     packages = with pkgs; [
