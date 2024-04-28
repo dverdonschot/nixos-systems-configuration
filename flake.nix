@@ -43,6 +43,11 @@
             specialArgs = {inherit inputs; };
             modules = [ 
               ./hosts/media-server/configuration.nix
+              {
+                home-manager.useGlobalPkgs = true;
+                home-manager.useUserPackages = true;
+                home-manager.users.ewt = import home-manager/home.nix;
+              }
             ];
           };
          };
