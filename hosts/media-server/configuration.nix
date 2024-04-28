@@ -151,6 +151,16 @@
 
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
+  
+  programs.bash = {
+    interactiveShellInit = ''
+      # Loading ohh my posh config
+      eval "$(oh-my-posh --init --shell bash --config /home/ewt/.config/oh-my-posh/posh-dverdonschot.omp.json)"
+    '';
+  };
+
+
+
 
   # Copy the NixOS configuration file and link it from the resulting system
   # (/run/current-system/configuration.nix). This is useful in case you
