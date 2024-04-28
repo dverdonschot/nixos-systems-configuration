@@ -7,6 +7,10 @@
       home-manager.inputs.nixpkgs.follows = "nixpkgs"; # Use system packages list where available
     };
 
+
+    userName = "ewt";
+    userEmail = "36795362+dverdonschot@users.noreply.github.com";
+
     outputs = {self, nixpkgs, ...}@inputs:
       let
         userName = "ewt";
