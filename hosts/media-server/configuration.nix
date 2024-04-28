@@ -2,7 +2,7 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running `nixos-help`).
 
-{ config, lib, pkgs, modulesPath, ... }:
+{ config, lib, pkgs, modulesPath, inputs, ... }:
 
 {
   imports =
@@ -138,7 +138,7 @@
   services.jellyfin = {
     enable = true;
     openFirewall = true;
-    user=userName;
+    user=inputs.userName;
   };
 
   services.duplicati = {
@@ -153,7 +153,7 @@
   programs.bash = {
     interactiveShellInit = ''
       # Loading ohh my posh config
-      eval "$(oh-my-posh --init --shell bash --config /home/${userName}/.config/oh-my-posh/posh-dverdonschot.omp.json)"
+      eval "$(oh-my-posh --init --shell bash --config /home/${inputs.userName}/.config/oh-my-posh/posh-dverdonschot.omp.json)"
     '';
   };
 
