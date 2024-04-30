@@ -1,11 +1,6 @@
 {
     description = "workstation flake";
 
-    darwinSystem = {
-      specialArgs.userName = "ewt";
-      specialArgs.userEmail = "36795362+dverdonschot@users.noreply.github.com";
-    };
- 
     inputs = {
       nixpkgs.url = "nixpkgs/nixos-unstable";
       home-manager.url = "github:nix-community/home-manager/master";
