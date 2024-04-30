@@ -10,10 +10,6 @@
       nixpkgs.url = "nixpkgs/nixos-unstable";
       home-manager.url = "github:nix-community/home-manager/master";
       home-manager.inputs.nixpkgs.follows = "nixpkgs"; # Use system packages list where available
-      user = {
-        userName = "ewt";
-        userEmail = "36795362+dverdonschot@users.noreply.github.com";
-      };
     };
 
     outputs = {self, nixpkgs, userName, userEmail, ...}@inputs:
