@@ -1,7 +1,7 @@
 {
     description = "workstation flake";
 
-    darwinSystem {
+    darwinSystem = {
       specialArgs.userName = "ewt";
       specialArgs.userEmail = "36795362+dverdonschot@users.noreply.github.com";
     };
