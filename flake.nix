@@ -7,7 +7,7 @@
       home-manager.inputs.nixpkgs.follows = "nixpkgs"; # Use system packages list where available
     };
 
-    outputs = {self, nixpkgs, userName, userEmail, ...}@inputs:
+    outputs = {self, nixpkgs, ...}@inputs:
       let
         lib = nixpkgs.lib;
         system = "x86_64-linux";
