@@ -18,7 +18,11 @@
         system = "x86_64-linux";
         pkgs = import nixpkgs {
           inherit system;
-          specialArgs = { inherit inputs; };
+          specialArgs = { 
+            inherit inputs; 
+            userName = "ewt";
+            userEmail = "36795362+dverdonschot@users.noreply.github.com";
+          };
           config = { allowUnfree = true; };
         };
       in rec {
