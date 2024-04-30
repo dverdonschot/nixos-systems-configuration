@@ -30,7 +30,7 @@
               {
                 home-manager.useGlobalPkgs = true;
                 home-manager.useUserPackages = true;
-                home-manager.users.${userName} = import home-manager/home.nix;
+                home-manager.users.ewt = import home-manager/home.nix;
               }
             ];
           };
@@ -49,7 +49,7 @@
               {
                 home-manager.useGlobalPkgs = true;
                 home-manager.useUserPackages = true;
-                home-manager.users.${userName} = import home-manager/home-minimal.nix;
+                home-manager.users.ewt = import home-manager/home-minimal.nix;
               }
             ];
           };
