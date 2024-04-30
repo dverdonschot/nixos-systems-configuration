@@ -68,7 +68,7 @@
 
   
   # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users.${inputs.userName} = {
+  users.users.${inputs.user.userName} = {
     isNormalUser = true;
     extraGroups = [ "wheel" "docker" "podman"  ]; # Enable ‘sudo’ for the user.
     packages = with pkgs; [
@@ -138,7 +138,7 @@
   services.jellyfin = {
     enable = true;
     openFirewall = true;
-    user=inputs.userName;
+    user=inputs.user.userName;
   };
 
   services.duplicati = {
@@ -153,7 +153,7 @@
   programs.bash = {
     interactiveShellInit = ''
       # Loading ohh my posh config
-      eval "$(oh-my-posh --init --shell bash --config /home/${inputs.userName}/.config/oh-my-posh/posh-dverdonschot.omp.json)"
+      eval "$(oh-my-posh --init --shell bash --config /home/${inputs.user.userName}/.config/oh-my-posh/posh-dverdonschot.omp.json)"
     '';
   };
 
