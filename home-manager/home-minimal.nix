@@ -1,9 +1,9 @@
-{ config, pkgs, inputs, ... }:
+{ config, pkgs, inputs, userName, userEmail, ... }:
 
 {
     home.stateVersion = "23.11";
-    home.username = user.userName;
-    home.homeDirectory = "/home/${inputs.user.userName}";
+    home.username = userName;
+    home.homeDirectory = "/home/${userName}";
     nixpkgs.config.allowUnfree = true;
     home.packages = with pkgs; [
       curl
@@ -18,8 +18,8 @@
 
     programs.git = {
       enable = true;
-      userName = inputs.user.userName;
-      userEmail = inputs.user.userEmail;
+      userName = userName;
+      userEmail = userEmail;
     };
     
     programs.neovim = {
