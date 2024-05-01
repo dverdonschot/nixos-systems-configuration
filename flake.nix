@@ -24,7 +24,11 @@
         nixosConfigurations = {
           workstation = lib.nixosSystem {
             inherit system;
-            specialArgs = {inherit inputs userName userEmail; };
+            specialArgs = {
+              inherit inputs;
+              userName = "ewt";
+              userEmail = "36795362+dverdonschot@users.noreply.github.com"; 
+            };
             modules = [ 
               ./hosts/workstation/configuration.nix
               {
@@ -43,7 +47,10 @@
           };
           media-server = lib.nixosSystem {
             inherit system;
-            specialArgs = {inherit inputs userName userEmail; };
+            specialArgs = {inherit inputs;
+              userName = "ewt";
+              userEmail = "36795362+dverdonschot@users.noreply.github.com"; 
+            };
             modules = [ 
               ./hosts/media-server/configuration.nix
               {
