@@ -87,9 +87,9 @@
     jq
     zip
     oh-my-posh
-    jellyfin
-    jellyfin-web
-    jellyfin-ffmpeg
+    #jellyfin
+    #jellyfin-web
+    #jellyfin-ffmpeg
     openssl
     duplicati
     parted
