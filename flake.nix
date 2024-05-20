@@ -9,25 +9,32 @@
 
     outputs = {self, nixpkgs, ...}@inputs:
       let
-        username = "ewt";
         lib = nixpkgs.lib;
         system = "x86_64-linux";
         pkgs = import nixpkgs {
           inherit system;
-          specialArgs = { inherit inputs; };
+          specialArgs = { 
+            inherit inputs; 
+            userName = "ewt";
+            userEmail = "36795362+dverdonschot@users.noreply.github.com";
+          };
           config = { allowUnfree = true; };
         };
       in rec {
         nixosConfigurations = {
           workstation = lib.nixosSystem {
             inherit system;
-            specialArgs = {inherit inputs; };
+            specialArgs = {
+              inherit inputs;
+              userName = "ewt";
+              userEmail = "36795362+dverdonschot@users.noreply.github.com"; 
+            };
             modules = [ 
               ./hosts/workstation/configuration.nix
               {
                 home-manager.useGlobalPkgs = true;
                 home-manager.useUserPackages = true;
-                home-manager.users.ewt = import hosts/workstation/home.nix;
+                home-manager.users.ewt = import home-manager/home.nix;
               }
             ];
           };
@@ -40,13 +47,16 @@
           };
           media-server = lib.nixosSystem {
             inherit system;
-            specialArgs = {inherit inputs; };
+            specialArgs = {inherit inputs;
+              userName = "ewt";
+              userEmail = "36795362+dverdonschot@users.noreply.github.com"; 
+            };
             modules = [ 
               ./hosts/media-server/configuration.nix
               {
                 home-manager.useGlobalPkgs = true;
                 home-manager.useUserPackages = true;
-                home-manager.users.ewt = import home-manager/home.nix;
+                home-manager.users.ewt = import home-manager/home-minimal.nix;
               }
             ];
           };
