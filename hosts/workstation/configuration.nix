@@ -24,6 +24,10 @@ in
 #      ./home.nix
     ];
 
+  nixpkgs.overlays = [
+    (import "${fetchTarball "https://github.com/nix-community/fenix/archive/main.tar.gz"}/overlay.nix")
+  ];
+
   main-user.userName = "test-user";
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
@@ -57,29 +61,18 @@ in
   services.xserver.videoDrivers = ["nvidia"];
 
   hardware.nvidia = {
-
-    # Modesetting is required.
     modesetting.enable = true;
-
     # Nvidia power management. Experimental, and can cause sleep/suspend to fail.
     powerManagement.enable = true;
     # Fine-grained power management. Turns off GPU when not in use.
     # Experimental and only works on modern Nvidia GPUs (Turing or newer).
     powerManagement.finegrained = false;
-
     # Use the NVidia open source kernel module (not to be confused with the
     # independent third-party "nouveau" open source driver).
-    # Support is limited to the Turing and later architectures. Full list of 
-    # supported GPUs is at: 
-    # https://github.com/NVIDIA/open-gpu-kernel-modules#compatible-gpus 
-    # Only available from driver 515.43.04+
-    # Currently alpha-quality/buggy, so false is currently the recommended setting.
     open = false;
-
     # Enable the Nvidia settings menu,
-	# accessible via `nvidia-settings`.
+	  # accessible via `nvidia-settings`.
     nvidiaSettings = true;
-
     # Optionally, you may need to select the appropriate driver version for your specific GPU.
     package = config.boot.kernelPackages.nvidiaPackages.stable;
   };
@@ -87,9 +80,15 @@ in
   # Enable networking
   networking.networkmanager.enable = true;
 
+  # prepare network for finding printer and autodetection in general
+  services.avahi = {
+    enable = true;
+    nssmdns4 = true;
+    openFirewall = true;
+  };
+
   # Set your time zone.
   time.timeZone = "Europe/Amsterdam";
-
   # Select internationalisation properties.
   i18n.defaultLocale = "en_US.UTF-8";
 
@@ -115,6 +114,8 @@ in
     layout = "us";
     variant = "";
   };
+
+
 
   # Enable CUPS to print documents.
   services.printing.enable = true;
@@ -155,10 +156,9 @@ in
     }
   ];
 
-
   # Enable automatic login for the user.
-  services.xserver.displayManager.autoLogin.enable = true;
-  services.xserver.displayManager.autoLogin.user = "ewt";
+  services.displayManager.autoLogin.enable = true;
+  services.displayManager.autoLogin.user = "ewt";
 
   # Workaround for GNOME autologin: https://github.com/NixOS/nixpkgs/issues/103746#issuecomment-945091229
   systemd.services."getty@tty1".enable = false;
@@ -212,7 +212,6 @@ in
     neovim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
     wget
     nmap
-    #rustscan
     git
     tree
     google-chrome
@@ -230,10 +229,18 @@ in
     lshw
     nix-software-center
     nix-index
-    stdenv.cc.cc
-    gcc-unwrapped
     vscode-fhs
     super-productivity
+    # rust 
+    (fenix.complete.withComponents [
+      "cargo"
+      "clippy"
+      "rust-src"
+      "rustc"
+      "rustfmt"
+    ])
+    rust-analyzer-nightly
+    libudev-zero
     #images
     pinta
     tiv
@@ -252,8 +259,13 @@ in
     powerline-fonts
     font-awesome
     # compiling
+    stdenv.cc.cc
+    gcc
+    gcc-unwrapped
+    pkg-config
     gnumake
     pkgsCross.avr.buildPackages.gcc
+    appimage-run
     # Python
     jupyter-all
     python311
