@@ -24,6 +24,10 @@ in
 #      ./home.nix
     ];
 
+  nixpkgs.overlays = [
+    (import "${fetchTarball "https://github.com/nix-community/fenix/archive/main.tar.gz"}/overlay.nix")
+  ];
+
   main-user.userName = "test-user";
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
@@ -155,10 +159,9 @@ in
     }
   ];
 
-
   # Enable automatic login for the user.
-  services.xserver.displayManager.autoLogin.enable = true;
-  services.xserver.displayManager.autoLogin.user = "ewt";
+  services.displayManager.autoLogin.enable = true;
+  services.displayManager.autoLogin.user = "ewt";
 
   # Workaround for GNOME autologin: https://github.com/NixOS/nixpkgs/issues/103746#issuecomment-945091229
   systemd.services."getty@tty1".enable = false;
@@ -212,7 +215,6 @@ in
     neovim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
     wget
     nmap
-    #rustscan
     git
     tree
     google-chrome
@@ -230,10 +232,18 @@ in
     lshw
     nix-software-center
     nix-index
-    stdenv.cc.cc
-    gcc-unwrapped
     vscode-fhs
     super-productivity
+    # rust 
+    (fenix.complete.withComponents [
+      "cargo"
+      "clippy"
+      "rust-src"
+      "rustc"
+      "rustfmt"
+    ])
+    rust-analyzer-nightly
+    libudev-zero
     #images
     pinta
     tiv
@@ -252,8 +262,13 @@ in
     powerline-fonts
     font-awesome
     # compiling
+    stdenv.cc.cc
+    gcc
+    gcc-unwrapped
+    pkg-config
     gnumake
     pkgsCross.avr.buildPackages.gcc
+    appimage-run
     # Python
     jupyter-all
     python311

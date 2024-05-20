@@ -12,6 +12,9 @@
     ];
 
     home.sessionVariables.GTK_THEME = "palenight";
+    home.sessionPath = [
+      "/home/ewt/.cargo/bin"
+    ];
     home.file.".icons/default".source = "${pkgs.oreo-cursors-plus}/share/icons/oreo_blue_cursors";
 
 #    home.pointerCursor = 
