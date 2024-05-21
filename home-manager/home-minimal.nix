@@ -18,8 +18,8 @@
 
     programs.git = {
       enable = true;
-      userName = userName;
-      userEmail = userEmail;
+      userName = "ewt";
+      userEmail = "36795362+dverdonschot@users.noreply.github.com";
     };
     
     programs.neovim = {
