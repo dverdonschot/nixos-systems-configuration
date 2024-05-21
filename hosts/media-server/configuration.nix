@@ -2,7 +2,7 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running `nixos-help`).
 
-{ config, lib, pkgs, modulesPath, inputs, userName, userEmail, ... }:
+{ config, lib, pkgs, modulesPath, inputsj, ... }:
 
 {
   imports =
@@ -40,7 +40,7 @@
   # Enable SSH in the boot process.
   systemd.services.sshd.wantedBy = pkgs.lib.mkForce [ "multi-user.target" ];
   services.qemuGuest.enable = true;
-  users.users.${userName}.openssh.authorizedKeys.keys = [
+  users.users.ewt.openssh.authorizedKeys.keys = [
     "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCchj6sbAoMdefpGxb/NSi1oO+Nxj8HFvp3b8RjIJP+vLs5OtwMEksd+QB9Ssbl0ovs5HiUcT6Il0p4Qrir8xf7tvTGblQGQAaYcGSsgw0NMmCgSAYuDYrwn6yTR1d9dtIugl4kcU8xUikBkrmTbNiA0bP0LOXvkuwkl/SaUowznBbQK7Q2uLVRWEi6RmfSil+3UPF7o/UWLTyOrE4RW0Ggr5GTvvQPmjg0Mj7aSZwMBz9PMJTJgVoRq/R/OY7PDuF+Y8KlTvpIRutTCgE7Jt+i2IOYLEmQkdfjrq8yvHxbsWSLM8Fj+l6n3VJUhmfH/U5GTm/i/ZcvnVDjbNLHu4YN07ExX9sXh8ZZPHBjImUTXO7Db5NRo+AVZ/Kr8F1yjLB4hwTP33avfi0yqM+niLFb2eRHQN3P0+db5skSi6S5IDpqHKcPPrux2cLXT4+8DoRIQO+ICkTei9qvd424kF6IhrfVJxHm+wlUCbY2fWbnUH/r36uJSrbqemMkGgOa0lE= ewt@fedora"
   ];
   networking = {
@@ -68,7 +68,7 @@
 
   
   # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users.${userName} = {
+  users.users.ewt = {
     isNormalUser = true;
     extraGroups = [ "wheel" "docker" "podman"  ]; # Enable ‘sudo’ for the user.
     packages = with pkgs; [
@@ -153,7 +153,7 @@
   programs.bash = {
     interactiveShellInit = ''
       # Loading ohh my posh config
-      eval "$(oh-my-posh --init --shell bash --config /home/${userName}/.config/oh-my-posh/posh-dverdonschot.omp.json)"
+      eval "$(oh-my-posh --init --shell bash --config /home/ewt/.config/oh-my-posh/posh-dverdonschot.omp.json)"
     '';
   };
 
