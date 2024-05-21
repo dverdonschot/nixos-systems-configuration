@@ -1,9 +1,9 @@
-{ config, pkgs, inputs, userName, userEmail, ... }:
+{ config, pkgs, inputs, ... }:
 
 {
     home.stateVersion = "23.11";
-    home.username = userName;
-    home.homeDirectory = "/home/${userName}";
+    home.username = "ewt";
+    home.homeDirectory = "/home/ewt";
     nixpkgs.config.allowUnfree = true;
     home.packages = with pkgs; [
       curl
