@@ -162,7 +162,16 @@
       };
     };
   };
-  # Enable the OpenSSH daemon.
+  virtualisation.oci-containers.containers = {
+    metube = {
+      image = "ghcr.io/alexta69/metube";
+      ports = ["0.0.0.0:8081:8081"];
+      volumes = [
+        "/home/ewt/metube-downloads:/downloads"
+      ];
+    };
+  };
+   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
   
   programs.bash = {
