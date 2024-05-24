@@ -2,7 +2,7 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running `nixos-help`).
 
-{ config, lib, pkgs, modulesPath, inputsj, ... }:
+{ config, lib, pkgs, modulesPath, inputs, ... }:
 
 {
   imports =
@@ -45,7 +45,7 @@
   ];
   networking = {
     hostName = "media";
-    networkmanager.enable = true;
+    useDHCP = false;
     usePredictableInterfaceNames = false;
     interfaces.ens18.ipv4.addresses = [{
       address = "192.168.50.11";
@@ -87,9 +87,9 @@
     jq
     zip
     oh-my-posh
-    #jellyfin
-    #jellyfin-web
-    #jellyfin-ffmpeg
+    jellyfin
+    jellyfin-web
+    jellyfin-ffmpeg
     openssl
     duplicati
     parted
@@ -147,6 +147,21 @@
     user = "root";
   };
 
+  virtualisation.oci-containers.containers = {
+    tubesync = {
+      image = "ghcr.io/meeb/tubesync:latest";
+      ports = ["0.0.0.0:4848:4848"];
+      volumes = [
+        "/home/ewt/tubesync-config:/config"
+        "/home/ewt/tubesync-downloads:/downloads"
+      ];
+      environment = {
+        PUID="1000";
+        PGID="1000";
+        TZ="Europe/Amsterdam";
+      };
+    };
+  };
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
   
