@@ -25,7 +25,7 @@
       legacyPackages = pkgsForSystem system;
   }) // {
     # non-system suffixed items should go here
-    nixosModules.home = import ./home.nix; # attr set or list
+    nixosModules.home = import ../home-manager/home.nix; # attr set or list
 
     homeConfigurations.fedora = mkHomeConfiguration {
     };
