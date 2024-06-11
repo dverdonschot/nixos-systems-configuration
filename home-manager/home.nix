@@ -1,15 +1,25 @@
-{ config, pkgs, inputs, ... }:
+{ config, lib, pkgs, inputs, specialArgs, ... }:
+
+let
+  packages = import ./packages.nix;
+
+  inherit (specialArgs) withGUI;
+
+  inherit (lib) mkIf;
+  inherit (pkgs.stdenv) isLinux;
+in
 
 {
     home.stateVersion = "23.11";
     home.username = "ewt";
     home.homeDirectory = "/home/ewt";
     nixpkgs.config.allowUnfree = true;
-    home.packages = with pkgs; [
-      curl
-      nnn
-      lynx
-    ];
+    #home.packages = with pkgs; [
+    #  curl
+    #  nnn
+    #  lynx
+    #];
+    home.packages = packages pkgs withGUI;
 
     home.sessionVariables.GTK_THEME = "palenight";
     home.file.".icons/default".source = "${pkgs.oreo-cursors-plus}/share/icons/oreo_blue_cursors";
