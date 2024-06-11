@@ -19,15 +19,18 @@
       mkHomeConfiguration = args: home-manager.lib.homeManagerConfiguration (rec {
         modules = [ (import ../home-manager/home.nix) ] ++ (args.modules or []);
         pkgs = pkgsForSystem (args.system or "x86_64-linux");
-      });
+      } // { inherit (args) extraSpecialArgs; });
 
     in utils.lib.eachSystem [ "x86_64-linux" "aarch64-darwin" "x86_64-darwin" ] (system: rec {
       legacyPackages = pkgsForSystem system;
   }) // {
     # non-system suffixed items should go here
-    nixosModules.home = import ../home-manager/home.nix; # attr set or list
+    nixosModules.home = import ./home.nix; # attr set or list
 
     homeConfigurations.fedora = mkHomeConfiguration {
+      extraSpecialArgs = {
+        withGUI = true;
+      };
     };
 
     inherit home-manager;
