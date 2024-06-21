@@ -1,40 +1,42 @@
-{ config, pkgs, inputs, ... }:
+{ config, lib, pkgs, inputs, specialArgs, ... }:
+
+let
+  packages = import ./packages.nix;
+
+  inherit (specialArgs) withGUI;
+
+  inherit (lib) mkIf;
+  inherit (pkgs.stdenv) isLinux;
+in
 
 {
     home.stateVersion = "23.11";
     home.username = "ewt";
     home.homeDirectory = "/home/ewt";
     nixpkgs.config.allowUnfree = true;
-    home.packages = with pkgs; [
-      curl
-      nnn
-      lynx
-    ];
+    home.packages = packages pkgs;
 
     home.sessionVariables.GTK_THEME = "palenight";
+    home.sessionVariables.XDG_DATA_DIRS="/home/ewt/.nix-profile/share:$XDG_DATA_DIRS";
+    home.sessionVariables.PATH="/home/ewt/.cargo/bin:$PATH";
+    home.sessionVariables.RUST_SRC_PATH = "${pkgs.rust.packages.stable.rustPlatform.rustLibSrc}";
     home.file.".icons/default".source = "${pkgs.oreo-cursors-plus}/share/icons/oreo_blue_cursors";
 
-#    home.pointerCursor = 
-#      let 
-#        getFrom = url: hash: name: {
-#            gtk.enable = true;
-#            x11.enable = true;
-#            name = name;
-#            size = 48;
-#            package = 
-#              pkgs.runCommand "moveUp" {} ''
-#                mkdir -p $out/share/icons
-#                ln -s ${pkgs.fetchzip {
-#                  url = url;
-#                  hash = hash;
-#                }} $out/share/icons/${name}
-#            '';
-#          };
-#      in
-#        getFrom 
-#          "https://github.com/ful1e5/fuchsia-cursor/releases/download/v2.0.0/Fuchsia-Pop.tar.gz"
-#          "sha256-BvVE9qupMjw7JRqFUj1J0a4ys6kc9fOLBPx2bGaapTk="
-#          "Fuchsia-Pop";
+    programs.bash = {
+      enable = true;
+      initExtra = ''
+        source $HOME/.profile
+      '';
+      profileExtra = ''
+        #export PATH=$HOME/.cargo/bin:$PATH
+        export EDITOR=nvim
+        alias vim=nvim
+        alias v=nvim
+        set -o vi
+        eval "$(oh-my-posh --init --shell bash --config ~/ohhmyposh/posh-dverdons.opm.json)"
+      '';
+    };
+
     xdg.configFile.oh-my-posh = {
       source = ../config;
       recursive = true;
@@ -48,7 +50,7 @@
     };
     programs.neovim = {
       enable = true;
-      #defaultEditor = true;
+      defaultEditor = true;
       viAlias = true;
       vimAlias = true;
       plugins = with pkgs.vimPlugins; [
@@ -123,4 +125,15 @@
         }
       ];
     };
+    programs.direnv.enable = true;
+    programs.htop = {
+      enable = true;
+      settings = {
+        left_meters = [ "LeftCPUs2" "Memory" "Swap" ];
+        left_right = [ "RightCPUs2" "Tasks" "LoadAverage" "Uptime" ];
+        setshowProgramPath = false;
+        treeView = true;
+      };
+    };
+    programs.jq.enable = true;
 }

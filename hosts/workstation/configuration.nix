@@ -60,6 +60,11 @@ in
   # Load nvidia driver for Xorg and Wayland
   services.xserver.videoDrivers = ["nvidia"];
 
+  systemd.services.nvidia-control-devices = {
+    wantedBy = [ "multi-user.target" ];
+    serviceConfig.ExecStart = "${pkgs.linuxPackages.nvidia_x11.bin}/bin/nvidia-smi";
+  };
+
   hardware.nvidia = {
     modesetting.enable = true;
     # Nvidia power management. Experimental, and can cause sleep/suspend to fail.
@@ -76,7 +81,7 @@ in
     # Optionally, you may need to select the appropriate driver version for your specific GPU.
     package = config.boot.kernelPackages.nvidiaPackages.stable;
   };
-
+  hardware.nvidia-container-toolkit.enable = true;
   # Enable networking
   networking.networkmanager.enable = true;
 
@@ -175,14 +180,15 @@ in
   services.flatpak.enable = true;
 
   # Allow Docker
-  virtualisation.docker = {
+  virtualisation.podman = {
+    dockerCompat = true;
     enable = true;
-    enableNvidia = true;
-    enableOnBoot = true;
-    rootless = {
-      enable = true;
-      setSocketVariable = true;
-    };
+    defaultNetwork.settings.dns_enabled = true;
+    #enableOnBoot = true;
+#    rootless = {
+#      enable = true;
+#      setSocketVariable = true;
+#    };
   };
   
   programs.dconf.enable = true;
@@ -204,6 +210,7 @@ in
   programs.nix-ld.enable = true;
   programs.nix-ld.libraries = with pkgs; [
     stdenv.cc.cc.lib
+    #libudev-zero
   ];
 
   # List packages installed in system profile. To search, run:
@@ -230,6 +237,7 @@ in
     nix-software-center
     nix-index
     vscode-fhs
+    jetbrains.rust-rover
     super-productivity
     # rust 
     (fenix.complete.withComponents [
@@ -240,18 +248,19 @@ in
       "rustfmt"
     ])
     rust-analyzer-nightly
-    libudev-zero
     #images
     pinta
     tiv
     # ai
     ollama
     # microcrontrollers
+    pciutils
     usbutils
     qmk
     esptool
     esphome
     arduino
+    haskellPackages.udev
     # cli bautification
     oh-my-posh
     oh-my-git
@@ -275,9 +284,12 @@ in
     nodejs
     nodePackages.aws-cdk
     # docker
+    cudatoolkit
+    #nvidia-container-toolkit
     podman
     podman-tui
     podman-compose
+    lazydocker
     # virtualization
     virt-manager
     virt-viewer
@@ -344,6 +356,7 @@ in
   # vscode wayland support
   environment.sessionVariables.NIXOS_OZONE_WL = "1";
   environment.sessionVariables.RUST_SRC_PATH = "${pkgs.rust.packages.stable.rustPlatform.rustLibSrc}";
+  #environment.sessionVariables.LD_LIBRARY_PATH = "${pkgs.stdenv.cc.cc.lib}/lib/:${pkgs.libudev-zero}/lib/:$LD_LIBRARY_PATH";
   environment.sessionVariables.LD_LIBRARY_PATH = "${pkgs.stdenv.cc.cc.lib}/lib/:$LD_LIBRARY_PATH";
 
   # List services that you want to enable:
