@@ -9,6 +9,7 @@
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
       <home-manager/nixos>
+      (fetchTarball "https://github.com/nix-community/nixos-vscode-server/tarball/master")
     ];
 
   # Use the GRUB 2 boot loader.
@@ -44,20 +45,11 @@
     "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCchj6sbAoMdefpGxb/NSi1oO+Nxj8HFvp3b8RjIJP+vLs5OtwMEksd+QB9Ssbl0ovs5HiUcT6Il0p4Qrir8xf7tvTGblQGQAaYcGSsgw0NMmCgSAYuDYrwn6yTR1d9dtIugl4kcU8xUikBkrmTbNiA0bP0LOXvkuwkl/SaUowznBbQK7Q2uLVRWEi6RmfSil+3UPF7o/UWLTyOrE4RW0Ggr5GTvvQPmjg0Mj7aSZwMBz9PMJTJgVoRq/R/OY7PDuF+Y8KlTvpIRutTCgE7Jt+i2IOYLEmQkdfjrq8yvHxbsWSLM8Fj+l6n3VJUhmfH/U5GTm/i/ZcvnVDjbNLHu4YN07ExX9sXh8ZZPHBjImUTXO7Db5NRo+AVZ/Kr8F1yjLB4hwTP33avfi0yqM+niLFb2eRHQN3P0+db5skSi6S5IDpqHKcPPrux2cLXT4+8DoRIQO+ICkTei9qvd424kF6IhrfVJxHm+wlUCbY2fWbnUH/r36uJSrbqemMkGgOa0lE= ewt@fedora"
   ];
   networking = {
+    networkmanager.enable = true;
     hostName = "media";
-    useDHCP = false;
     usePredictableInterfaceNames = false;
-    interfaces.ens18.ipv4.addresses = [{
-      address = "192.168.50.11";
-      prefixLength = 24;
-    }];
-    defaultGateway = {
-      address = "192.168.50.1";
-      interface = "ens18";
-    };
     nameservers = [ "192.168.50.110" ];
   };
-
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
@@ -66,6 +58,7 @@
   # Enable experimentatl features
   nix.settings.experimental-features = [ "nix-command" "flakes" ];  
 
+  services.vscode-server.enable = true;
   
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.ewt = {
@@ -117,6 +110,7 @@
   ];
   networking.firewall.allowedTCPPorts = [
     8200
+    8000
   ];
   # Setup DNS.
   services.resolved = {
@@ -160,6 +154,58 @@
         PGID="1000";
         TZ="Europe/Amsterdam";
       };
+    };
+  };
+  virtualisation.oci-containers.containers = {
+    tubearchivist = {
+      image = "bbilly1/tubearchivist";
+      ports = ["0.0.0.0:8000:8000"];
+      volumes = [
+        "/home/ewt/tubearchivist/media:/youtube"
+        "/home/ewt/tubearchivist/cache:/chache"
+      ];
+      environment = {
+        ES_URL="http://archivist-es:9200";
+        REDIS_HOST="archivist-redis";
+        HOST_UID="1000";
+        HOST_GID="1000";
+        TA_HOST="tubearchivist.local 192.168.50.11 localhost";
+        TA_USERNAME="djewt1";
+        TZ="Europe/Amsterdam";
+      };
+      environmentFiles = [
+        "/home/ewt/tubearchivist/.env"
+      ];
+      dependsOn = [
+        "archivist-es"
+        "archivist-redis"
+      ];
+    };
+    archivist-redis = {
+      image = "redis/redis-stack-server";
+      ports = ["0.0.0.0:6379:6379"];
+      volumes = [
+        "/home/ewt/tubearchivist/redis:/data"
+      ];
+      dependsOn = [
+        "archivist-es"
+      ];
+    };
+    archivist-es = {
+      image = "bbilly1/tubearchivist-es";
+      ports = ["0.0.0.0:9200:9200"];
+      environment = {
+        ES_JAVA_OPTS="-Xms512m -Xmx512m";
+        "xpack.security.enabled"="true";
+        "discovery.type"="single-node";
+        "path.repo"="/usr/share/elasticsearch/data/snapshot";
+      };
+      volumes = [
+        "/home/ewt/tubearchivist/es:/usr/share/elasticsearch/data"
+      ];
+      environmentFiles = [
+        "/home/ewt/tubearchivist/.env"
+      ];
     };
   };
   virtualisation.oci-containers.containers = {
