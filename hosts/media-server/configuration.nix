@@ -209,6 +209,15 @@
     };
   };
   virtualisation.oci-containers.containers = {
+    dashy = {
+      image = "lissy93/dashy";
+      ports = ["0.0.0.0:8080:8080"];
+      volumes = [
+	"/home/ewt/dashy/my-local-conf.yml:/app/user-data/conf.yml"
+      ];
+    };
+  };
+  virtualisation.oci-containers.containers = {
     metube = {
       image = "ghcr.io/alexta69/metube";
       ports = ["0.0.0.0:8081:8081"];
