@@ -269,7 +269,7 @@
         enable = true;
         extraConfig = ''
 
-          dashy.tailnet-name.ts.net {
+          dashy.tail5bbc4.ts.net {
             reverse_proxy localhost:8080
           }
 
