@@ -248,6 +248,18 @@
     };
 
     config = { pkgs, ... }: {
+      environment.systemPackages = with pkgs; [
+        vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
+        wget
+        git
+        bind
+        jq
+        zip
+        openssl
+        podman
+        podman-compose
+        podman-tui
+      ];
       virtualisation.oci-containers.containers = {
         dashy = {
           image = "lissy93/dashy";
