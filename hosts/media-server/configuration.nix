@@ -49,6 +49,12 @@
     hostName = "media";
     usePredictableInterfaceNames = false;
     nameservers = [ "192.168.50.110" ];
+    nat = {
+      enable = true;
+      internalInterfaces = ["ve-+"];
+      externalInterface = "ens3";
+      enableIPv6 = true;
+    };
   };
 
   # Allow unfree packages
