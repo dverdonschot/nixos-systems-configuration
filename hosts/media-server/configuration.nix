@@ -214,15 +214,7 @@
       ];
     };
   };
-  virtualisation.oci-containers.containers = {
-    dashy = {
-      image = "lissy93/dashy";
-      ports = ["0.0.0.0:8080:8080"];
-      volumes = [
-	"/home/ewt/dashy/my-local-conf.yml:/app/user-data/conf.yml"
-      ];
-    };
-  };
+
   virtualisation.oci-containers.containers = {
     metube = {
       image = "ghcr.io/alexta69/metube";
@@ -242,7 +234,57 @@
     '';
   };
 
+  ## Dashy
+  containers.dashy = {
+    autoStart = true;
+    enableTun = true;
+    privateNetwork = true;
+    hostAddress = "192.168.100.10";
+    localAddress = "192.168.100.11";
+    bindMounts = {
+      "/films" = {
+        hostPath = "/mnt/films";
+      };
+    };
 
+    config = { pkgs, ... }: {
+      virtualisation.oci-containers.containers = {
+        dashy = {
+          image = "lissy93/dashy";
+          ports = ["0.0.0.0:8080:8080"];
+          volumes = [
+	    "/home/ewt/dashy/my-local-conf.yml:/app/user-data/conf.yml"
+          ];
+        };
+      };
+      services.tailscale = {
+        enable = true;
+        # permit caddy to get certs from tailscale
+        permitCertUid = "caddy";
+      };
+      
+
+
+      services.caddy = {
+        enable = true;
+        extraConfig = ''
+
+          dashy.tailnet-name.ts.net {
+            reverse_proxy localhost:8080
+          }
+
+        '';
+      };
+
+
+      # open https port
+      networking.firewall.allowedTCPPorts = [ 443 ];
+
+      system.stateVersion = "23.05";
+
+    };
+  };
+### dashy
 
 
   # Copy the NixOS configuration file and link it from the resulting system
