@@ -52,7 +52,7 @@
     nat = {
       enable = true;
       internalInterfaces = ["ve-+"];
-      externalInterface = "ens3";
+      externalInterface = "ens18";
       enableIPv6 = true;
     };
   };
