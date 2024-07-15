@@ -1,4 +1,7 @@
 pkgs: with pkgs; [
+  pipx
+  exercism
+  ollama
   pinta
   cmake
   curl
@@ -6,9 +9,7 @@ pkgs: with pkgs; [
   dig
   felix-fm
   awscli2
+  cachix
   tree
-  rustup
-  rustc
-  rustycli
-  jetbrains.rust-rover
+  jetbrains.pycharm-community-bin
 ]

@@ -18,7 +18,7 @@ in
 
     home.sessionVariables.GTK_THEME = "palenight";
     home.sessionVariables.XDG_DATA_DIRS="/home/ewt/.nix-profile/share:$XDG_DATA_DIRS";
-    home.sessionVariables.PATH="/home/ewt/.cargo/bin:$PATH";
+    home.sessionVariables.PATH="/home/ewt/.cargo/bin:/home/ewt/.local/bin:$PATH";
     home.sessionVariables.RUST_SRC_PATH = "${pkgs.rust.packages.stable.rustPlatform.rustLibSrc}";
     home.file.".icons/default".source = "${pkgs.oreo-cursors-plus}/share/icons/oreo_blue_cursors";
 
@@ -31,7 +31,7 @@ in
         #export PATH=$HOME/.cargo/bin:$PATH
         export EDITOR=nvim
         alias vim=nvim
-        alias v=nvim
+        #alias v=nvim
         set -o vi
         eval "$(oh-my-posh --init --shell bash --config ~/ohhmyposh/posh-dverdons.opm.json)"
       '';
@@ -125,7 +125,11 @@ in
         }
       ];
     };
-    programs.direnv.enable = true;
+    programs.direnv = {
+      enable = true;
+      enableBashIntegration = true;
+      nix-direnv.enable = true;
+    };
     programs.htop = {
       enable = true;
       settings = {

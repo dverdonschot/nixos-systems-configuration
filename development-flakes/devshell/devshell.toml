@@ -1,0 +1,27 @@
+imports ["language/rust"]
+[[env]]
+name = "GO111MODULE"
+value = "on"
+[[commands]]
+package = "vim"
+[[commands]]
+package = "python312"
+[[commands]]
+package = "python312Packages.pip"
+[devshell]
+packages = [
+  "pkgconfig",
+  "openssl.dev",
+  "gcc",
+  "git",
+  "memcached",
+  "jq",
+]
+[rust]
+enableDefaultToolchain = "true"
+[serviceGroups.database]
+description = "Runs a postgress database in the background"
+[serviceGroups.database.services.postgres]
+command = "postgres"
+[serviceGroups.database.services.memcached]
+command = "memcached"
