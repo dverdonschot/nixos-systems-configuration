@@ -66,12 +66,13 @@
           };
           bookmarks = [
             {
-              Developer = [
+              Media = [
                 {
-                  Github = [
+                  FreshRSS = [
                     {
-                      abbr = "GH";
-                      href = "https://github.com/";
+                      icon = "freshrss";
+                      abbr = "FreshRSS";
+                      href = "https://freshrss.tail5bbc4.ts.net";
                     }
                   ];
                 }
