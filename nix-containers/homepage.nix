@@ -12,7 +12,7 @@ in {
     proxmoxUrl = mkOption {
       type = types.str;
       default = "https://proxmox:8006";
-    }
+    };
   };
   
   config = mkIf cfg.enable {
