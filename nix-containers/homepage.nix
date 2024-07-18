@@ -98,7 +98,7 @@ in {
                   "Home Assistant" = {
                     icon = "home-assistant";
                     description = "Home Assistant";
-                    href = "http://homeassistant.${cfg.tailNet}:8123"
+                    href = "http://homeassistant.${cfg.tailNet}:8123";
                   };
                 }
               ];
