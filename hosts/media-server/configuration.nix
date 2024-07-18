@@ -41,19 +41,19 @@
   # Enable SSH in the boot process.
   systemd.services.sshd.wantedBy = pkgs.lib.mkForce [ "multi-user.target" ];
   services.qemuGuest.enable = true;
-  users.users.ewt.openssh.authorizedKeys.keys = [
-    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICGleUUM1uZR2jd+3xy+o0sykRuo3as740Q7IZb4LSzW ewt@fedora"
-  ];
   networking = {
     networkmanager.enable = true;
+    # added for nixos containers
+    networkmanager.unmanaged = ["interface-name:ve-*"];
     hostName = "media";
     usePredictableInterfaceNames = false;
-    nameservers = [ "192.168.50.110" ];
+    nameservers = [ "192.168.50.110" "100.119.102.1" ];
+    # added for nixos containers
     nat = {
       enable = true;
       internalInterfaces = ["ve-+"];
-      externalInterface = "ens3";
-      enableIPv6 = true;
+      externalInterface = "eth0";
+      enableIPv6 = false;
     };
   };
 
@@ -96,6 +96,7 @@
     podman-compose
     podman-tui
     tree
+    iputils
     awscli2
     nodePackages.aws-cdk 
   ];
@@ -118,6 +119,7 @@
     8200
     8000
   ];
+  networking.firewall.trustedInterfaces = ["ve-dashy"];
   # Setup DNS.
   services.resolved = {
     enable = true;
@@ -247,10 +249,12 @@
       };
     };
 
+
     config = { pkgs, ... }: {
       environment.systemPackages = with pkgs; [
         vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
         wget
+        iputils
         git
         bind
         jq
@@ -260,12 +264,20 @@
         podman-compose
         podman-tui
       ];
-      virtualisation.oci-containers.containers = {
+      virtualisation = {
+        podman = {
+          enable = true;
+          # docker alias
+          dockerCompat = true;
+          defaultNetwork.settings.dns_enabled = true;
+       };
+      };
+	  virtualisation.oci-containers.containers = {
         dashy = {
           image = "lissy93/dashy";
           ports = ["0.0.0.0:8080:8080"];
           volumes = [
-	    "/home/ewt/dashy/my-local-conf.yml:/app/user-data/conf.yml"
+	        "/home/ewt/dashy/my-local-conf.yml:/app/user-data/conf.yml"
           ];
         };
       };
@@ -298,6 +310,121 @@
   };
 ### dashy
 
+### homepage-dashboard
+
+  containers.homepage = {
+    autoStart = true;
+    enableTun = true;
+    privateNetwork = true;
+    hostAddress = "192.168.100.10";
+    localAddress = "192.168.100.12";
+    bindMounts = {
+      "/films" = {
+        hostPath = "/mnt/films";
+      };
+    };
+
+
+    config = { pkgs, ... }: {
+      environment.systemPackages = with pkgs; [
+        vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
+        wget
+        iputils
+        git
+        bind
+        jq
+        zip
+        openssl
+      ];
+
+      services.homepage-dashboard = {
+        enable = true;
+        listenPort = 8082;
+        openFirewall = true;
+        settings = {
+          layout = {
+            Media = {
+              style = "row";
+              columns = 4;
+            };
+          };
+        };
+        bookmarks = [
+          {
+            Developer = [
+              {
+                Github = [
+                  {
+                    abbr = "GH";
+                    href = "https://github.com/";
+                  }
+                ];
+              }
+            ];
+          }
+          {
+            Entertainment = [
+              {
+                YouTube = [
+                  {
+                    abbr = "YT";
+                    href = "https://youtube.com/";
+                  }
+                ];
+              }
+            ];
+          }
+        ];
+        services = [
+          {
+            "My First Group" = [
+              {
+                "My First Service" = {
+                  description = "Homepage is awesome";
+                  href = "http://localhost/";
+                };
+              }
+            ];
+          }
+          {
+            "My Second Group" = [
+              {
+                "My Second Service" = {
+                  description = "Homepage is the best";
+                  href = "http://localhost/";
+                };
+              }
+            ];
+          }
+        ];
+      };
+      services.tailscale = {
+        enable = true;
+        # permit caddy to get certs from tailscale
+        permitCertUid = "caddy";
+      };
+      
+
+
+      services.caddy = {
+        enable = true;
+        extraConfig = ''
+
+          homepage.tail5bbc4.ts.net {
+            reverse_proxy localhost:8082
+          }
+
+        '';
+      };
+
+
+      # open https port
+      networking.firewall.allowedTCPPorts = [ 443 ];
+
+      system.stateVersion = "23.05";
+
+    };
+  };
 
   # Copy the NixOS configuration file and link it from the resulting system
   # (/run/current-system/configuration.nix). This is useful in case you
