@@ -66,7 +66,7 @@ in {
                     {
                       icon = "freshrss";
                       abbr = "FreshRSS";
-                      href = "https://freshrss.tail5bbc4.ts.net";
+                      href = "https://freshrss.${vars.tailNet}";
                     }
                   ];
                 }
@@ -92,7 +92,7 @@ in {
                   "FreshRSS" = {
                     icon = "freshrss";
                     description = "FreshRSS";
-                    href = "https://freshrss.tail5bbc4.ts.net";
+                    href = "https://freshrss.${vars.tailNet}";
                   };
                 }
               ];
@@ -103,7 +103,7 @@ in {
                   "Immich" = {
                     icon = "immich";
                     description = "Immich Photo Collection";
-                    href = "https://immich.tail5bbc4.ts.net";
+                    href = "https://immich.${vars.tailNet}";
                   };
                 }
               ];
@@ -122,7 +122,7 @@ in {
           enable = true;
           extraConfig = ''
 
-            homepage.tail5bbc4.ts.net {
+            homepage.${vars.tailNet} {
               reverse_proxy localhost:8082
             }
 
