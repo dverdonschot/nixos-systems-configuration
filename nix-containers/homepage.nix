@@ -2,6 +2,7 @@
 with lib;
 let
   cfg = config.services.homepage;
+  vars = import ./homepage-vars.nix;
 in {
   options.services.homepage = {
     enable = mkEnableOption "Enable Homepage service";
@@ -18,8 +19,6 @@ in {
     # using the "option" above. 
     # Options for modules imported in "imports" can be set here.
 
-    let vars = import ./homepage-vars.nix;
-    
     containers.homepage = {
       autoStart = true;
       enableTun = true;
