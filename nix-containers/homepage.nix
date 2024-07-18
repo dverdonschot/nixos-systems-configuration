@@ -1,9 +1,9 @@
 { lib, pkgs, config, ... }:
 with lib;
 let
-  cfg = config.service.homepage;
+  cfg = config.services.homepage;
 in {
-  options.service.homepage = {
+  options.services.homepage = {
     enable = mkEnableOption "Enable Homepage service";
     greeter = mkOption {
       type = types.str;
