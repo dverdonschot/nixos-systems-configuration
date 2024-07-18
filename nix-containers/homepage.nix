@@ -11,7 +11,7 @@ in {
     };
     proxmoxUrl = mkOption {
       type = types.str;
-      default = "https://proxmox:8006"
+      default = "https://proxmox:8006";
     }
   };
   
