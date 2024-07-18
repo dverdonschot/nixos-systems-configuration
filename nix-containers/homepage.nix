@@ -1,22 +1,17 @@
-{
-  imports = [
-    # Paths to other modules.
-    # Compose this module out of smaller ones.
-  ];
-
-  options = {
-    # Option declarations.
-    # Declare what settings a user of this module module can set.
-    # Usually this includes a global "enable" option which defaults to false.
-    optionName = mkOption {
-      type = lib.types.bool;
-      default = false;
-      example = true;
-      description = "Enable homepage-dashboard service"
-    }
+{ lib, pkgs, config, ... }:
+with lib;
+let
+  cfg = config.service.homepage;
+in {
+  options.service.homepage = {
+    enable = mkEnableOption "Enable Homepage service";
+    greeter = mkOption {
+      type = types.str;
+      default = "world";
+    };
   };
-
-  config = {
+  
+  config = mkIf cfg.enable {
     # Option definitions.
     # Define what other settings, services and resources should be active.
     # Usually these depend on whether a user of this module chose to "enable" it
@@ -143,4 +138,5 @@
 
       };
     };
-  }
+  };
+}

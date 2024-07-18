@@ -10,6 +10,7 @@
       ./hardware-configuration.nix
       <home-manager/nixos>
       (fetchTarball "https://github.com/nix-community/nixos-vscode-server/tarball/master")
+      ../../nix-containers/homepage.nix
     ];
 
   # Use the GRUB 2 boot loader.
@@ -310,6 +311,10 @@
   };
 ### dashy
 
+  services.homepage = {
+    enable = true;
+    greeter = "mister";
+  };
 
 
   # Copy the NixOS configuration file and link it from the resulting system
