@@ -18,7 +18,7 @@ in {
     # using the "option" above. 
     # Options for modules imported in "imports" can be set here.
 
-    vars = import ./homepage-vars.nix;
+    let vars = import ./homepage-vars.nix;
     
     containers.homepage = {
       autoStart = true;
