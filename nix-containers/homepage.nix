@@ -105,6 +105,13 @@ in {
                     description = "Immich Photo Collection";
                     href = "https://immich.${vars.tailNet}";
                   };
+                },
+                {
+                  "Immich Backup" = {
+                    icon = "duplicati";
+                    description = "Immich backup";
+                    href = "https://immich.${vars.tailNet}:8200";
+                  }
                 }
               ];
             }
