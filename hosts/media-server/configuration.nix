@@ -11,6 +11,7 @@
       <home-manager/nixos>
       (fetchTarball "https://github.com/nix-community/nixos-vscode-server/tarball/master")
       ../../nix-containers/homepage.nix
+      ../../nix-containers/jellyfin-container.nix
     ];
 
   # Use the GRUB 2 boot loader.
@@ -87,9 +88,9 @@
     jq
     zip
     oh-my-posh
-    jellyfin
-    jellyfin-web
-    jellyfin-ffmpeg
+#    jellyfin
+#    jellyfin-web
+#    jellyfin-ffmpeg
     openssl
     duplicati
     parted
@@ -138,11 +139,11 @@
       };
   };
 
-  services.jellyfin = {
-    enable = true;
-    openFirewall = true;
-    user="ewt";
-  };
+#  services.jellyfin = {
+#    enable = true;
+#    openFirewall = true;
+#    user="ewt";
+#  };
 
   services.duplicati = {
     enable = true;
@@ -315,6 +316,12 @@
     enable = true;
     tailNet = "tail5bbc4.ts.net";
     proxmoxUrl = "proxmox.th:8006";
+  };
+
+
+  services.jellyfin-container = {
+    enable = true;
+    tailNet = "tail5bbc4.ts.net";
   };
 
 
