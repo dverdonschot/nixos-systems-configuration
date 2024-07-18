@@ -51,12 +51,6 @@ in {
           settings = {
             title = "My Home Services";
             favicon = "https://www.google.com/favicon.ico";
-            layout = {
-              Media = {
-                style = "row";
-                columns = 4;
-              };
-            };
           };
           bookmarks = [
             {
@@ -87,7 +81,7 @@ in {
           ];
           services = [
             {
-              "Media" = [
+              "News" = [
                 {
                   "FreshRSS" = {
                     icon = "freshrss";
@@ -111,6 +105,17 @@ in {
                     icon = "duplicati";
                     description = "Immich backup";
                     href = "https://immich.${vars.tailNet}:8200";
+                  };
+                }
+              ];
+            }
+            {
+              "Infra" = [
+                {
+                  "Proxmox" = {
+                    icon = "proxmox";
+                    description = "Proxmox";
+                    href = "${vars.proxmox_url}";
                   };
                 }
               ];
