@@ -1,1 +1,1 @@
-*-vars.nix
+nix-containers/*-vars.nix
