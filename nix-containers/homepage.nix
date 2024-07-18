@@ -94,7 +94,7 @@
             {
               "Media" = [
                 {
-                  "My First Service" = {
+                  "FreshRSS" = {
                     icon = "freshrss";
                     description = "FreshRSS";
                     href = "https://freshrss.tail5bbc4.ts.net";
