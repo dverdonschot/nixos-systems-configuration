@@ -2,14 +2,17 @@
 with lib;
 let
   cfg = config.services.homepage;
-  vars = import ./homepage-vars.nix;
 in {
   options.services.homepage = {
     enable = mkEnableOption "Enable Homepage service";
-    greeter = mkOption {
+    tailNet = mkOption {
       type = types.str;
-      default = "world";
+      default = "tail1abc2.ts.net";
     };
+    proxmoxUrl = mkOption {
+      type = types.str;
+      default = "https://proxmox:8006"
+    }
   };
   
   config = mkIf cfg.enable {
@@ -52,33 +55,6 @@ in {
             title = "My Home Services";
             favicon = "https://www.google.com/favicon.ico";
           };
-          bookmarks = [
-            {
-              Media = [
-                {
-                  FreshRSS = [
-                    {
-                      icon = "freshrss";
-                      abbr = "FreshRSS";
-                      href = "https://freshrss.${vars.tailNet}";
-                    }
-                  ];
-                }
-              ];
-            }
-            {
-              Entertainment = [
-                {
-                  YouTube = [
-                    {
-                      abbr = "YT";
-                      href = "https://youtube.com/";
-                    }
-                  ];
-                }
-              ];
-            }
-          ];
           services = [
             {
               "News" = [
@@ -86,7 +62,7 @@ in {
                   "FreshRSS" = {
                     icon = "freshrss";
                     description = "FreshRSS";
-                    href = "https://freshrss.${vars.tailNet}";
+                    href = "https://freshrss.${cfg.tailNet}";
                   };
                 }
               ];
@@ -97,14 +73,14 @@ in {
                   "Immich" = {
                     icon = "immich";
                     description = "Immich Photo Collection";
-                    href = "https://immich.${vars.tailNet}";
+                    href = "https://immich.${cfg.tailNet}";
                   };
                 }
                 {
                   "Immich Backup" = {
                     icon = "duplicati";
                     description = "Immich backup";
-                    href = "https://immich.${vars.tailNet}:8200";
+                    href = "https://immich.${cfg.tailNet}:8200";
                   };
                 }
               ];
@@ -115,7 +91,7 @@ in {
                   "Proxmox" = {
                     icon = "proxmox";
                     description = "Proxmox";
-                    href = "${vars.proxmox_url}";
+                    href = "${cfg.proxmoxUrl}";
                   };
                 }
               ];
@@ -134,7 +110,7 @@ in {
           enable = true;
           extraConfig = ''
 
-            homepage.${vars.tailNet} {
+            homepage.${cfg.tailNet} {
               reverse_proxy localhost:8082
             }
 

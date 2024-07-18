@@ -313,7 +313,8 @@
 
   services.homepage = {
     enable = true;
-    greeter = "mister";
+    tailNet = "tail5bbc4.ts.net";
+    proxmoxUrl = "proxmox.th:8006";
   };
 
 
