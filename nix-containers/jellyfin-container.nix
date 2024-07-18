@@ -66,7 +66,7 @@ in {
         services.jellyfin = {
           enable = true; 
           openFirewall = true; 
-          user = "ewt";
+          #user = "ewt";
         };
 
         services.tailscale = {
