@@ -81,7 +81,7 @@ in {
           enable = true;
           extraConfig = ''
 
-            homepage.${cfg.tailNet} {
+            jellyfin.${cfg.tailNet} {
               reverse_proxy localhost:8096
             }
 
