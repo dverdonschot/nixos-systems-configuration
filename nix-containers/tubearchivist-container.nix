@@ -85,8 +85,8 @@ in {
             image = "bbilly1/tubearchivist";
             ports = ["0.0.0.0:8000:8000"];
             volumes = [
-              "/home/ewt/tubearchivist/media:/youtube"
-              "/home/ewt/tubearchivist/cache:/chache"
+              "/tubearchivist/media:/youtube"
+              "/tubearchivist/cache:/chache"
             ];
             environment = {
               ES_URL="http://archivist-es:9200";
