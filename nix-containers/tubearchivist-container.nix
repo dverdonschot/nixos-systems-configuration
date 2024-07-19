@@ -18,7 +18,7 @@ in {
     # using the "option" above. 
     # Options for modules imported in "imports" can be set here.
 
-    containers.homepage = {
+    containers.tubearchivist-container = {
       autoStart = true;
       enableTun = true;
       privateNetwork = true;
