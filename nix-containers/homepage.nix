@@ -54,8 +54,7 @@ in {
         isReadOnly = false;
       };
 
-
-      config = { pkgs, pkgs, ... }: {
+      config = { config, pkgs, ... }: {
         boot.isContainer = true;
         systemd.services.docker.path = [ pkgs.fuse-overlayfs ];
 
