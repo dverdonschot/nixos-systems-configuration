@@ -12,6 +12,7 @@
       (fetchTarball "https://github.com/nix-community/nixos-vscode-server/tarball/master")
       ../../nix-containers/homepage.nix
       ../../nix-containers/jellyfin-container.nix
+      ../../nix-containers/tubearchivist-container.nix
     ];
 
   # Use the GRUB 2 boot loader.
@@ -166,58 +167,58 @@
       };
     };
   };
-  virtualisation.oci-containers.containers = {
-    tubearchivist = {
-      image = "bbilly1/tubearchivist";
-      ports = ["0.0.0.0:8000:8000"];
-      volumes = [
-        "/home/ewt/tubearchivist/media:/youtube"
-        "/home/ewt/tubearchivist/cache:/chache"
-      ];
-      environment = {
-        ES_URL="http://archivist-es:9200";
-        REDIS_HOST="archivist-redis";
-        HOST_UID="1000";
-        HOST_GID="1000";
-        TA_HOST="tubearchivist.local 192.168.50.11 localhost";
-        TA_USERNAME="djewt1";
-        TZ="Europe/Amsterdam";
-      };
-      environmentFiles = [
-        "/home/ewt/tubearchivist/.env"
-      ];
-      dependsOn = [
-        "archivist-es"
-        "archivist-redis"
-      ];
-    };
-    archivist-redis = {
-      image = "redis/redis-stack-server";
-      ports = ["0.0.0.0:6379:6379"];
-      volumes = [
-        "/home/ewt/tubearchivist/redis:/data"
-      ];
-      dependsOn = [
-        "archivist-es"
-      ];
-    };
-    archivist-es = {
-      image = "bbilly1/tubearchivist-es";
-      ports = ["0.0.0.0:9200:9200"];
-      environment = {
-        ES_JAVA_OPTS="-Xms512m -Xmx512m";
-        "xpack.security.enabled"="true";
-        "discovery.type"="single-node";
-        "path.repo"="/usr/share/elasticsearch/data/snapshot";
-      };
-      volumes = [
-        "/home/ewt/tubearchivist/es:/usr/share/elasticsearch/data"
-      ];
-      environmentFiles = [
-        "/home/ewt/tubearchivist/.env"
-      ];
-    };
-  };
+#  virtualisation.oci-containers.containers = {
+    #tubearchivist = {
+      #image = "bbilly1/tubearchivist";
+      #ports = ["0.0.0.0:8000:8000"];
+      #volumes = [
+        #"/home/ewt/tubearchivist/media:/youtube"
+        #"/home/ewt/tubearchivist/cache:/chache"
+      #];
+      #environment = {
+        #ES_URL="http://archivist-es:9200";
+        #REDIS_HOST="archivist-redis";
+        #HOST_UID="1000";
+        #HOST_GID="1000";
+        #TA_HOST="tubearchivist.local 192.168.50.11 localhost";
+        #TA_USERNAME="djewt1";
+        #TZ="Europe/Amsterdam";
+      #};
+      #environmentFiles = [
+        #"/home/ewt/tubearchivist/.env"
+      #];
+      #dependsOn = [
+        #"archivist-es"
+        #"archivist-redis"
+      #];
+    #};
+    #archivist-redis = {
+      #image = "redis/redis-stack-server";
+      #ports = ["0.0.0.0:6379:6379"];
+      #volumes = [
+        #"/home/ewt/tubearchivist/redis:/data"
+      #];
+      #dependsOn = [
+        #"archivist-es"
+      #];
+    #};
+    #archivist-es = {
+      #image = "bbilly1/tubearchivist-es";
+      #ports = ["0.0.0.0:9200:9200"];
+      #environment = {
+        #ES_JAVA_OPTS="-Xms512m -Xmx512m";
+        #"xpack.security.enabled"="true";
+        #"discovery.type"="single-node";
+        #"path.repo"="/usr/share/elasticsearch/data/snapshot";
+      #};
+      #volumes = [
+        #"/home/ewt/tubearchivist/es:/usr/share/elasticsearch/data"
+      #];
+      #environmentFiles = [
+        #"/home/ewt/tubearchivist/.env"
+      #];
+    #};
+  #};
 
   virtualisation.oci-containers.containers = {
     metube = {
@@ -324,6 +325,10 @@
     tailNet = "tail5bbc4.ts.net";
   };
 
+  services.tubearchivist-container = {
+    enable = true;
+    tailNet = "tail5bbc4.ts.net";
+  };
 
   # Copy the NixOS configuration file and link it from the resulting system
   # (/run/current-system/configuration.nix). This is useful in case you
