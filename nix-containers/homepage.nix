@@ -52,7 +52,7 @@ in {
           rootless = {
             enable = true;
             setSocketVariable = true;
-          }
+          };
         };
 
         services.homepage-dashboard = {
