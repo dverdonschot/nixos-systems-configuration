@@ -34,8 +34,31 @@ in {
         };
       };
 
+      extraFlags = [ "--private-users-ownership=chown" ];
+      additionalCapabilities = [
+        # This is a very ugly hack to add the system-call-filter flag to
+        # nspawn. extraFlags is written to an env file as an env var and
+        # does not support spaces in arguments, so I take advantage of
+        # the additionalCapabilities generation to inject the command
+        # line argument.
+        ''all" --system-call-filter="add_key keyctl bpf" --capability="all''
+      ];
+      allowedDevices = [
+        { node = "/dev/fuse"; modifier = "rwm"; }
+        { node = "/dev/mapper/control"; modifier = "rw"; }
+        { node = "/dev/console"; modifier = "rwm"; }
+      ];
+      bindMounts.fuse = {
+        hostPath = "/dev/fuse";
+        mountPoint = "/dev/fuse";
+        isReadOnly = false;
+      };
 
-      config = { pkgs, ... }: {
+
+      config = { pkgs, pkgs, ... }: {
+        boot.isContainer = true;
+        systemd.services.docker.path = [ pkgs.fuse-overlayfs ];
+
         environment.systemPackages = with pkgs; [
           vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
           wget
