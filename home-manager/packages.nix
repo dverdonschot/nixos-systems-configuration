@@ -1,6 +1,7 @@
 pkgs: with pkgs; [
   pipx
   exercism
+  zed-editor
   ollama
   pinta
   cmake

@@ -47,6 +47,14 @@ in {
           openssl
         ];
 
+        virtualisation.docker = {
+          enable = true;
+          rootless = {
+            enable = true;
+            setSocketVariable = true;
+          }
+        };
+
         services.homepage-dashboard = {
           enable = true;
           listenPort = 8082;
