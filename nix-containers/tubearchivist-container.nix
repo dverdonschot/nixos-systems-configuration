@@ -96,58 +96,58 @@ in {
           };
         };
 
-        #virtualisation.oci-containers.containers = {
-          #tubearchivist = {
-            #image = "bbilly1/tubearchivist";
-            #ports = ["0.0.0.0:8000:8000"];
-            #volumes = [
-              #"/tubearchivist/media:/youtube"
-              #"/tubearchivist/cache:/chache"
-            #];
-            #environment = {
-              #ES_URL="http://archivist-es:9200";
-              #REDIS_HOST="archivist-redis";
-              #HOST_UID="1000";
-              #HOST_GID="1000";
-              #TA_HOST="tubearchivist.local 192.168.50.11 localhost";
-              #TA_USERNAME="djewt1";
-              #TZ="Europe/Amsterdam";
-            #};
-            #environmentFiles = [
-              #"/tubearchivist/.env"
-            #];
-            #dependsOn = [
-              #"archivist-es"
-              #"archivist-redis"
-            #];
-          #};
-          #archivist-redis = {
-            #image = "redis/redis-stack-server";
-            #ports = ["0.0.0.0:6379:6379"];
-            #volumes = [
-              #"/tubearchivist/redis:/data"
-            #];
-            #dependsOn = [
-              #"archivist-es"
-            #];
-          #};
-          #archivist-es = {
-            #image = "bbilly1/tubearchivist-es";
-            #ports = ["0.0.0.0:9200:9200"];
-            #environment = {
-              #ES_JAVA_OPTS="-Xms512m -Xmx512m";
-              #"xpack.security.enabled"="true";
-              #"discovery.type"="single-node";
-              #"path.repo"="/usr/share/elasticsearch/data/snapshot";
-            #};
-            #volumes = [
-              #"/tubearchivist/es:/usr/share/elasticsearch/data"
-            #];
-            #environmentFiles = [
-              #"/tubearchivist/.env"
-            #];
-          #};
-        #};
+       #virtualisation.oci-containers.containers = {
+          tubearchivist = {
+            image = "bbilly1/tubearchivist";
+            ports = ["0.0.0.0:8000:8000"];
+            volumes = [
+              "/tubearchivist/media:/youtube"
+              "/tubearchivist/cache:/chache"
+            ];
+            environment = {
+              ES_URL="http://archivist-es:9200";
+              REDIS_HOST="archivist-redis";
+              HOST_UID="1000";
+              HOST_GID="1000";
+              TA_HOST="tubearchivist.local 192.168.50.11 localhost";
+              TA_USERNAME="djewt1";
+              TZ="Europe/Amsterdam";
+            };
+            environmentFiles = [
+              "/tubearchivist/.env"
+            ];
+            dependsOn = [
+              "archivist-es"
+              "archivist-redis"
+            ];
+          };
+          archivist-redis = {
+            image = "redis/redis-stack-server";
+            ports = ["0.0.0.0:6379:6379"];
+            volumes = [
+              "/tubearchivist/redis:/data"
+            ];
+            dependsOn = [
+              "archivist-es"
+            ];
+          };
+          archivist-es = {
+            image = "bbilly1/tubearchivist-es";
+            ports = ["0.0.0.0:9200:9200"];
+            environment = {
+              ES_JAVA_OPTS="-Xms512m -Xmx512m";
+              "xpack.security.enabled"="true";
+              "discovery.type"="single-node";
+              "path.repo"="/usr/share/elasticsearch/data/snapshot";
+            };
+            volumes = [
+              "/tubearchivist/es:/usr/share/elasticsearch/data"
+            ];
+            environmentFiles = [
+              "/tubearchivist/.env"
+            ];
+          };
+        };
 
         services.caddy = {
           enable = true;
