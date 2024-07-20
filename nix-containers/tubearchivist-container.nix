@@ -66,7 +66,7 @@ in {
           openssl
         ];
 
-        networking.nameservers = [ "1.1.1.1" ];
+        services.resolved.fallbackDns = [ "1.1.1.1" ];
         virtualisation.docker = {
           enable = true;
           rootless = {
