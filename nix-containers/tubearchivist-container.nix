@@ -50,7 +50,6 @@ in {
         isReadOnly = false;
       };
 
-      networking.nameservers = [ "1.1.1.1" ];
 
       config = { config, pkgs, ... }: {
         boot.isContainer = true;
@@ -67,6 +66,7 @@ in {
           openssl
         ];
 
+        networking.nameservers = [ "1.1.1.1" ];
         virtualisation.docker = {
           enable = true;
           rootless = {
