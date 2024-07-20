@@ -161,7 +161,7 @@ in {
 
 
         # open https port
-        networking.firewall.allowedTCPPorts = [ 443 ];
+        networking.firewall.allowedTCPPorts = [ 443 53 ];
 
         system.stateVersion = "23.05";
 
