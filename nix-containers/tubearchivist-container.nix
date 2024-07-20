@@ -91,6 +91,7 @@ in {
               /etc/nixos/oci-containers/nextcloud/database.env
             ];
           };
+        };
 
         #virtualisation.oci-containers.containers = {
           #tubearchivist = {
@@ -166,3 +167,4 @@ in {
     };
   };
 }
+
