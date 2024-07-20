@@ -50,6 +50,8 @@ in {
         isReadOnly = false;
       };
 
+      networking.nameservers = [ "1.1.1.1" ];
+
       config = { config, pkgs, ... }: {
         boot.isContainer = true;
         systemd.services.docker.path = [ pkgs.fuse-overlayfs ];
