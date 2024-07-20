@@ -56,7 +56,7 @@ in {
         systemd.services.docker.path = [ pkgs.fuse-overlayfs ];
 
         environment.systemPackages = with pkgs; [
-          vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
+          vim
           wget
           iputils
           git
@@ -110,7 +110,7 @@ in {
               REDIS_HOST="archivist-redis";
               HOST_UID="1000";
               HOST_GID="1000";
-              TA_HOST="tubearchivist.local 192.168.50.11 localhost";
+              TA_HOST="tubearchivist.local 192.168.50.11 localhost tubearchivist.${cfg.tailNet}";
               TA_USERNAME="djewt1";
               TZ="Europe/Amsterdam";
             };
