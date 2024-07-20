@@ -325,10 +325,10 @@
     tailNet = "tail5bbc4.ts.net";
   };
 
-  services.tubearchivist-container = {
-    enable = true;
-    tailNet = "tail5bbc4.ts.net";
-  };
+#  services.tubearchivist-container = {
+#    enable = true;
+#    tailNet = "tail5bbc4.ts.net";
+#  };
 
   # Copy the NixOS configuration file and link it from the resulting system
   # (/run/current-system/configuration.nix). This is useful in case you
