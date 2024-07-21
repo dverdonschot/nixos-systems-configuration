@@ -220,16 +220,16 @@
     #};
   #};
 
-  virtualisation.oci-containers.containers = {
-    metube = {
-      image = "ghcr.io/alexta69/metube";
-      ports = ["0.0.0.0:8081:8081"];
-      volumes = [
-        "/home/ewt/metube-downloads:/downloads"
-      ];
-    };
-  };
-   # Enable the OpenSSH daemon.
+#  virtualisation.oci-containers.containers = {
+    #metube = {
+      #image = "ghcr.io/alexta69/metube";
+      #ports = ["0.0.0.0:8081:8081"];
+      #volumes = [
+        #"/home/ewt/metube-downloads:/downloads"
+      #];
+    #};
+  #};
+   ## Enable the OpenSSH daemon.
   services.openssh.enable = true;
   
   programs.bash = {
@@ -329,6 +329,11 @@
     enable = true;
     tailNet = "tail5bbc4.ts.net";
   };
+  services.metube-container = {
+    enable = true;
+    tailNet = "tail5bbc4.ts.net";
+  };
+
 
   # Copy the NixOS configuration file and link it from the resulting system
   # (/run/current-system/configuration.nix). This is useful in case you
