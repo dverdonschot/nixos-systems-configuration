@@ -13,6 +13,7 @@
       ../../nix-containers/homepage.nix
       ../../nix-containers/jellyfin-container.nix
       ../../nix-containers/tubearchivist-container.nix
+      ../../nix-containers/metube-container.nix
     ];
 
   # Use the GRUB 2 boot loader.
