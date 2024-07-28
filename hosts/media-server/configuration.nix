@@ -339,7 +339,7 @@
     enable = true;
     tailNet = "tail5bbc4ts.net";
     userName = "ewt";
-  }
+  };
 
 
   # Copy the NixOS configuration file and link it from the resulting system
