@@ -33,7 +33,7 @@ in {
         };
         "/nextcloud-security" = {
           hostPath = "/home/${cfg.userName}/nextcloud-security";
-        }
+        };
       };
 
 
