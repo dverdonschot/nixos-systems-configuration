@@ -32,7 +32,7 @@ in {
           hostPath = "/home/${cfg.userName}/nextcloud";
         };
         "/nextcloud-security" = {
-          hostPath = "/home/${cfg.userName}/nextcloud-security"
+          hostPath = "/home/${cfg.userName}/nextcloud-security";
         }
       };
 
