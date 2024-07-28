@@ -51,7 +51,7 @@
     networkmanager.unmanaged = ["interface-name:ve-*"];
     hostName = "media";
     usePredictableInterfaceNames = false;
-    nameservers = [ "192.168.50.110" "100.119.102.1" ];
+    nameservers = [ "1.1.1.1" "192.168.50.110" "100.119.102.1" ];
     # added for nixos containers
     nat = {
       enable = true;
@@ -338,7 +338,7 @@
   services.nextcloud-container = {
     enable = true;
     tailNet = "tail5bbc4ts.net";
-    userName = "ewt";
+    userName = "ewt"
   }
 
 
