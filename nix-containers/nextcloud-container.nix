@@ -64,7 +64,7 @@ in {
         };
 
         };
-        nextcloud = {
+        services.nextcloud = {
           enable = true;
           hostName = "nextcloud.${cfg.tailNet}";
           # Need to manually increment with every major upgrade.
@@ -97,7 +97,7 @@ in {
           phpOptions."opcache.interned_strings_buffer" = "16";
         };
         # Nightly database backups.
-        postgresqlBackup = {
+        services.postgresqlBackup = {
           enable = true;
           startAt = "*-*-* 01:15:00";
         };
