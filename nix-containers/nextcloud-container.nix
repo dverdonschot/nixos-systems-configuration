@@ -29,11 +29,14 @@ in {
       localAddress = "192.168.100.16";
       bindMounts = {
         "/nextcloud" = {
-          hostPath = "/home/${cfg.userName}/nextcloud";
+          hostPath = "/mnt/nextcloud";
         };
         "/nextcloud-security" = {
-          hostPath = "/home/${cfg.userName}/nextcloud-security";
+          hostPath = "/mnt/nextcloud-security";
         };
+        "/nextcloud-database" = {
+          hostPath = "/mnt/nextcloud-database"
+        }
       };
 
 

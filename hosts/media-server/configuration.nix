@@ -340,7 +340,7 @@
 
   services.nextcloud-container = {
     enable = true;
-    tailNet = "tail5bbc4ts.net";
+    tailNet = "tail5bbc4.ts.net";
     userName = "ewt";
   };
 
