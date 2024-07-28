@@ -12,4 +12,5 @@ pkgs: with pkgs; [
   cachix
   tree
   jetbrains.pycharm-community-bin
+  yarn
 ]

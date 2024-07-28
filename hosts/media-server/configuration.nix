@@ -335,6 +335,12 @@
     tailNet = "tail5bbc4.ts.net";
   };
 
+  services.nextcloud-container = {
+    enable = true;
+    tailNet = "tail5bbc4ts.net";
+    userName = "ewt";
+  }
+
 
   # Copy the NixOS configuration file and link it from the resulting system
   # (/run/current-system/configuration.nix). This is useful in case you
