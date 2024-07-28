@@ -63,7 +63,6 @@ in {
           ];
         };
 
-        };
         services.nextcloud = {
           enable = true;
           hostName = "nextcloud.${cfg.tailNet}";
@@ -124,7 +123,7 @@ in {
         networking.firewall.allowedTCPPorts = [ 443 ];
 
         system.stateVersion = "23.05";
-
+      };
     };
   };
 }
