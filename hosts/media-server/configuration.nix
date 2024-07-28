@@ -14,6 +14,7 @@
       ../../nix-containers/jellyfin-container.nix
       ../../nix-containers/tubearchivist-container.nix
       ../../nix-containers/metube-container.nix
+      ../../nix-containers/nextcloud-container.nix
     ];
 
   # Use the GRUB 2 boot loader.
