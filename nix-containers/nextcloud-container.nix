@@ -35,8 +35,8 @@ in {
           hostPath = "/mnt/nextcloud-security";
         };
         "/nextcloud-database" = {
-          hostPath = "/mnt/nextcloud-database"
-        }
+          hostPath = "/mnt/nextcloud-database";
+        };
       };
 
 
