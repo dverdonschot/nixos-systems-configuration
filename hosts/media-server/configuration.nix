@@ -11,10 +11,10 @@
       <home-manager/nixos>
       (fetchTarball "https://github.com/nix-community/nixos-vscode-server/tarball/master")
       ../../nix-containers/homepage.nix
+      ../../nix-containers/nextcloud-container.nix
       ../../nix-containers/jellyfin-container.nix
       ../../nix-containers/tubearchivist-container.nix
       ../../nix-containers/metube-container.nix
-      ../../nix-containers/nextcloud-container.nix
     ];
 
   # Use the GRUB 2 boot loader.
@@ -322,6 +322,13 @@
     tailNet = "tail5bbc4.ts.net";
     proxmoxUrl = "proxmox.th:8006";
   };
+  
+  services.nextcloud-container = {
+    enable = true;
+    tailNet = "tail5bbc4.ts.net";
+    userName = "ewt";
+  };
+
 
 
   services.jellyfin-container = {
@@ -337,13 +344,6 @@
     enable = true;
     tailNet = "tail5bbc4.ts.net";
   };
-
-  services.nextcloud-container = {
-    enable = true;
-    tailNet = "tail5bbc4.ts.net";
-    userName = "ewt";
-  };
-
 
   # Copy the NixOS configuration file and link it from the resulting system
   # (/run/current-system/configuration.nix). This is useful in case you
