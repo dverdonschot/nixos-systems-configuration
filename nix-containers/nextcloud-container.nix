@@ -99,10 +99,10 @@ in {
           phpOptions."opcache.interned_strings_buffer" = "16";
         };
         # Nightly database backups.
-        services.postgresqlBackup = {
-          enable = true;
-          startAt = "*-*-* 01:15:00";
-        };
+        #services.postgresqlBackup = {
+        #  enable = true;
+        #  startAt = "*-*-* 01:15:00";
+        #};
 
         services.tailscale = {
           enable = true;
