@@ -11,7 +11,7 @@
       <home-manager/nixos>
       (fetchTarball "https://github.com/nix-community/nixos-vscode-server/tarball/master")
       ../../nix-containers/homepage.nix
-      ../../nix-containers/nextcloud-container.nix
+      #../../nix-containers/nextcloud-container.nix
       ../../nix-containers/jellyfin-container.nix
       ../../nix-containers/tubearchivist-container.nix
       ../../nix-containers/metube-container.nix
