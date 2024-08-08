@@ -1,7 +1,7 @@
 { lib, pkgs, config, ... }:
 with lib;
 let
-  cfg = config.services.nextcloud;
+  cfg = config.services.nextcloud-container;
 in {
   options.services.nextcloud-container = {
     enable = mkEnableOption "Enable nextcloud container service";
@@ -21,7 +21,7 @@ in {
     # using the "option" above. 
     # Options for modules imported in "imports" can be set here.
 
-    containers.nextcloud = {
+    containers.nextcloud-container = {
       autoStart = true;
       enableTun = true;
       privateNetwork = true;
@@ -50,6 +50,7 @@ in {
           jq
           zip
           openssl
+          nextcloud28
         ];
 
         nixpkgs.config.packageOverrides = pkgs: {
@@ -68,10 +69,10 @@ in {
 
         services.nextcloud = {
           enable = true;
-          hostName = "nextcloud.${cfg.tailNet}";
+          hostName = "nextcloud.tail5bbc4.ts.net";
           # Need to manually increment with every major upgrade.
-          package = pkgs.nextcloud28;
           # Let NixOS install and configure the database automatically.
+          package = pkgs.nextcloud29;
           database.createLocally = true;
           # Let NixOS install and configure Redis caching automatically.
           configureRedis = true;
@@ -125,7 +126,7 @@ in {
         # open https port
         networking.firewall.allowedTCPPorts = [ 443 ];
 
-        system.stateVersion = "23.05";
+        system.stateVersion = "23.11";
       };
     };
   };
