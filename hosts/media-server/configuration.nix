@@ -323,11 +323,11 @@
     proxmoxUrl = "proxmox.th:8006";
   };
   
-  services.nextcloud-container = {
-    enable = true;
-    tailNet = "tail5bbc4.ts.net";
-    userName = "ewt";
-  };
+  #services.nextcloud-container = {
+  #  enable = true;
+  #  tailNet = "tail5bbc4.ts.net";
+  #  userName = "ewt";
+  #};
 
 
 
