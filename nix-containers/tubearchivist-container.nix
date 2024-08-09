@@ -27,6 +27,7 @@ in {
       bindMounts = {
         "/tubearchivist" = {
           hostPath = "/mnt/tubearchivist";
+          isReadOnly = false;
         };
       };
 
