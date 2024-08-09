@@ -83,20 +83,6 @@ in {
           permitCertUid = "caddy";
         };
         
-        virtualisation.oci-containers.containers = {
-          extcloud_database = {
-		        image = "postgres:15.1";
-            autoStart = true;
-            volumes = [ 
-              "/nextcloud/postgres_data:/var/lib/postgresql/data"
-            ];
-            environmentFiles = [
-              /etc/nixos/oci-containers/default.env
-              /etc/nixos/oci-containers/nextcloud/database.env
-            ];
-          };
-        };
-
         virtualisation.oci-containers.backend = "docker";
         virtualisation.oci-containers.containers = {
           tubearchivist = {
@@ -115,6 +101,7 @@ in {
               TA_USERNAME="djewt1";
               TZ="Europe/Amsterdam";
             };
+            extraOptions = ["--network=host];
             environmentFiles = [
               "/tubearchivist/.env"
             ];
@@ -132,6 +119,7 @@ in {
             dependsOn = [
               "archivist-es"
             ];
+            extraOptions = ["--network=host];
           };
           archivist-es = {
             image = "bbilly1/tubearchivist-es";
@@ -148,6 +136,7 @@ in {
             environmentFiles = [
               "/tubearchivist/.env"
             ];
+            extraOptions = ["--network=host];
           };
         };
 
