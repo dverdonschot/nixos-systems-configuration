@@ -101,7 +101,7 @@ in {
               TA_USERNAME="djewt1";
               TZ="Europe/Amsterdam";
             };
-            extraOptions = ["--network=host"];
+            extraOptions = ["--network=bridge"];
             environmentFiles = [
               "/tubearchivist/.env"
             ];
@@ -119,7 +119,7 @@ in {
             dependsOn = [
               "archivist-es"
             ];
-            extraOptions = ["--network=host"];
+            extraOptions = ["--network=bridge"];
           };
           archivist-es = {
             image = "bbilly1/tubearchivist-es";
@@ -136,7 +136,7 @@ in {
             environmentFiles = [
               "/tubearchivist/.env"
             ];
-            extraOptions = ["--network=host"];
+            extraOptions = ["--network=bridge"];
           };
         };
 
