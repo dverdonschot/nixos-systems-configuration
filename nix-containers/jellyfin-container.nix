@@ -28,8 +28,8 @@ in {
         "/films" = {
           hostPath = "/home/ewt/films";
         };
-        "/tubearchivist" = {
-          hostPath = "/home/ewt/tubearchivist";
+        "/metube" = {
+          hostPath = "/mnt/metube";
         };
       };
 
