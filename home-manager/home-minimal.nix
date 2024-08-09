@@ -32,7 +32,7 @@
         nerdtree
         LazyVim
         nnn-vim
-        (nvim-treesitter.withPlugins (p: [p.rust p.python p.nix p.json p.yaml p.toml ]))
+        (nvim-treesitter.withPlugins (p: [p.rust p.python p.nix p.json p.yaml p.toml p.typescript ]))
       ];
       extraConfig = ''
         set number relativenumber
