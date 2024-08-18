@@ -347,6 +347,13 @@
     ipAddress = "192.168.100.15";
 
   };
+  
+  services.arthurtube-container = {
+    enable = true;
+    tailNet = "tail5bbc4.ts.net";
+    containerName = "arthurtube";
+    ipAddress = "192.168.100.17";
+  };
 
   # Copy the NixOS configuration file and link it from the resulting system
   # (/run/current-system/configuration.nix). This is useful in case you
