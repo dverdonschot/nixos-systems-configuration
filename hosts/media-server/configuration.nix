@@ -15,6 +15,7 @@
       ../../nix-containers/jellyfin-container.nix
       ../../nix-containers/tubearchivist-container.nix
       ../../nix-containers/metube-container.nix
+      ../../nix-containers/arthurtube-container.nix
     ];
 
   # Use the GRUB 2 boot loader.
@@ -345,7 +346,6 @@
     tailNet = "tail5bbc4.ts.net";
     containerName = "metube";
     ipAddress = "192.168.100.15";
-
   };
   
   services.arthurtube-container = {
