@@ -31,6 +31,9 @@ in {
         "/metube" = {
           hostPath = "/mnt/metube";
         };
+        "/arthurtube" = {
+          hostPath = "/mnt/arthurtube";
+        };
       };
 
 
