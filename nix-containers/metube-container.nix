@@ -26,12 +26,12 @@ in {
     # using the "option" above. 
     # Options for modules imported in "imports" can be set here.
 
-    containers.${containerName} = {
+    containers.${cfg.containerName} = {
       autoStart = true;
       enableTun = true;
       privateNetwork = true;
       hostAddress = "192.168.100.10";
-      localAddress = "${cfg.containerName}";
+      localAddress = "${cfg.ipAddress}";
       bindMounts = {
         "/${cfg.containerName}" = {
           hostPath = "/mnt/${cfg.containerName}";
