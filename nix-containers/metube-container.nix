@@ -9,6 +9,14 @@ in {
       type = types.str;
       default = "tail1abc2.ts.net";
     };
+    containerName = mkOption {
+      type = types.str;
+      default = "metube";
+    };
+    ipAddress = mkOption {
+      type = types.str;
+      default = "192.168.100.15";
+    };
   };
   
   config = mkIf cfg.enable {
@@ -18,15 +26,15 @@ in {
     # using the "option" above. 
     # Options for modules imported in "imports" can be set here.
 
-    containers.metube = {
+    containers.${containerName} = {
       autoStart = true;
       enableTun = true;
       privateNetwork = true;
       hostAddress = "192.168.100.10";
-      localAddress = "192.168.100.15";
+      localAddress = "${cfg.containerName}";
       bindMounts = {
-        "/metube" = {
-          hostPath = "/mnt/metube";
+        "/${cfg.containerName}" = {
+          hostPath = "/mnt/${cfg.containerName}";
           isReadOnly = false;
         };
       };
@@ -89,7 +97,7 @@ in {
             image = "ghcr.io/alexta69/metube";
             ports = ["0.0.0.0:8081:8081"];
             volumes = [
-              "/metube:/downloads"
+              "/${cfg.containerName}:/downloads"
             ];
           };
         };
@@ -98,7 +106,7 @@ in {
           enable = true;
           extraConfig = ''
 
-            metube.${cfg.tailNet} {
+            ${cfg.containerName}.${cfg.tailNet} {
               reverse_proxy localhost:8081
             }
 
