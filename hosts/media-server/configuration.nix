@@ -327,7 +327,7 @@
   services.homepage = {
     enable = true;
     tailNet = "tail5bbc4.ts.net";
-    proxmoxUrl = "proxmox.th:8006";
+    proxmoxUrl = "https://proxmox.th:8006";
   };
   
   #services.nextcloud-container = {

@@ -128,10 +128,35 @@ in {
                   "Home Assistant" = {
                     icon = "home-assistant";
                     description = "Home Assistant";
-                    href = "http://homeassistant.${cfg.tailNet}:8123";
+                    href = "https://homeassistant.${cfg.tailNet}";
                   };
                 }
               ];
+            }
+            {
+              "Media" = [
+                {
+                  "JellyFin" = {
+                    icon = "jellyfin";
+                    description = "JellyFin";
+                    href = "https://jellyfin.${cfg.tailNet}";
+                  }
+                }
+                {
+                  "Metube" = {
+                    icon = "youtube";
+                    description = "Download things from youtube with metube";
+                    href = "https://metube.${cfg.tailNet}";
+                  }
+                }
+                {
+                  "Arthurtube" = {
+                    icon = "youtube";
+                    description = "Download things from youtube with metube";
+                    href = "https://arthurtube.${cfg.tailNet}";
+                  }
+                }
+              ]
             }
           ];
         };
