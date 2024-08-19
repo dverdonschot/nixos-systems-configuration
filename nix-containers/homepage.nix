@@ -156,7 +156,7 @@ in {
                     href = "https://arthurtube.${cfg.tailNet}";
                   }
                 }
-              ]
+              ];
             }
           ];
         };
