@@ -54,8 +54,8 @@ in
         enable = true;
       };
       extraConfig = {
-        push = { autoSetupRemote = true; default = "current" };
-      }
+        push = { autoSetupRemote = true; default = "current"; };
+      };
 
     };
     programs.neovim = {
