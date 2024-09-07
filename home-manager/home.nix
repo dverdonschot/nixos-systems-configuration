@@ -47,6 +47,16 @@ in
       enable = true;
       userName = "ewt";
       userEmail = "36795362+dverdonschot@users.noreply.github.com";
+      aliases = { 
+        undo = "reset --soft HEAD^"; 
+      };
+      difftastic = {
+        enable = true;
+      };
+      extraConfig = {
+        push = { autoSetupRemote = true; default current };
+      }
+
     };
     programs.neovim = {
       enable = true;
