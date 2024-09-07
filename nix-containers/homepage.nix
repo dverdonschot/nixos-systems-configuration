@@ -154,7 +154,7 @@ in {
                     icon = "youtube";
                     description = "Download things from youtube with metube";
                     href = "https://arthurtube.${cfg.tailNet}";
-                  };
+                  }
                 }
               ];
             }
