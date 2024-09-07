@@ -2,7 +2,6 @@
 
 ## How to run this flake
 
-
 ```bash
 git clone https://github.com/dverdonschot/nixos-systems-configuration.git
 cd nix-systems-configuration/nix-any-os-home-manager
