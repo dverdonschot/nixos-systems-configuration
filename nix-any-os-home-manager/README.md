@@ -10,3 +10,4 @@ nix run .#home-manager -- switch --flake .#fedora
 ## OR
 nix run ~/code/nixos-systems-configuration/nix-any-os-home-manager/.#home-manager -- switch --flake ~/code/nixos-systems-configuration/nix-any-os-home-manager/.#fedora
 ```
+
