@@ -361,6 +361,12 @@
     ipAddress = "192.168.100.17";
   };
 
+  services.minio-container = {
+    enable = true;
+    tailNet = "tail5bbc4.ts.net";
+    containerName = "arthurtube";
+    ipAddress = "192.168.100.18";
+  };
   # Copy the NixOS configuration file and link it from the resulting system
   # (/run/current-system/configuration.nix). This is useful in case you
   # accidentally delete configuration.nix.
