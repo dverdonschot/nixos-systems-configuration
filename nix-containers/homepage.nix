@@ -131,6 +131,13 @@ in {
                     href = "https://homeassistant.${cfg.tailNet}";
                   };
                 }
+                {
+                  "Minio S3" = {
+                    icon = "minio";
+                    description = " Minio S3";
+                    href = "https://minio.${cfg.tailNet}";
+                  }
+                }
               ];
             }
             {
