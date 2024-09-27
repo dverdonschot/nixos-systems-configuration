@@ -78,7 +78,7 @@ in {
           listenAddress = 9000;
           dataDir = [
             "/var/lib/minio/data"
-          ]
+          ];
         };
         services.tailscale = {
           enable = true;
