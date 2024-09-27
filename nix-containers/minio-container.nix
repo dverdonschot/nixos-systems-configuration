@@ -15,7 +15,7 @@ in {
     };
     ipAddress = mkOption {
       type = types.str;
-      default = "192.168.100.15";
+      default = "192.168.100.18";
     };
   };
   
@@ -84,7 +84,7 @@ in {
 
         services.minio = {
           enable = true;
-          listenAddress = 9000;
+          listenAddress = ":9000";
           dataDir = [
             "/var/lib/minio/data"
           ];
