@@ -81,7 +81,7 @@ in {
           enable = true;
           rootless = {
             enable = false;
-            #setSocketVariable = true;
+            setSocketVariable = true;
           };
         };
 
