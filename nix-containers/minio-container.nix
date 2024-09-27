@@ -9,6 +9,14 @@ in {
       type = types.str;
       default = "tail1abc2.ts.net";
     };
+    containerName = mkOption {
+      type = types.str;
+      default = "metube";
+    };
+    ipAddress = mkOption {
+      type = types.str;
+      default = "192.168.100.15";
+    };
   };
   
   config = mkIf cfg.enable {
