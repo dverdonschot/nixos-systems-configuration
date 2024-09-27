@@ -1,7 +1,7 @@
 { lib, pkgs, config, ... }:
 with lib;
 let
-  cfg = config.services.homepage;
+  cfg = config.services.minio-container;
 in {
   options.services.homepage = {
     enable = mkEnableOption "Enable Minio service";
