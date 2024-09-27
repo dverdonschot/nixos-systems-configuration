@@ -3,7 +3,7 @@ with lib;
 let
   cfg = config.services.minio-container;
 in {
-  options.services.homepage = {
+  options.services.minio-container = {
     enable = mkEnableOption "Enable Minio service";
     tailNet = mkOption {
       type = types.str;
