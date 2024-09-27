@@ -18,15 +18,16 @@ in {
     # using the "option" above. 
     # Options for modules imported in "imports" can be set here.
 
-    containers.minio = {
+    containers.${cfg.containerName} = {
       autoStart = true;
       enableTun = true;
       privateNetwork = true;
       hostAddress = "192.168.100.10";
-      localAddress = "192.168.100.18";
+      localAddress = "${cfg.ipAddress}";
       bindMounts = {
-        "/var/lib/mio/data" = {
-          hostPath = "/mnt/minio";
+        "/${cfg.containerName}" = {
+          hostPath = "/mnt/${cfg.containerName}";
+          isReadOnly = false;
         };
       };
 
