@@ -101,7 +101,7 @@ in {
           enable = true;
           extraConfig = ''
 
-            homepage.${cfg.tailNet} {
+            minio.${cfg.tailNet} {
               reverse_proxy localhost:9000
             }
 
