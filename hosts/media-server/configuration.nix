@@ -16,6 +16,7 @@
       ../../nix-containers/tubearchivist-container.nix
       ../../nix-containers/metube-container.nix
       ../../nix-containers/arthurtube-container.nix
+      ../../nix-containers/minio-container.nix
     ];
 
   # Use the GRUB 2 boot loader.
@@ -364,7 +365,7 @@
   services.minio-container = {
     enable = true;
     tailNet = "tail5bbc4.ts.net";
-    containerName = "arthurtube";
+    containerName = "minio";
     ipAddress = "192.168.100.18";
   };
   # Copy the NixOS configuration file and link it from the resulting system
