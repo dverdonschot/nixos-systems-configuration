@@ -136,7 +136,7 @@ in {
                     icon = "minio";
                     description = " Minio S3";
                     href = "https://minio.${cfg.tailNet}";
-                  }
+                  };
                 }
               ];
             }
@@ -161,7 +161,7 @@ in {
                     icon = "youtube";
                     description = "Download things from youtube with metube";
                     href = "https://arthurtube.${cfg.tailNet}";
-                  }
+                  };
                 }
               ];
             }
