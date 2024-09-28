@@ -92,7 +92,11 @@ in {
           dataDir = [
             "/var/lib/minio/data"
           ];
+          configDir = [
+            "/.env/minio.env"
+          ]
         };
+
         services.tailscale = {
           enable = true;
           # permit caddy to get certs from tailscale
