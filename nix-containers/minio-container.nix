@@ -37,6 +37,10 @@ in {
           hostPath = "/mnt/${cfg.containerName}";
           isReadOnly = false;
         };
+        "/.env/minio.env" = {
+          hostPath = "/home/env/
+        }
+
       };
 
       extraFlags = [ "--private-users-ownership=chown" ];
