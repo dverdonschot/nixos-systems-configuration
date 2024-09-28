@@ -102,7 +102,7 @@ in {
           extraConfig = ''
 
             minio.${cfg.tailNet} {
-              reverse_proxy localhost:9000
+              reverse_proxy localhost:9001
             }
 
           '';
