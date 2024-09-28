@@ -38,9 +38,9 @@ in {
           isReadOnly = false;
         };
         "/.env/minio.env" = {
-          hostPath = "/home/env/
-        }
-
+          hostPath = "/home/ewt/.env/minio.env";
+          isReadOnly = true;
+        };
       };
 
       extraFlags = [ "--private-users-ownership=chown" ];
