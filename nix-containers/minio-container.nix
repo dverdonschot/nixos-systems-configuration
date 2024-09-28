@@ -94,7 +94,7 @@ in {
           ];
           configDir = [
             "/.env/minio.env"
-          ]
+          ];
         };
 
         services.tailscale = {
