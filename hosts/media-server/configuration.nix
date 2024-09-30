@@ -373,7 +373,7 @@
   services.alby-container = {
     enable = true;
     tailNet = "tail5bbc4.ts.net";
-    containerName = "ably";
+    containerName = "alby";
     ipAddress = "192.168.100.19";
   };
   # Copy the NixOS configuration file and link it from the resulting system
