@@ -99,7 +99,7 @@ in {
             environment = {
               WORK_DIR = "/data";
             };
-            extraOptions = ["--pull=always"]
+            extraOptions = ["--pull=always"];
             volumes = [
               "/${cfg.containerName}:/data"
             ];
