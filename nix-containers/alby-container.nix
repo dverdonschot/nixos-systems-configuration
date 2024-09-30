@@ -1,7 +1,7 @@
 { lib, pkgs, config, ... }:
 with lib;
 let
-  cfg = config.services.metube-container;
+  cfg = config.services.alby-container;
 in {
   options.services.alby-container = {
     enable = mkEnableOption "Enable alby Container service";
@@ -93,7 +93,7 @@ in {
         
         virtualisation.oci-containers.backend = "docker";
         virtualisation.oci-containers.containers = {
-          metube = {
+          alby = {
             image = "ghcr.io/getalby/hub:latest";
             ports = ["0.0.0.0:8080:8080"];
             environment = {
