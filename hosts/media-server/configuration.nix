@@ -364,13 +364,6 @@
     ipAddress = "192.168.100.17";
   };
 
-  services.minio-container = {
-    enable = true;
-    tailNet = "tail5bbc4.ts.net";
-    containerName = "minio";
-    ipAddress = "192.168.100.18";
-  };
-
   services.alby-container = {
     enable = true;
     tailNet = "tail5bbc4.ts.net";
