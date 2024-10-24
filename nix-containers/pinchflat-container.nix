@@ -108,7 +108,7 @@ in {
           extraConfig = ''
 
             ${cfg.containerName}.${cfg.tailNet} {
-              reverse_proxy localhost:8081
+              reverse_proxy localhost:8945
             }
 
           '';
