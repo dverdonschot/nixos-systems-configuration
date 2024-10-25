@@ -11,9 +11,7 @@
       <home-manager/nixos>
       (fetchTarball "https://github.com/nix-community/nixos-vscode-server/tarball/master")
       ../../nix-containers/homepage.nix
-      #../../nix-containers/nextcloud-container.nix
       ../../nix-containers/jellyfin-container.nix
-      ../../nix-containers/tubearchivist-container.nix
       ../../nix-containers/metube-container.nix
       ../../nix-containers/arthurtube-container.nix
       ../../nix-containers/minio-container.nix
@@ -333,23 +331,11 @@
     proxmoxUrl = "https://proxmox.th:8006";
   };
   
-  #services.nextcloud-container = {
-  #  enable = true;
-  #  tailNet = "tail5bbc4.ts.net";
-  #  userName = "ewt";
-  #};
-
-
-
   services.jellyfin-container = {
     enable = true;
     tailNet = "tail5bbc4.ts.net";
   };
 
-  services.tubearchivist-container = {
-    enable = true;
-    tailNet = "tail5bbc4.ts.net";
-  };
   services.metube-container = {
     enable = true;
     tailNet = "tail5bbc4.ts.net";
