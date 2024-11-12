@@ -11,6 +11,18 @@ pkgs: with pkgs; [
   awscli2
   cachix
   tree
+  lsof
+  pciutils
+  usbutils
+  ethtool
   jetbrains.pycharm-community-bin
   yarn
+  zip
+  tree
+  xz
+  unzip
+  p7zip
+  nnn
+  jq
+  devenv  
 ]

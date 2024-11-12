@@ -4,7 +4,7 @@ let
   cfg = config.services.arthurtube-container;
 in {
   options.services.arthurtube-container = {
-    enable = mkEnableOption "Enable metube Container service";
+    enable = mkEnableOption "Enable arthurtube Container service";
     tailNet = mkOption {
       type = types.str;
       default = "tail1abc2.ts.net";

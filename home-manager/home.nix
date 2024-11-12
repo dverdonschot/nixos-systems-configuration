@@ -24,6 +24,7 @@ in
 
     programs.bash = {
       enable = true;
+      enableCompletion = true;
       initExtra = ''
         source $HOME/.profile
       '';
