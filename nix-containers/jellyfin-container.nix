@@ -34,6 +34,9 @@ in {
         "/arthurtube" = {
           hostPath = "/mnt/arthurtube";
         };
+        "/pinchflat" = {
+          hostPath = "/mnt/pinchflat";
+        };
       };
 
 

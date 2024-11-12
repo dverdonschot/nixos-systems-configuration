@@ -11,12 +11,12 @@
       <home-manager/nixos>
       (fetchTarball "https://github.com/nix-community/nixos-vscode-server/tarball/master")
       ../../nix-containers/homepage.nix
-      #../../nix-containers/nextcloud-container.nix
       ../../nix-containers/jellyfin-container.nix
-      ../../nix-containers/tubearchivist-container.nix
       ../../nix-containers/metube-container.nix
       ../../nix-containers/arthurtube-container.nix
       ../../nix-containers/minio-container.nix
+      ../../nix-containers/alby-container.nix
+      ../../nix-containers/pinchflat-container.nix
     ];
 
   # Use the GRUB 2 boot loader.
@@ -331,23 +331,11 @@
     proxmoxUrl = "https://proxmox.th:8006";
   };
   
-  #services.nextcloud-container = {
-  #  enable = true;
-  #  tailNet = "tail5bbc4.ts.net";
-  #  userName = "ewt";
-  #};
-
-
-
   services.jellyfin-container = {
     enable = true;
     tailNet = "tail5bbc4.ts.net";
   };
 
-  services.tubearchivist-container = {
-    enable = true;
-    tailNet = "tail5bbc4.ts.net";
-  };
   services.metube-container = {
     enable = true;
     tailNet = "tail5bbc4.ts.net";
@@ -362,11 +350,18 @@
     ipAddress = "192.168.100.17";
   };
 
-  services.minio-container = {
+  services.alby-container = {
     enable = true;
     tailNet = "tail5bbc4.ts.net";
-    containerName = "minio";
-    ipAddress = "192.168.100.18";
+    containerName = "alby";
+    ipAddress = "192.168.100.19";
+  };
+
+  services.pinchflat-container = {
+    enable = true;
+    tailNet = "tail5bbc4.ts.net";
+    containerName = "pinchflat";
+    ipAddress = "192.168.100.21";
   };
   # Copy the NixOS configuration file and link it from the resulting system
   # (/run/current-system/configuration.nix). This is useful in case you
