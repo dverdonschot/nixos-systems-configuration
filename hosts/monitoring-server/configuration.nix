@@ -46,7 +46,7 @@
     networkmanager.unmanaged = ["interface-name:ve-*"];
     hostName = "monitoring";
     usePredictableInterfaceNames = false;
-    nameservers = [ "1.1.1.1" "192.168.50.110" "100.119.102.1" ];
+    nameservers = [ "192.168.50.110" "1.1.1.1" "100.119.102.1" ];
     # added for nixos containers
     nat = {
       enable = true;
