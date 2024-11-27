@@ -95,9 +95,6 @@
     jq
     zip
     oh-my-posh
-#    jellyfin
-#    jellyfin-web
-#    jellyfin-ffmpeg
     openssl
     duplicati
     parted
@@ -127,6 +124,7 @@
   networking.firewall.allowedTCPPorts = [
     8200
     8000
+    9100
   ];
   networking.firewall.trustedInterfaces = ["ve-dashy"];
   # Setup DNS.
@@ -146,17 +144,7 @@
       };
   };
 
-  services.iperf3 = {
-    enable = true;
-    openFirewall = true;
-    port = 7575;
-  };
-
-#  services.jellyfin = {
-#    enable = true;
-#    openFirewall = true;
-#    user="ewt";
-#  };
+  services.prometheus.exporters.node.enable = true;
 
   services.duplicati = {
     enable = true;
@@ -179,69 +167,8 @@
       };
     };
   };
-#  virtualisation.oci-containers.containers = {
-    #tubearchivist = {
-      #image = "bbilly1/tubearchivist";
-      #ports = ["0.0.0.0:8000:8000"];
-      #volumes = [
-        #"/home/ewt/tubearchivist/media:/youtube"
-        #"/home/ewt/tubearchivist/cache:/chache"
-      #];
-      #environment = {
-        #ES_URL="http://archivist-es:9200";
-        #REDIS_HOST="archivist-redis";
-        #HOST_UID="1000";
-        #HOST_GID="1000";
-        #TA_HOST="tubearchivist.local 192.168.50.11 localhost";
-        #TA_USERNAME="djewt1";
-        #TZ="Europe/Amsterdam";
-      #};
-      #environmentFiles = [
-        #"/home/ewt/tubearchivist/.env"
-      #];
-      #dependsOn = [
-        #"archivist-es"
-        #"archivist-redis"
-      #];
-    #};
-    #archivist-redis = {
-      #image = "redis/redis-stack-server";
-      #ports = ["0.0.0.0:6379:6379"];
-      #volumes = [
-        #"/home/ewt/tubearchivist/redis:/data"
-      #];
-      #dependsOn = [
-        #"archivist-es"
-      #];
-    #};
-    #archivist-es = {
-      #image = "bbilly1/tubearchivist-es";
-      #ports = ["0.0.0.0:9200:9200"];
-      #environment = {
-        #ES_JAVA_OPTS="-Xms512m -Xmx512m";
-        #"xpack.security.enabled"="true";
-        #"discovery.type"="single-node";
-        #"path.repo"="/usr/share/elasticsearch/data/snapshot";
-      #};
-      #volumes = [
-        #"/home/ewt/tubearchivist/es:/usr/share/elasticsearch/data"
-      #];
-      #environmentFiles = [
-        #"/home/ewt/tubearchivist/.env"
-      #];
-    #};
-  #};
-
-#  virtualisation.oci-containers.containers = {
-    #metube = {
-      #image = "ghcr.io/alexta69/metube";
-      #ports = ["0.0.0.0:8081:8081"];
-      #volumes = [
-        #"/home/ewt/metube-downloads:/downloads"
-      #];
-    #};
-  #};
-   ## Enable the OpenSSH daemon.
+  
+  ## Enable the OpenSSH daemon.
   services.openssh.enable = true;
   
   programs.bash = {
@@ -250,80 +177,6 @@
       eval "$(oh-my-posh --init --shell bash --config /home/ewt/.config/oh-my-posh/posh-dverdonschot.omp.json)"
     '';
   };
-
-  ## Dashy
-  containers.dashy = {
-    autoStart = true;
-    enableTun = true;
-    privateNetwork = true;
-    hostAddress = "192.168.100.10";
-    localAddress = "192.168.100.11";
-    bindMounts = {
-      "/films" = {
-        hostPath = "/mnt/films";
-      };
-    };
-
-
-    config = { pkgs, ... }: {
-      environment.systemPackages = with pkgs; [
-        vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
-        wget
-        iputils
-        git
-        bind
-        jq
-        zip
-        openssl
-        podman
-        podman-compose
-        podman-tui
-      ];
-      virtualisation = {
-        podman = {
-          enable = true;
-          # docker alias
-          dockerCompat = true;
-          defaultNetwork.settings.dns_enabled = true;
-       };
-      };
-	    virtualisation.oci-containers.containers = {
-        dashy = {
-          image = "lissy93/dashy";
-          ports = ["0.0.0.0:8080:8080"];
-          volumes = [
-	        "/home/ewt/dashy/my-local-conf.yml:/app/user-data/conf.yml"
-          ];
-        };
-      };
-      services.tailscale = {
-        enable = true;
-        # permit caddy to get certs from tailscale
-        permitCertUid = "caddy";
-      };
-      
-
-
-      services.caddy = {
-        enable = true;
-        extraConfig = ''
-
-          dashy.tail5bbc4.ts.net {
-            reverse_proxy localhost:8080
-          }
-
-        '';
-      };
-
-
-      # open https port
-      networking.firewall.allowedTCPPorts = [ 443 ];
-
-      system.stateVersion = "23.05";
-
-    };
-  };
-### dashy
 
   services.homepage = {
     enable = true;

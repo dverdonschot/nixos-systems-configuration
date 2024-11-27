@@ -9,6 +9,7 @@
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
       <home-manager/nixos>
+      ../../nix-containers/prometheus-container.nix
     ];
 
   # Use the GRUB 2 boot loader.
@@ -85,9 +86,6 @@
     jq
     zip
     oh-my-posh
-#    jellyfin
-#    jellyfin-web
-#    jellyfin-ffmpeg
     openssl
     duplicati
     parted
@@ -110,14 +108,16 @@
    };
   };
 	
+  services.prometheus.exporters.node.enable = true;
+
   networking.firewall.allowedUDPPorts = [
     53 # DNS
     5353 # Multicast
   ];
   networking.firewall.allowedTCPPorts = [
     8200
+    9100
   ];
-  networking.firewall.trustedInterfaces = ["ve-dashy"];
   # Setup DNS.
   services.resolved = {
     enable = true;
@@ -145,6 +145,12 @@
     '';
   };
 
+  services.prometheus-container = {
+    enable = true;
+    tailNet = "tail5bbc4.ts.net";
+    containerName = "prometheus";
+    ipAddress = "192.168.100.23";
+  };
   # Copy the NixOS configuration file and link it from the resulting system
   # (/run/current-system/configuration.nix). This is useful in case you
   # accidentally delete configuration.nix.
