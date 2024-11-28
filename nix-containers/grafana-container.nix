@@ -85,70 +85,33 @@ in {
             }];
           };
         };
-        services.loki = {
-          let
-            lokiDir = "/var/lib/loki"
-          in
-          {
+
+        services.grafana = {
+          protocol = "http";
+          addr = "0.0.0.0";
+          analytics.reporting.enable = false;
+          enable = true;
+
+          provision = {
             enable = true;
-            configuration = {
-              analytics.reporting_enabled = false;
-              auth_enabled = false;
-
-              server = {
-                http_listen_address = "0.0.0.0";
-                http_listen_port = 3100;
-                log_level = "warn";
-              };
-
-              ingester = {
-                lifecycler = {
-                  address = "127.0.0.1";
-                  ring = {
-                    kvstore.store = "inmemory";
-                    replication_factor = 1;
-                  };
-                  final_sleep = "0s";
-                };
-                chunk_idle_period = "5m";
-                chunk_retain_period = "30s";
-              };
-
-              schema_config.configs = [
-                {
-                  from = "2023-06-01";
-                  store = "tsdb";
-                  object_store = "filesystem";
-                  schema = "v13";
-                  index = {
-                    prefix = "index_";
-                    period = "24h";
-                  };
-                }
-              ];
-
-              storage_config = {
-                tsdb_shipper = {
-                  active_index_directory = "${lokiDir}/tsdb-index";
-                  cache_location = "${lokiDir}/tsdb-cache";
-                  cache_ttl = "24h";
-                };
-                filesystem.directory = "${lokiDir}/chunks";
-              };
-
-              # Do not accept new logs that are ingressed when they are actually already old.
-              limits_config = {
-                reject_old_samples = true;
-                reject_old_samples_max_age = "168h";
-                allow_structured_metadata = false;
-              };
-              compactor = {
-                working_directory = lokiDir;
-                compactor_ring.kvstore.store = "inmemory";
-              };
-            };
+            datasources = [
+              {
+                name = "Prometheus";
+                type = "prometheus";
+                access = "proxy";
+                url = "https://prometheus.${cfg.tailNet}:443";
+              }
+              {
+                name = "Loki";
+                type = "loki";
+                access = "proxy";
+                url = "https://loki.${cfg.tailNet}:443;
+              }
+            ];
           };
         };
+
+
         services.tailscale = {
           enable = true;
           # permit caddy to get certs from tailscale
@@ -158,7 +121,7 @@ in {
         services.caddy = {
           enable = true;
           extraConfig = ''
-            loki.${cfg.tailNet} {
+            grafana.${cfg.tailNet} {
               reverse_proxy localhost:3100
             }
           '';

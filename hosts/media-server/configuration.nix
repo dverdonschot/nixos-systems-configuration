@@ -152,19 +152,34 @@
     user = "root";
   };
 
-  virtualisation.oci-containers.containers = {
-    tubesync = {
-      image = "ghcr.io/meeb/tubesync:latest";
-      ports = ["0.0.0.0:4848:4848"];
-      volumes = [
-        "/home/ewt/tubesync-config:/config"
-        "/home/ewt/tubesync-downloads:/downloads"
-      ];
-      environment = {
-        PUID="1000";
-        PGID="1000";
-        TZ="Europe/Amsterdam";
+  # promtail to forward logs to loki
+  services.promtail = {
+    enable = true;
+    configuration = {
+      server = {
+        http_listen_port = 3031;
+        grpc_listen_port = 0;
       };
+      positions = {
+        filename = "/tmp/positions.yaml"
+      };
+      clients = [{
+        url = "http://loki.${cfg.tailNet}:3100/loki/api/v1/push";
+      }];
+      scrape_configs = [{
+        job_name = "journal";
+        journal = {
+          max_age = "12h";
+          labels = {
+            job = "systemd-journal";
+            host = "pihole";
+          };
+        };
+        relabel_configs = [{
+          source_labels = [ "__journal__systemd_unit" ];
+          target_label = "unit";
+        }];
+      }];
     };
   };
   

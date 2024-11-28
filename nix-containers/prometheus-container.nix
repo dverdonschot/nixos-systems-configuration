@@ -90,7 +90,7 @@ in {
         # open https port
         networking.firewall.allowedTCPPorts = [ 443 9100 ];
 
-        system.stateVersion = "23.05";
+        system.stateVersion = "24.05";
 
       };
     };
