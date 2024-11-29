@@ -188,8 +188,6 @@
   services.loki-container = {
     enable = true;
     tailNet = "tail5bbc4.ts.net";
-    containerName = "loki";
-    ipAddress = "192.168.100.23";
   };
   services.grafana-container = {
     enable = true;
