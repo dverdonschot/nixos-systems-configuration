@@ -9,6 +9,14 @@ in {
       type = types.str;
       default = "tail1abc2.ts.net";
     };
+    containerName = mkOption {
+      type = types.str;
+      default = "prometheus";
+    };
+    ipAddress = mkOption {
+      type = types.str;
+      default = "192.168.100.22";
+    };
   };
   
   config = mkIf cfg.enable {
@@ -23,10 +31,10 @@ in {
       enableTun = true;
       privateNetwork = true;
       hostAddress = "192.168.100.10";
-      localAddress = "192.168.100.22";
+      localAddress = "${cfg.ipAddress}";
       bindMounts = {
-        "/prometheus" = {
-          hostPath = "/mnt/prometheus";
+        "/${cfg.containerName}" = {
+          hostPath = "/mnt/${cfg.containerName}";
         };
       };
 
@@ -64,7 +72,7 @@ in {
             {
               job_name = "media";
               static_configs = [{
-                targets = [ "media.tail5bbc4.ts.net:9100" "monitoring.tail5bbc4ts.net:9100"];
+                targets = [ "media.${tailNet}:9100" "monitoring.${tailNet}:9100"];
               }];
             }
           ]
@@ -75,8 +83,6 @@ in {
           # permit caddy to get certs from tailscale
           permitCertUid = "caddy";
         };
-        
-
 
         services.caddy = {
           enable = true;
