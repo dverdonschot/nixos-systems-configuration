@@ -1,10 +1,10 @@
 { lib, pkgs, config, ... }:
 with lib;
 let
-  cfg = config.services.loki;
+  cfg = config.services.grafana;
 in {
-  options.services.loki-container = {
-    enable = mkEnableOption "Enable loki container service";
+  options.services.grafana-container = {
+    enable = mkEnableOption "Enable grafana container service";
     tailNet = mkOption {
       type = types.str;
       default = "tail1abc2.ts.net";
@@ -18,17 +18,12 @@ in {
     # using the "option" above. 
     # Options for modules imported in "imports" can be set here.
 
-    containers.loki = {
+    containers.grafana = {
       autoStart = true;
       enableTun = true;
       privateNetwork = true;
       hostAddress = "192.168.100.10";
-      localAddress = "192.168.100.23";
-      bindMounts = {
-        "/var/lib/loki" = {
-          hostPath = "/mnt/loki";
-        };
-      };
+      localAddress = "192.168.100.24";
 
       config = { pkgs, ... }: {
         environment.systemPackages = with pkgs; [
@@ -105,7 +100,7 @@ in {
                 name = "Loki";
                 type = "loki";
                 access = "proxy";
-                url = "https://loki.${cfg.tailNet}:443;
+                url = "https://loki.${cfg.tailNet}:443";
               }
             ];
           };
@@ -122,15 +117,15 @@ in {
           enable = true;
           extraConfig = ''
             grafana.${cfg.tailNet} {
-              reverse_proxy localhost:3100
+              reverse_proxy localhost:3000
             }
           '';
         };
 
         # open https port
-        networking.firewall.allowedTCPPorts = [ 443 3100 ];
+        networking.firewall.allowedTCPPorts = [ 443 3000 ];
 
-        system.stateVersion = "24.05";
+        system.stateVersion = "24.11";
 
       };
     };

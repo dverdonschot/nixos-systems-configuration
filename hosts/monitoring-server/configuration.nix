@@ -10,6 +10,8 @@
       ./hardware-configuration.nix
       <home-manager/nixos>
       ../../nix-containers/prometheus-container.nix
+      ../../nix-containers/loki-container.nix
+      ../../nix-containers/grafana-container.nix
     ];
 
   # Use the GRUB 2 boot loader.
@@ -180,9 +182,21 @@
     enable = true;
     tailNet = "tail5bbc4.ts.net";
     containerName = "prometheus";
+    ipAddress = "192.168.100.22";
+  };
+
+  services.loki-container = {
+    enable = true;
+    tailNet = "tail5bbc4.ts.net";
+    containerName = "loki";
     ipAddress = "192.168.100.23";
   };
-  # Copy the NixOS configuration file and link it from the resulting system
+  services.grafana-container = {
+    enable = true;
+    tailNet = "tail5bbc4.ts.net";
+    containerName = "grafana";
+    ipAddress = "192.168.100.24";
+  };  # Copy the NixOS configuration file and link it from the resulting system
   # (/run/current-system/configuration.nix). This is useful in case you
   # accidentally delete configuration.nix.
   # system.copySystemConfiguration = true;
