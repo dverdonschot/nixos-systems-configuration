@@ -11,7 +11,6 @@
       let
         lib = nixpkgs.lib;
         system = "x86_64-linux";
-        tailNet = "tail5bbc4.ts.net";
         pkgs = import nixpkgs {
           inherit system;
           specialArgs = { 
@@ -25,7 +24,6 @@
         nixosConfigurations = {
           workstation = lib.nixosSystem {
             inherit system;
-            inherit tailNet;
             specialArgs = {
               inherit inputs;
               userName = "ewt";
@@ -42,7 +40,6 @@
           };
           laptop76 = lib.nixosSystem {
             inherit system;
-            inherit tailNet;
             specialArgs = {
               inherit inputs;
               userName = "ewt";
@@ -59,7 +56,6 @@
           };
            wsl = lib.nixosSystem {
             inherit system;
-            inherit tailNet;
             specialArgs = {inherit inputs; };
             modules = [ 
               ./hosts/wsl/configuration.nix
@@ -67,7 +63,6 @@
           };
           media-server = lib.nixosSystem {
             inherit system;
-            inherit tailNet;
             specialArgs = {inherit inputs;
               userName = "ewt";
               userEmail = "36795362+dverdonschot@users.noreply.github.com"; 
@@ -83,7 +78,6 @@
           };
           monitoring-server = lib.nixosSystem {
             inherit system;
-            inherit tailNet;
             specialArgs = {inherit inputs;
               userName = "ewt";
               userEmail = "36795362+dverdonschot@users.noreply.github.com"; 

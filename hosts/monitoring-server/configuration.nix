@@ -149,7 +149,7 @@
         filename = "/tmp/positions.yaml";
       };
       clients = [{
-        url = "http://loki.${cfg.tailNet}:3100/loki/api/v1/push";
+        url = "http://loki.tail5bbc4.ts.net:3100/loki/api/v1/push";
       }];
       scrape_configs = [{
         job_name = "journal";
