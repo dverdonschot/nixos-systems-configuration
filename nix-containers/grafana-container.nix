@@ -93,13 +93,11 @@ in {
               {
                 name = "Prometheus";
                 type = "prometheus";
-                access = "proxy";
                 url = "https://prometheus.${cfg.tailNet}:443";
               }
               {
                 name = "Loki";
                 type = "loki";
-                access = "proxy";
                 url = "https://loki.${cfg.tailNet}:443";
               }
             ];
