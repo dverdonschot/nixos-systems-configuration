@@ -1,7 +1,7 @@
 { lib, pkgs, config, ... }:
 with lib;
 let
-  cfg = config.services.loki-container;
+  cfg = config.services.loki;
 in {
   options.services.loki-container = {
     enable = mkEnableOption "Enable loki container service";
@@ -165,7 +165,7 @@ in {
         };
 
         # open https port
-        #networking.firewall.allowedTCPPorts = [ 443 3100 ];
+        networking.firewall.allowedTCPPorts = [ 443 3100 ];
 
         system.stateVersion = "25.05";
 
