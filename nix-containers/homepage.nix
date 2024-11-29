@@ -116,6 +116,31 @@ in {
               ];
             }
             {
+              "Monitoring" = [
+                {
+                  "Prometheus" = {
+                    icon = "prometheus";
+                    description = "Prometheus";
+                    href = "https://prometheus.${cfg.tailNet}";
+                  };
+                }
+                {
+                  "Loki" = {
+                    icon = "loki";
+                    description = "Loki";
+                    href = "https://loki.${cfg.tailNet}";
+                  };
+                }
+                {
+                  "Grafana" = {
+                    icon = "grafana";
+                    description = "Grafana";
+                    href = "https://grafana.${cfg.tailNet}";
+                  };
+                }
+              ];
+            }
+            {
               "Infra" = [
                 {
                   "Proxmox" = {
@@ -190,7 +215,7 @@ in {
         # open https port
         networking.firewall.allowedTCPPorts = [ 443 ];
 
-        system.stateVersion = "23.05";
+        system.stateVersion = "25.05";
 
       };
     };
