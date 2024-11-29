@@ -146,7 +146,7 @@
         grpc_listen_port = 0;
       };
       positions = {
-        filename = "/tmp/positions.yaml"
+        filename = "/tmp/positions.yaml";
       };
       clients = [{
         url = "http://loki.${cfg.tailNet}:3100/loki/api/v1/push";
