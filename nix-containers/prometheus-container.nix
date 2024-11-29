@@ -75,7 +75,7 @@ in {
                 targets = [ "media.${tailNet}:9100" "monitoring.${tailNet}:9100"];
               }];
             }
-          ]
+          ];
         };
 
         services.tailscale = {
