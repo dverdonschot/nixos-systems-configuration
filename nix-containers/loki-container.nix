@@ -87,7 +87,7 @@ in {
         };
         services.loki = {
           let
-            lokiDir = "/var/lib/loki"
+            lokiDir = "/var/lib/loki";
           in
           {
             enable = true;
