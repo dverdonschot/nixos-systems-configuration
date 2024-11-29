@@ -85,7 +85,7 @@ in {
             }];
           };
         };
-        services.loki = {
+        services.loki = 
           let
             lokiDir = "/var/lib/loki";
           in
