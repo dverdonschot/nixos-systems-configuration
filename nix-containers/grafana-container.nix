@@ -1,7 +1,7 @@
 { lib, pkgs, config, ... }:
 with lib;
 let
-  cfg = config.services.grafana;
+  cfg = config.services.grafana-container;
 in {
   options.services.grafana-container = {
     enable = mkEnableOption "Enable grafana container service";
@@ -40,7 +40,7 @@ in {
         nixpkgs.config.packageOverrides = pkgs: {
           vaapiIntel = pkgs.vaapiIntel.override { enableHybridCodec = true; };
         };
-        hardware.opengl = {
+        hardware.graphics = {
           enable = true;
           extraPackages = with pkgs; [
             intel-media-driver

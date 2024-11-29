@@ -1,7 +1,7 @@
 { lib, pkgs, config, ... }:
 with lib;
 let
-  cfg = config.services.prometheus;
+  cfg = config.services.prometheus-container;
 in {
   options.services.prometheus-container = {
     enable = mkEnableOption "Enable prometheus container service";

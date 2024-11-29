@@ -1,7 +1,7 @@
 { lib, pkgs, config, ... }:
 with lib;
 let
-  cfg = config.services.loki;
+  cfg = config.services.loki-container;
 in {
   options.services.loki-container = {
     enable = mkEnableOption "Enable loki container service";
