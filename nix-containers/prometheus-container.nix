@@ -33,7 +33,7 @@ in {
       hostAddress = "192.168.100.10";
       localAddress = "${cfg.ipAddress}";
       bindMounts = {
-        "/${cfg.containerName}" = {
+        "/var/lib/${cfg.containerName}" = {
           hostPath = "/mnt/${cfg.containerName}";
         };
       };
@@ -85,9 +85,9 @@ in {
           ];
         };
 
-        services.prometheus = {
-          enable = true;
-          globalConfig.scrape_interval = "1m";
+        #services.prometheus = {
+        #  enable = true;
+        #  globalConfig.scrape_interval = "1m";
           #scrapeConfigs = [
           #  {
           #    job_name = "hosts";
@@ -96,7 +96,7 @@ in {
           #    }];
           #  }
           #];
-        };
+        #};
 
         services.tailscale = {
           enable = true;
