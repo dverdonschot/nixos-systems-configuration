@@ -89,20 +89,20 @@ in {
 
           provision = {
             enable = true;
-            datasources = [
-              {
-                name = "Prometheus";
-                type = "prometheus";
-                url = "https://prometheus.${cfg.tailNet}:443";
-                access = "proxy";
-              }
+            #datasources = [
+            #  {
+            #   name = "Prometheus";
+            #    type = "prometheus";
+            #    url = "https://prometheus.${cfg.tailNet}:443";
+            #    access = "proxy";
+            #  }
               #{
               #  name = "Loki";
               #  type = "loki";
               #  url = "https://loki.${cfg.tailNet}:443";
               #  access = "proxy"
               #}
-            ];
+            #];
           };
         };
 
