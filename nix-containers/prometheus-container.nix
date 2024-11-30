@@ -90,9 +90,9 @@ in {
           globalConfig.scrape_interval = "1m";
           scrapeConfigs = [
             {
-              job_name = "media";
+              job_name = "hosts";
               static_configs = [{
-                targets = [ "media.${tailNet}:9100" "monitoring.${tailNet}:9100"];
+                targets = [ "media.${cfg.tailNet}:9100" "monitoring.${cfg.tailNet}:9100"];
               }];
             }
           ];

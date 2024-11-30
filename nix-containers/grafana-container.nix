@@ -82,9 +82,13 @@ in {
         };
 
         services.grafana = {
-          protocol = "http";
-          addr = "0.0.0.0";
-          analytics.reporting.enable = false;
+          settings = {
+            analytics.reporting_enable = false;
+            server = {
+              protocol = "http";
+              addr = "0.0.0.0";
+            };
+          };
           enable = true;
 
           provision = {
