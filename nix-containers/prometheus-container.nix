@@ -74,7 +74,7 @@ in {
         nixpkgs.config.packageOverrides = pkgs: {
           vaapiIntel = pkgs.vaapiIntel.override { enableHybridCodec = true; };
         };
-        hardware.opengl = {
+        hardware.graphics = {
           enable = true;
           extraPackages = with pkgs; [
             intel-media-driver
@@ -88,14 +88,14 @@ in {
         services.prometheus = {
           enable = true;
           globalConfig.scrape_interval = "1m";
-          scrapeConfigs = [
-            {
-              job_name = "hosts";
-              static_configs = [{
-                targets = [ "media.${cfg.tailNet}:9100" "monitoring.${cfg.tailNet}:9100"];
-              }];
-            }
-          ];
+          #scrapeConfigs = [
+          #  {
+          #    job_name = "hosts";
+          #    static_configs = [{
+          #      targets = [ "media.${cfg.tailNet}:9100" "monitoring.${cfg.tailNet}:9100"];
+          #    }];
+          #  }
+          #];
         };
 
         services.tailscale = {
@@ -114,7 +114,7 @@ in {
         };
 
         # open https port
-        networking.firewall.allowedTCPPorts = [ 443 9100 ];
+        networking.firewall.allowedTCPPorts = [ 443 ];
 
         system.stateVersion = "25.05";
 
