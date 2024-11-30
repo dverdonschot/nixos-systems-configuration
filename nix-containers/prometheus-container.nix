@@ -88,7 +88,7 @@ in {
         services.prometheus = {
           enable = true;
           globalConfig.scrape_interval = "1m";
-          enableCollectors = ["systemd" "logind"];
+          enableCollectors = ["systemd"];
           scrapeConfigs = [
             {
               job_name = "media";
