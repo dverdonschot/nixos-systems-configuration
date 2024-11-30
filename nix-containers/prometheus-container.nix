@@ -31,10 +31,10 @@ in {
       enableTun = true;
       privateNetwork = true;
       hostAddress = "192.168.100.10";
-      localAddress = "${cfg.ipAddress}";
+      localAddress = "192.168.100.22";
       bindMounts = {
-        "/var/lib/${cfg.containerName}" = {
-          hostPath = "/mnt/${cfg.containerName}";
+        "/var/lib/prometheus" = {
+          hostPath = "/mnt/prometheus";
         };
       };
 
@@ -85,18 +85,18 @@ in {
           ];
         };
 
-        #services.prometheus = {
-        #  enable = true;
-        #  globalConfig.scrape_interval = "1m";
-          #scrapeConfigs = [
-          #  {
-          #    job_name = "hosts";
-          #    static_configs = [{
-          #      targets = [ "media.${cfg.tailNet}:9100" "monitoring.${cfg.tailNet}:9100"];
-          #    }];
-          #  }
-          #];
-        #};
+        services.prometheus = {
+          enable = true;
+          globalConfig.scrape_interval = "1m";
+          scrapeConfigs = [
+            {
+              job_name = "hosts";
+              static_configs = [{
+                targets = [ "media.${cfg.tailNet}:9100" "monitoring.${cfg.tailNet}:9100"];
+              }];
+            }
+          ];
+        };
 
         services.tailscale = {
           enable = true;
