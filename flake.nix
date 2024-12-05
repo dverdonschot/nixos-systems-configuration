@@ -4,7 +4,7 @@
     inputs = {
       home-manager.url = "github:nix-community/home-manager/master";
       home-manager.inputs.nixpkgs.follows = "nixpkgs"; # Use system packages list where available
-      inputs.microvm.url = "github:astro/microvm.nix";
+      microvm.url = "github:astro/microvm.nix";
       nixpkgs.url = "nixpkgs/nixos-unstable";
     };
 
