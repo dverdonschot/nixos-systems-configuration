@@ -4,6 +4,7 @@
     inputs = {
       home-manager.url = "github:nix-community/home-manager/master";
       home-manager.inputs.nixpkgs.follows = "nixpkgs"; # Use system packages list where available
+      inputs.microvm.url = "github:astro/microvm.nix";
       nixpkgs.url = "nixpkgs/nixos-unstable";
     };
 
@@ -83,11 +84,19 @@
               userEmail = "36795362+dverdonschot@users.noreply.github.com"; 
             };
             modules = [ 
+              microvm.nixosModules.host
               ./hosts/monitoring-server/configuration.nix
               {
+                networking.useNetworkd = true;
                 home-manager.useGlobalPkgs = true;
                 home-manager.useUserPackages = true;
                 home-manager.users.ewt = import home-manager/home-minimal.nix;
+
+                microvm.vms = {
+                  my-microvm = {
+                    flake = self;
+                  };
+                };
               }
             ];
           };

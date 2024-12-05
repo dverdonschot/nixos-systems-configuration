@@ -189,6 +189,7 @@
     enable = true;
     tailNet = "tail5bbc4.ts.net";
   };
+  
   services.grafana-container = {
     enable = true;
     tailNet = "tail5bbc4.ts.net";
