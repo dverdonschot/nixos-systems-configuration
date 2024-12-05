@@ -55,7 +55,7 @@
               }
             ];
           };
-           wsl = lib.nixosSystem {
+          wsl = lib.nixosSystem {
             inherit system;
             specialArgs = {inherit inputs; };
             modules = [ 
@@ -91,12 +91,6 @@
                 home-manager.useGlobalPkgs = true;
                 home-manager.useUserPackages = true;
                 home-manager.users.ewt = import home-manager/home-minimal.nix;
-
-                microvm.vms = {
-                  my-microvm = {
-                    flake = self;
-                  };
-                };
               }
             ];
           };
