@@ -55,6 +55,22 @@
               }
             ];
           };
+          um790 = lib.nixosSystem {
+            inherit system;
+            specialArgs = {
+              inherit inputs;
+              userName = "ewt";
+              userEmail = "36795362+dverdonschot@users.noreply.github.com"; 
+            };
+            modules = [ 
+              ./hosts/um790/configuration.nix
+              {
+                home-manager.useGlobalPkgs = true;
+                home-manager.useUserPackages = true;
+                home-manager.users.ewt = import home-manager/home.nix;
+              }
+            ];
+          };
           wsl = lib.nixosSystem {
             inherit system;
             specialArgs = {inherit inputs; };

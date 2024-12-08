@@ -14,7 +14,7 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  networking.hostName = "nixos"; # Define your hostname.
+  networking.hostName = "um790"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
   # Configure network proxy if necessary
@@ -95,18 +95,103 @@
   systemd.services."getty@tty1".enable = false;
   systemd.services."autovt@tty1".enable = false;
 
+
+  environment.systemPackages = with pkgs; [
+     pkgs.gnome.gnome-remote-desktop
+  ];
+  services.gnome.gnome-remote-desktop.enable = true;
+
   # Install firefox.
   programs.firefox.enable = true;
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
+  # Enable nix flakes
+  nix.package = pkgs.nixFlakes;
+  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+
+  # Allow flatpak
+  services.flatpak.enable = true;
+
+  # Allow Docker
+  virtualisation.podman = {
+    dockerCompat = true;
+    enable = true;
+    defaultNetwork.settings.dns_enabled = true;
+    #enableOnBoot = true;
+#    rootless = {
+#      enable = true;
+#      setSocketVariable = true;
+#    };
+  };
+  
+  programs.dconf.enable = true;
+  virtualisation = {
+    libvirtd = {
+      enable = true;
+      qemu = {
+        swtpm.enable = true;
+        ovmf.enable = true;
+        ovmf.packages = [ pkgs.OVMFFull.fd ];
+      };
+    };
+    spiceUSBRedirection.enable = true;
+  };
+  programs.virt-manager.enable = true;
+  services.spice-vdagentd.enable = true;
+
+
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-  #  vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
-  #  wget
+    nvim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
+    wget
+    git
+    unzip
+    pciutils
+    fzf
+    btop
+    tmux
+    wl-clipboard
+    gnome.gnome-remote-desktop
+    gnome.gnome-terminal
+    tree
+    nix-software-center
+    nix-index
+    # images
+    pinta
+    tiv
+    # virtualization
+    virt-manager
+    virt-viewer
+    spice spice-gtk
+    spice-protocol
+    win-virtio
+    win-spice
+    quickemu
+    quickgui
+    # services
+    tailscale
+    steam
+    ollama
+    # cli 
+    oh-my-posh
+    hack-font
+    powerline-fonts
+    font-awesome
   ];
+
+  fonts.fontDir.enable = true; 
+  fonts.packages = with pkgs; [
+    (nerdfonts.override { fonts = [ "FiraCode" "DroidSansMono" ]; })
+  ];
+  fonts.fontconfig = {
+    defaultFonts = {
+      monospace = ["FiraCode"];
+    };
+  };
+
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
@@ -119,7 +204,47 @@
   # List services that you want to enable:
 
   # Enable the OpenSSH daemon.
-  # services.openssh.enable = true;
+  services.openssh.enable = true;
+
+  services.tailscale.enable = true;
+
+  # 3389 is for gnome RDP
+  networking.firewall.allowedTCPPorts = [ 3389 ];
+  networking.firewall.allowedUDPPorts = [ 3389 ];
+
+  programs.bash = {
+    interactiveShellInit = ''
+      # initializing Tmux
+      [ "$EUID" -ne 0 ] && [ -z "$TMUX"  ] && { tmux attach || exec tmux new-session && exit;}
+      # Loading ohh my posh config
+      eval "$(oh-my-posh --init --shell bash --config /home/ewt/.config/oh-my-posh/posh-dverdonschot.omp.json)"
+    '';
+  };
+
+  # nvim
+  programs.neovim = {
+    enable = true;
+    defaultEditor = true;
+    viAlias = true;
+    vimAlias = true;
+    configure = {
+      customRC = ''
+        set number relativenumber
+        set paste
+        syntax on
+        colorscheme tokyonight
+        set tabstop=4
+        set autoindent
+        set expandtab
+        set softtabstop=4
+        set ruler
+      '';
+      packages.myVimPackage = with pkgs.vimPlugins; {
+        start = [ tokyonight-nvim];
+      };
+    };
+  };
+
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
