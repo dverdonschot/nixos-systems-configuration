@@ -8,6 +8,7 @@
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
+      <home-manager/nixos>
     ];
 
   # Bootloader.
@@ -58,6 +59,10 @@
   # Enable CUPS to print documents.
   services.printing.enable = true;
 
+  hardware.graphics = {
+    enable = true;
+    enable32Bit = true;
+  };
   # Enable sound with pipewire.
   hardware.pulseaudio.enable = false;
   security.rtkit.enable = true;
@@ -88,18 +93,14 @@
   };
 
   # Enable automatic login for the user.
-  services.xserver.displayManager.autoLogin.enable = true;
-  services.xserver.displayManager.autoLogin.user = "ewt";
+  services.displayManager.autoLogin.enable = true;
+  services.displayManager.autoLogin.user = "ewt";
 
   # Workaround for GNOME autologin: https://github.com/NixOS/nixpkgs/issues/103746#issuecomment-945091229
   systemd.services."getty@tty1".enable = false;
   systemd.services."autovt@tty1".enable = false;
 
 
-  environment.systemPackages = with pkgs; [
-     pkgs.gnome.gnome-remote-desktop
-  ];
-  services.gnome.gnome-remote-desktop.enable = true;
 
   # Install firefox.
   programs.firefox.enable = true;
@@ -145,7 +146,7 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-    nvim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
+    neovim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
     wget
     git
     unzip
@@ -154,11 +155,11 @@
     btop
     tmux
     wl-clipboard
-    gnome.gnome-remote-desktop
-    gnome.gnome-terminal
+    gnome-remote-desktop
+    gnome-terminal
     tree
-    nix-software-center
     nix-index
+    monitor
     # images
     pinta
     tiv
@@ -170,16 +171,19 @@
     win-virtio
     win-spice
     quickemu
-    quickgui
+    #quickgui
     # services
     tailscale
     steam
     ollama
     # cli 
     oh-my-posh
-    hack-font
     powerline-fonts
     font-awesome
+    # development
+    devenv
+    direnv
+    vscode
   ];
 
   fonts.fontDir.enable = true; 
@@ -192,21 +196,12 @@
     };
   };
 
-
-  # Some programs need SUID wrappers, can be configured further or are
-  # started in user sessions.
-  # programs.mtr.enable = true;
-  # programs.gnupg.agent = {
-  #   enable = true;
-  #   enableSSHSupport = true;
-  # };
-
   # List services that you want to enable:
 
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
-
   services.tailscale.enable = true;
+  services.gnome.gnome-remote-desktop.enable = true;
 
   # 3389 is for gnome RDP
   networking.firewall.allowedTCPPorts = [ 3389 ];
@@ -219,6 +214,10 @@
       # Loading ohh my posh config
       eval "$(oh-my-posh --init --shell bash --config /home/ewt/.config/oh-my-posh/posh-dverdonschot.omp.json)"
     '';
+  };
+
+  environment.sessionVariables = {
+    NIXPKGS_ALLOW_UNFREE = 1;
   };
 
   # nvim
