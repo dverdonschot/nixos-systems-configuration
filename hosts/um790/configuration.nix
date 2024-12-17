@@ -16,7 +16,6 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  networking.hostName = "um790"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
   # Configure network proxy if necessary
@@ -24,7 +23,23 @@
   # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
   # Enable networking
-  networking.networkmanager.enable = true;
+  networking = {
+    networkmanager = {
+      enable = true;
+      # added for nixos containers
+      unmanaged = ["interface-name:ve-*"];
+    };
+    hostName = "um790";
+    usePredictableInterfaceNames = false;
+    nameservers = [ "1.1.1.1" "192.168.50.110" "100.119.102.1" ];
+    # added for nixos containers
+    nat = {
+      enable = true;
+      internalInterfaces = ["ve-+"];
+      externalInterface = "wlan0";
+      enableIPv6 = false;
+    };
+  };
 
   # Set your time zone.
   time.timeZone = "Europe/Amsterdam";

@@ -103,30 +103,20 @@ in {
             environment = {
               SEARXNG_BASE_URL = "https://search.tail5bbc4.ts.net/";
             };
-            capabilities = {
-              ALL = false;
-              CHOWN = true;
-              SETGID = true;
-              SETUID = true;
-            };
             extraOptions = ["--pull=always"];
+            autoStart = true;
             volumes = [
               "/${cfg.containerName}:/etc/searxng:rw"
             ];
           };
           redis = {
             image = "docker.io/valkey/valkey:8-alpine";
-            command = "valkey-server --save 30 1 --loglevel warning";
-            restart = "unless-stpped";
+            cmd = ["valkey-server --save 30 1 --loglevel warning"];
+            autoStart = true;
+          
             volumes = [
               "/${cfg.containerName}-redis:/data"
             ];
-            capabilities = {
-              ALL = false;
-              CHOWN = true;
-              SETGID = true;
-              SETUID = true;
-            };
           };
         };
 
