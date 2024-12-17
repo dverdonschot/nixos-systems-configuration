@@ -124,7 +124,7 @@
   nixpkgs.config.allowUnfree = true;
 
   # Enable nix flakes
-  nix.package = pkgs.nixFlakes;
+  nix.package = pkgs.nixVersions.stable;
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
   # Allow flatpak
@@ -205,9 +205,7 @@
   ];
 
   fonts.fontDir.enable = true; 
-  fonts.packages = with pkgs; [
-    (nerdfonts.override { fonts = [ "FiraCode" "DroidSansMono" ]; })
-  ];
+  fonts.packages = with pkgs; [ pkgs.hack-font ]; 
   fonts.fontconfig = {
     defaultFonts = {
       monospace = ["FiraCode"];

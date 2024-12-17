@@ -1,10 +1,10 @@
 { lib, pkgs, config, ... }:
 with lib;
 let
-  cfg = config.services.search-container;
+  cfg = config.services.forgejo-container;
 in {
-  options.services.search-container = {
-    enable = mkEnableOption "Enable searxng Container service";
+  options.services.forgejo-container = {
+    enable = mkEnableOption "Enable forgejo Container service";
     tailNet = mkOption {
       type = types.str;
       default = "tail1abc2.ts.net";

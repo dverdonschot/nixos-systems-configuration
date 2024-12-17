@@ -77,8 +77,6 @@ in
 
   fonts.fontDir.enable = true; 
   fonts.packages = with pkgs; [
-    (nerdfonts.override { fonts = [ "FiraCode" "DroidSansMono" ]; })
-  ];
   fonts.fontconfig = {
     defaultFonts = {
       monospace = ["FiraCode"];

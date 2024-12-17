@@ -67,7 +67,7 @@
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
   # Allow Nix Flakes
-  nix.package = pkgs.nixFlakes;
+  nix.package = pkgs.nixVersions.stable;
   # Enable experimentatl features
   nix.settings.experimental-features = [ "nix-command" "flakes" ];  
 
