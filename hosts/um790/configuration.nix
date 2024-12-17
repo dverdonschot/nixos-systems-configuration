@@ -10,6 +10,7 @@
       ./hardware-configuration.nix
       <home-manager/nixos>
       ../../nix-containers/search-container.nix
+      ../../nix-containers/forgejo-container.nix
     ];
 
   # Bootloader.
@@ -171,6 +172,7 @@
     tree
     nix-index
     monitor
+    bottom
     # AMD powertuning
     lact
     # images
@@ -268,6 +270,12 @@
     tailNet = "tail5bbc4.ts.net";
     ipAddress = "192.168.100.25";
   };
+  services.forgejo-container = {
+    enable = true;
+    tailNet = "tail5bbc4.ts.net";
+    ipAddress = "192.168.100.26";
+  };
+
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
