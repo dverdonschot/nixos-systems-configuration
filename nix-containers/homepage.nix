@@ -95,6 +95,13 @@ in {
                     href = "https://freshrss.${cfg.tailNet}";
                   };
                 }
+                {
+                  "SearXNG" = {
+                    icon = "searxng";
+                    description = "Private Internet search";
+                    href = "https://search.${cfg.tailNet}";
+                  };
+                }
               ];
             }
             {

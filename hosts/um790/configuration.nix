@@ -9,6 +9,7 @@
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
       <home-manager/nixos>
+      ../../nix-containers/search-container.nix
     ];
 
   # Bootloader.
@@ -86,7 +87,7 @@
   users.users.ewt = {
     isNormalUser = true;
     description = "ewt";
-    extraGroups = [ "networkmanager" "wheel" ];
+    extraGroups = [ "networkmanager" "wheel" "libvirtd" "docker" ];
     packages = with pkgs; [
     #  thunderbird
     ];
@@ -99,8 +100,6 @@
   # Workaround for GNOME autologin: https://github.com/NixOS/nixpkgs/issues/103746#issuecomment-945091229
   systemd.services."getty@tty1".enable = false;
   systemd.services."autovt@tty1".enable = false;
-
-
 
   # Install firefox.
   programs.firefox.enable = true;
@@ -115,18 +114,14 @@
   # Allow flatpak
   services.flatpak.enable = true;
 
-  # Allow Docker
-  virtualisation.podman = {
-    dockerCompat = true;
+  virtualisation.docker = {
     enable = true;
-    defaultNetwork.settings.dns_enabled = true;
-    #enableOnBoot = true;
-#    rootless = {
-#      enable = true;
-#      setSocketVariable = true;
-#    };
+    rootless = {
+      enable = true;
+      setSocketVariable = true;
+    };
   };
-  
+
   programs.dconf.enable = true;
   virtualisation = {
     libvirtd = {
@@ -157,9 +152,12 @@
     wl-clipboard
     gnome-remote-desktop
     gnome-terminal
+    google-chrome
     tree
     nix-index
     monitor
+    # AMD powertuning
+    lact
     # images
     pinta
     tiv
@@ -172,10 +170,12 @@
     win-spice
     quickemu
     #quickgui
+    # containers
     # services
     tailscale
     steam
     ollama
+    alpaca
     # cli 
     oh-my-posh
     powerline-fonts
@@ -184,6 +184,7 @@
     devenv
     direnv
     vscode
+    nodejs_22
   ];
 
   fonts.fontDir.enable = true; 
@@ -203,6 +204,8 @@
   services.tailscale.enable = true;
   services.gnome.gnome-remote-desktop.enable = true;
 
+  systemd.packages = with pkgs; [ lact ];
+  systemd.services.lactd.wantedBy = ["multi-user.target"];
   # 3389 is for gnome RDP
   networking.firewall.allowedTCPPorts = [ 3389 ];
   networking.firewall.allowedUDPPorts = [ 3389 ];
@@ -244,6 +247,12 @@
     };
   };
 
+
+  services.search-container = {
+    enable = true;
+    tailNet = "tail5bbc4.ts.net";
+    ipAddress = "192.168.100.25";
+  };
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
