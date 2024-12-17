@@ -103,25 +103,16 @@ in {
             environment = {
               SEARXNG_BASE_URL = "https://search.tail5bbc4.ts.net/";
             };
-            cap_drop = {
-              "ALL"
-            };
-            cap_add = {
-              "CHOWN"
-              "SETGID"
-              "SETUID"
+            capabilities = {
+              ALL = false;
+              CHOWN = true;
+              SETGID = true;
+              SETUID = true;
             };
             extraOptions = ["--pull=always"];
             volumes = [
               "/${cfg.containerName}:/etc/searxng:rw"
             ];
-            logging = {
-              driver = "json-file";
-              options = {
-                max-size = "1m";
-                max-file = "1";
-              };
-            };
           };
           redis = {
             image = "docker.io/valkey/valkey:8-alpine";
@@ -130,20 +121,11 @@ in {
             volumes = [
               "/${cfg.containerName}-redis:/data"
             ];
-            cap_drop = {
-              "ALL"
-            };
-            cap_add = {
-              "CHOWN"
-              "SETGID"
-              "SETUID"
-            };
-            logging = {
-              driver = "json-file";
-              options = {
-                max-size = "1m";
-                max-file = "1";
-              };
+            capabilities = {
+              ALL = false;
+              CHOWN = true;
+              SETGID = true;
+              SETUID = true;
             };
           };
         };
