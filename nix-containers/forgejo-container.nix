@@ -102,6 +102,7 @@ in {
             environment = {
               USER_UID = "1000";
               USER_GID = "1000";
+              ROOT_URL = "https://${cfg.containerName}.${cfg.tailNet}";
             };
             extraOptions = ["--pull=always"];
             autoStart = true;
@@ -117,13 +118,13 @@ in {
           enable = true;
           extraConfig = ''
             ${cfg.containerName}.${cfg.tailNet} {
-              reverse_proxy localhost:3000
+              reverse_proxy ${cfg.ipAddress}:3000
             }
           '';
         };
 
         # open https port
-        networking.firewall.allowedTCPPorts = [ 443 ];
+        networking.firewall.allowedTCPPorts = [ 443 3000 12322 ];
 
         system.stateVersion = "25.05";
 

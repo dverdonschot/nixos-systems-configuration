@@ -42,6 +42,17 @@
     };
   };
 
+  # Added weekly garbage collection
+  nix = {
+    gc = {
+      dates = "weekly";
+      automatic = true;
+    };
+    extraOptions = ''
+      trusted-users = root ewt
+    '';
+  };
+
   # Set your time zone.
   time.timeZone = "Europe/Amsterdam";
 
