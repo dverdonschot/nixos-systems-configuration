@@ -9,9 +9,11 @@
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
       <home-manager/nixos>
+      ../../nix-containers/loki-container.nix
       ../../nix-containers/search-container.nix
       ../../nix-containers/forgejo-container.nix
       ../../nix-containers/prometheus-container.nix
+      ../../nix-containers/grafana-container.nix
     ];
 
   # Bootloader.
@@ -304,6 +306,15 @@
     ipAddress = "192.168.100.22";
   };
 
+  services.grafana-container = {
+    enable = true;
+    tailNet = "tail5bbc4.ts.net";
+  };
+
+  services.loki-container = {
+    enable = true;
+    tailNet = "tail5bbc4.ts.net";
+  };
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
   # networking.firewall.allowedUDPPorts = [ ... ];
