@@ -144,6 +144,7 @@
       };
   };
 
+  services.tailscale.enable = true;
   services.prometheus.exporters.node.enable = true;
 
   services.duplicati = {

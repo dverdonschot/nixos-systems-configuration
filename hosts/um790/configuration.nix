@@ -11,6 +11,7 @@
       <home-manager/nixos>
       ../../nix-containers/search-container.nix
       ../../nix-containers/forgejo-container.nix
+      ../../nix-containers/prometheus-container.nix
     ];
 
   # Bootloader.
@@ -285,6 +286,12 @@
     ipAddress = "192.168.100.26";
   };
 
+  services.prometheus-container = {
+    enable = true;
+    tailNet = "tail5bbc4.ts.net";
+    containerName = "prometheus";
+    ipAddress = "192.168.100.22";
+  };
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
