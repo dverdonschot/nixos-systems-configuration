@@ -92,7 +92,7 @@ in {
             {
               job_name = "hosts";
               static_configs = [{
-                targets = [ "media.${cfg.tailNet}:9100" "monitoring.${cfg.tailNet}:9100"];
+                targets = [ "media.${cfg.tailNet}:9100" "um790.${cfg.tailNet}:9100"];
               }];
             }
           ];

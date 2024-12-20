@@ -94,7 +94,12 @@
   };
   # Enable sound with pipewire.
   hardware.pulseaudio.enable = false;
-  security.rtkit.enable = true;
+  security = {
+    rtkit.enable = true;
+    sudo.extraConfig = ''
+      Defaults        timestamp_timeout=30
+    '';
+  };
   services.pipewire = {
     enable = true;
     alsa.enable = true;
@@ -230,6 +235,12 @@
   services.openssh.enable = true;
   services.tailscale.enable = true;
   services.gnome.gnome-remote-desktop.enable = true;
+
+  services.prometheus.exporters.node = {
+    enable = true;
+    port = 9100;
+    enabledCollectors = [ "systemd" ];
+  };
 
   systemd.packages = with pkgs; [ lact ];
   systemd.services.lactd.wantedBy = ["multi-user.target"];

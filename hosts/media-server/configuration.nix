@@ -13,8 +13,6 @@
       ../../nix-containers/homepage.nix
       ../../nix-containers/jellyfin-container.nix
       ../../nix-containers/metube-container.nix
-      ../../nix-containers/arthurtube-container.nix
-      ../../nix-containers/minio-container.nix
       ../../nix-containers/alby-container.nix
       ../../nix-containers/pinchflat-container.nix
     ];
@@ -145,7 +143,11 @@
   };
 
   services.tailscale.enable = true;
-  services.prometheus.exporters.node.enable = true;
+  services.prometheus.exporters.node = {
+    enable = true;
+    port = 9100;
+    enabledCollectors = [ "systemd" ];
+  };
 
   services.duplicati = {
     enable = true;
@@ -210,13 +212,6 @@
     tailNet = "tail5bbc4.ts.net";
     containerName = "metube";
     ipAddress = "192.168.100.15";
-  };
-  
-  services.arthurtube-container = {
-    enable = true;
-    tailNet = "tail5bbc4.ts.net";
-    containerName = "arthurtube";
-    ipAddress = "192.168.100.17";
   };
 
   services.alby-container = {
