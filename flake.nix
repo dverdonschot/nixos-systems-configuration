@@ -2,6 +2,10 @@
     description = "workstation flake";
 
     inputs = {
+      # password encryption
+      agenix.url = "github/ryantm/agenix";
+      # disable darwin deps
+      inputs.agenix.inputs.darwin.follows = "";
       home-manager.url = "github:nix-community/home-manager/master";
       home-manager.inputs.nixpkgs.follows = "nixpkgs"; # Use system packages list where available
       microvm.url = "github:astro/microvm.nix";
@@ -69,6 +73,7 @@
                 home-manager.useUserPackages = true;
                 home-manager.users.ewt = import home-manager/home-minimal.nix;
               }
+              agenix.nixosModules.default
             ];
           };
           wsl = lib.nixosSystem {

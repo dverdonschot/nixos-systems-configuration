@@ -76,7 +76,7 @@ in
   users.users.nixos.extraGroups = ["wheel" "docker"];
 
   fonts.fontDir.enable = true; 
-  fonts.packages = with pkgs; [
+  fonts.packages = with pkgs; [ pkgs.hack-font ]; 
   fonts.fontconfig = {
     defaultFonts = {
       monospace = ["FiraCode"];

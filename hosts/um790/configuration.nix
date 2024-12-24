@@ -9,11 +9,12 @@
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
       <home-manager/nixos>
-      ../../nix-containers/loki-container.nix
+      #../../nix-containers/loki-container.nix
       ../../nix-containers/search-container.nix
       ../../nix-containers/forgejo-container.nix
       ../../nix-containers/prometheus-container.nix
       ../../nix-containers/grafana-container.nix
+      ../../nix-containers/immich-container.nix
     ];
 
   # Bootloader.
@@ -190,6 +191,7 @@
     google-chrome
     tree
     nix-index
+    niv
     monitor
     bottom
     # AMD powertuning
@@ -263,6 +265,7 @@
     NIXPKGS_ALLOW_UNFREE = 1;
   };
 
+  
   # nvim
   programs.neovim = {
     enable = true;
@@ -287,34 +290,54 @@
     };
   };
 
+  # Secret for tailnet : https://github.com/ryantm/agenix
+  age.secrets.tailnet.file = ../../secrets/tailnet.age;
 
   services.search-container = {
     enable = true;
-    tailNet = "tail5bbc4.ts.net";
+    tailNet = config.age.tailnet.path;
     ipAddress = "192.168.100.25";
   };
   services.forgejo-container = {
     enable = true;
-    tailNet = "tail5bbc4.ts.net";
+    tailNet = config.age.tailnet.path;
     ipAddress = "192.168.100.26";
   };
 
   services.prometheus-container = {
     enable = true;
-    tailNet = "tail5bbc4.ts.net";
+    tailNet = config.age.tailnet.path;
     containerName = "prometheus";
     ipAddress = "192.168.100.22";
   };
 
   services.grafana-container = {
     enable = true;
-    tailNet = "tail5bbc4.ts.net";
+    tailNet = config.age.tailnet.path;
   };
 
-  services.loki-container = {
+  # Secret for immich postgress db : https://github.com/ryantm/agenix
+  age.secrets.dbpw.file = ../../secrets/DBPW.age;
+
+  services.immich-container = {
     enable = true;
-    tailNet = "tail5bbc4.ts.net";
+    immichVersion = "v1.23.0";
+    postgresqlImage = "tensorchord/pgvecto-rs:pg14-v0.2.0@sha256:90724186f0a3517cf6914295b5ab410db9ce23190a2d9d0b9dd6463e3fa298f0";
+    redisImage = "redis:6.2-alpine@sha256:51d6c56749a4243096327e3fb964a48ed92254357108449cb6e23999c37773c5";
+    backupImage = "prodrigestivill/postgres-backup-local";
+    immichUpload = "/mnt/immich/immich-photos";
+    immichModelcache = "/mnt/immich/immich-modelcache";
+    PostgresqlPath = "/mnt/immich/postgresql";
+    PostgresqlBackup = "/mnt/immich/backup-postgresql";
+    databasePw = config.age.dbpw.path;
+    tailNet = config.age.tailnet.path;
+    ipAddress = "192.168.100.27";
   };
+
+  #services.loki-container = {
+  #  enable = true;
+  #  tailNet = "tail5bbc4.ts.net";
+  #};
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
   # networking.firewall.allowedUDPPorts = [ ... ];
