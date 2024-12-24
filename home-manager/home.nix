@@ -34,7 +34,7 @@ in
         alias vim=nvim
         #alias v=nvim
         set -o vi
-        eval "$(oh-my-posh --init --shell bash --config ~/ohhmyposh/posh-dverdons.opm.json)"
+        eval "$(oh-my-posh --init --shell bash --config ~/.config/oh-my-posh/posh-dverdonschot.omp.json)"
       '';
     };
 
@@ -109,7 +109,7 @@ in
     };
     programs.vscode = {
       enable = true;
-      package = pkgs.vscode;
+      package = pkgs.vscodium;
       extensions = with pkgs.vscode-extensions; [
         dracula-theme.theme-dracula
         vscodevim.vim
