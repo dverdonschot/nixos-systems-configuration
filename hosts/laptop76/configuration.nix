@@ -38,7 +38,6 @@
   time.timeZone = "Europe/Amsterdam";
   hardware.pulseaudio.enable = false;
   security.rtkit.enable = true;
-  nixpkgs.config.allowUnfree = true;
   
   # Enable the X11 windowing system.
   services = {
@@ -95,10 +94,8 @@
 
   programs.firefox.enable = true;
 
-<<<<<<< HEAD
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
-<<<<<<< HEAD
   
   # Enable nix flakes
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
@@ -134,13 +131,9 @@
   programs.virt-manager.enable = true;
   services.spice-vdagentd.enable = true;
 
-=======
->>>>>>> e6e4eea (nix on laptop)
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
-=======
->>>>>>> e151d50 (changes to laptop)
   environment.systemPackages = with pkgs; [
     git # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
     wget
@@ -152,24 +145,13 @@
     libgcc
   ];
 
-<<<<<<< HEAD
-<<<<<<< HEAD
   fonts.fontDir.enable = true; 
   fonts.packages = with pkgs; [ pkgs.hack-font ]; 
-=======
-  fonts.fontDir.enable = true; 
-  fonts.packages = with pkgs; [
-    (nerdfonts.override { fonts = [ "FiraCode" "DroidSansMono" ]; })
-  ];
->>>>>>> e151d50 (changes to laptop)
   fonts.fontconfig = {
     defaultFonts = {
       monospace = ["FiraCode"];
     };
   };
-<<<<<<< HEAD
-
-  services.tailscale.enable = true;
 
   programs.bash = {
     interactiveShellInit = ''
@@ -209,52 +191,8 @@
   environment.sessionVariables.RUST_SRC_PATH = "${pkgs.rust.packages.stable.rustPlatform.rustLibSrc}";
   #environment.sessionVariables.LD_LIBRARY_PATH = "${pkgs.stdenv.cc.cc.lib}/lib/:${pkgs.libudev-zero}/lib/:$LD_LIBRARY_PATH";
   environment.sessionVariables.LD_LIBRARY_PATH = "${pkgs.stdenv.cc.cc.lib}/lib/:$LD_LIBRARY_PATH";
-=======
-  # Some programs need SUID wrappers, can be configured further or are
-  # started in user sessions.
-  # programs.mtr.enable = true;
-  # programs.gnupg.agent = {
-  #   enable = true;
-  #   enableSSHSupport = true;
-  # };
->>>>>>> e6e4eea (nix on laptop)
-=======
->>>>>>> e151d50 (changes to laptop)
 
   services.tailscale.enable = true;
-
-  programs.bash = {
-    interactiveShellInit = ''
-      # initializing Tmux
-      [ "$EUID" -ne 0 ] && [ -z "$TMUX"  ] && { tmux attach || exec tmux new-session && exit;}
-      # Loading ohh my posh config
-      eval "$(oh-my-posh --init --shell bash --config /home/ewt/.config/oh-my-posh/posh-dverdonschot.omp.json)"
-    '';
-  };
-
-  # nvim
-  programs.neovim = {
-    enable = true;
-    defaultEditor = true;
-    viAlias = true;
-    vimAlias = true;
-    configure = {
-      customRC = ''
-        set number relativenumber
-        set paste
-        syntax on
-        colorscheme tokyonight
-        set tabstop=4
-        set autoindent
-        set expandtab
-        set softtabstop=4
-        set ruler
-      '';
-      packages.myVimPackage = with pkgs.vimPlugins; {
-        start = [ tokyonight-nvim];
-      };
-    };
-  };
 
   system.stateVersion = "24.05"; # Did you read the comment?
 

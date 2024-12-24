@@ -55,7 +55,6 @@
               }
             ];
           };
-<<<<<<< HEAD
           um790 = lib.nixosSystem {
             inherit system;
             specialArgs = {
@@ -72,8 +71,6 @@
               }
             ];
           };
-=======
->>>>>>> e151d50 (changes to laptop)
           wsl = lib.nixosSystem {
             inherit system;
             specialArgs = {inherit inputs; };
