@@ -3,16 +3,14 @@
 
     inputs = {
       # password encryption
-      agenix.url = "github/ryantm/agenix";
-      # disable darwin deps
-      inputs.agenix.inputs.darwin.follows = "";
+      agenix.url = "github:ryantm/agenix";
       home-manager.url = "github:nix-community/home-manager/master";
       home-manager.inputs.nixpkgs.follows = "nixpkgs"; # Use system packages list where available
       microvm.url = "github:astro/microvm.nix";
       nixpkgs.url = "nixpkgs/nixos-unstable";
     };
 
-    outputs = {self, nixpkgs, microvm, ...}@inputs:
+    outputs = {self, nixpkgs, microvm, agenix, ...}@inputs:
       let
         lib = nixpkgs.lib;
         system = "x86_64-linux";

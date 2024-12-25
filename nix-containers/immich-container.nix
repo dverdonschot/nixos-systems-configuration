@@ -42,7 +42,7 @@ in {
     };
     postgresqlImage = mkOption {
       type = types.str;
-      default = "tensorchord/pgvecto-rs:pg14-v0.2.0@sha256:90724186f0a3517cf6914295b5ab410db9ce23190a2d9d0b9dd6463e3fa298f0"
+      default = "tensorchord/pgvecto-rs:pg14-v0.2.0@sha256:90724186f0a3517cf6914295b5ab410db9ce23190a2d9d0b9dd6463e3fa298f0";
     };
     redisImage = mkOption {
       type = types.str;
@@ -51,14 +51,7 @@ in {
     backupImage = mkOption {
       type = types.str;
       default = "prodrigestivill/postgres-backup-local";
-    }
-  };
-  
-  immichVars = {
-    upload = "/immich/data-upload";
-    modelcache = "/immich/modelcache";
-    postgresql = "/immich/postgresql";
-    backupPostgresql = "/immich/backup-postgresql";
+    };
   };
 
   config = mkIf cfg.enable {
@@ -68,6 +61,7 @@ in {
     # using the "option" above. 
     # Options for modules imported in "imports" can be set here.
 
+    
     containers.immich = {
       autoStart = true;
       enableTun = true;
@@ -75,19 +69,19 @@ in {
       hostAddress = cfg.hostAddress;
       localAddress = cfg.ipAddress;
       bindMounts = {
-        immichVars.upload = {
+        "/immich/data-upload" = {
           hostPath = cfg.immichUpload;
           isReadOnly = false;
         };
-        immichVars.modelcache = {
+        "/immich/modelcache" = {
           hostPath = cfg.immichModelcache;
           isReadOnly = false;
         };
-        immichVars.postgresql = {
+        "/immich/postgresql" = {
           hostPath = cfg.postgresqlPath;
           isReadOnly = false;
          };
-        immichVars.backupPostgresql = {
+        "/immich/backup-postgresql" = {
           hostPath = cfg.postgresqlBackup;
           isReadOnly = false;
          };
@@ -147,10 +141,10 @@ in {
             "IMMICH_VERSION" = cfg.immichVersion;
             "REDIS_HOSTNAME" = "immich_redis";
             "TYPESENSE_API_KEY" = cfg.databasePw;
-            "UPLOAD_LOCATION" = immichVars.upload;
+            "UPLOAD_LOCATION" = "/immich/data-upload";
           };
           volumes = [
-            "${immichVars.modelcache}:/cache:rw"
+            "/immich/modelcache:/cache:rw"
           ];
           log-driver = "journald";
           extraOptions = [
@@ -183,7 +177,7 @@ in {
             "POSTGRES_USER" = "postgres";
           };
           volumes = [
-            "${immichVars.postgresql}:/var/lib/postgresql/data:rw"
+            "/immich/postgresql:/var/lib/postgresql/data:rw"
           ];
           log-driver = "journald";
           extraOptions = [
@@ -243,11 +237,11 @@ in {
             "IMMICH_VERSION" = cfg.immichVersion;
             "REDIS_HOSTNAME" = "immich_redis";
             "TYPESENSE_API_KEY" = cfg.databasePw;
-            "UPLOAD_LOCATION" = immichVars.upload;
+            "UPLOAD_LOCATION" = "/immich/data-upload";
           };
           volumes = [
             "/etc/localtime:/etc/localtime:ro"
-            "${immichVars.upload}:/usr/src/app/upload:rw"
+            "/immich/data-upload:/usr/src/app/upload:rw"
           ];
           ports = [
             "2283:2283/tcp"
@@ -292,7 +286,7 @@ in {
             "SCHEDULE" = "@daily";
           };
           volumes = [
-            "${immichVars.backupPostgresql}:/db_dumps:rw"
+            "/immich/backup-postgresql:/db_dumps:rw"
           ];
           dependsOn = [
             "immich_postgres"
@@ -370,5 +364,5 @@ in {
       };
     };
   };
-};
+}
 

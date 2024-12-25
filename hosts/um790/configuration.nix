@@ -236,7 +236,17 @@
   # List services that you want to enable:
 
   # Enable the OpenSSH daemon.
-  services.openssh.enable = true;
+  services.openssh = {
+    enable = true;
+    hostKeys = [
+      {
+        comment = "secretsKey";
+        path = "/etc/ssh/ssh_host_ed25519_key";
+        rounds = 100;
+        type = "ed25519";
+      }
+    ];
+  };
   services.tailscale.enable = true;
   services.gnome.gnome-remote-desktop.enable = true;
 
@@ -290,59 +300,47 @@
     };
   };
 
-  # Secret for tailnet : https://github.com/ryantm/agenix
-  age.secrets.tailnet.file = ../../secrets/tailnet.age;
-
   services.search-container = {
     enable = true;
-    tailNet = config.age.tailnet.path;
+    tailNet = "tail5bbc4.ts.net";
     ipAddress = "192.168.100.25";
   };
   services.forgejo-container = {
     enable = true;
-    tailNet = config.age.tailnet.path;
+    tailNet = "tail5bbc4.ts.net";
     ipAddress = "192.168.100.26";
   };
 
   services.prometheus-container = {
     enable = true;
-    tailNet = config.age.tailnet.path;
+    tailNet = "tail5bbc4.ts.net";
     containerName = "prometheus";
     ipAddress = "192.168.100.22";
   };
 
   services.grafana-container = {
     enable = true;
-    tailNet = config.age.tailnet.path;
+    tailNet = "tail5bbc4.ts.net";
   };
 
   # Secret for immich postgress db : https://github.com/ryantm/agenix
   age.secrets.dbpw.file = ../../secrets/DBPW.age;
+  age.identityPaths = [ "ssh_host_ed25519_key.pub" ];
 
-  services.immich-container = {
-    enable = true;
-    immichVersion = "v1.23.0";
-    postgresqlImage = "tensorchord/pgvecto-rs:pg14-v0.2.0@sha256:90724186f0a3517cf6914295b5ab410db9ce23190a2d9d0b9dd6463e3fa298f0";
-    redisImage = "redis:6.2-alpine@sha256:51d6c56749a4243096327e3fb964a48ed92254357108449cb6e23999c37773c5";
-    backupImage = "prodrigestivill/postgres-backup-local";
-    immichUpload = "/mnt/immich/immich-photos";
-    immichModelcache = "/mnt/immich/immich-modelcache";
-    PostgresqlPath = "/mnt/immich/postgresql";
-    PostgresqlBackup = "/mnt/immich/backup-postgresql";
-    databasePw = config.age.dbpw.path;
-    tailNet = config.age.tailnet.path;
-    ipAddress = "192.168.100.27";
-  };
-
-  #services.loki-container = {
+  #services.immich-container = {
   #  enable = true;
+  #  immichVersion = "v1.23.0";
+  #  postgresqlImage = "tensorchord/pgvecto-rs:pg14-v0.2.0@sha256:90724186f0a3517cf6914295b5ab410db9ce23190a2d9d0b9dd6463e3fa298f0";
+  #  redisImage = "redis:6.2-alpine@sha256:51d6c56749a4243096327e3fb964a48ed92254357108449cb6e23999c37773c5";
+  #  backupImage = "prodrigestivill/postgres-backup-local";
+  #  immichUpload = "/mnt/immich/immich-photos";
+  #  immichModelcache = "/mnt/immich/immich-modelcache";
+  #  postgresqlPath = "/mnt/immich/postgresql";
+  #  postgresqlBackup = "/mnt/immich/backup-postgresql";
+  #  #databasePw = config.age.secrets.dbpw.path;
   #  tailNet = "tail5bbc4.ts.net";
+  #  ipAddress = "192.168.100.27";
   #};
-  # Open ports in the firewall.
-  # networking.firewall.allowedTCPPorts = [ ... ];
-  # networking.firewall.allowedUDPPorts = [ ... ];
-  # Or disable the firewall altogether.
-  # networking.firewall.enable = false;
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
