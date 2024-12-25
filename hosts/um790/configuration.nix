@@ -238,14 +238,6 @@
   # Enable the OpenSSH daemon.
   services.openssh = {
     enable = true;
-    hostKeys = [
-      {
-        comment = "secretsKey";
-        path = "/etc/ssh/ssh_host_ed25519_key";
-        rounds = 100;
-        type = "ed25519";
-      }
-    ];
   };
   services.tailscale.enable = true;
   services.gnome.gnome-remote-desktop.enable = true;
@@ -325,7 +317,6 @@
 
   # Secret for immich postgress db : https://github.com/ryantm/agenix
   age.secrets.dbpw.file = ../../secrets/DBPW.age;
-  age.identityPaths = [ "ssh_host_ed25519_key.pub" ];
 
   #services.immich-container = {
   #  enable = true;
