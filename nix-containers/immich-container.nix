@@ -136,7 +136,7 @@ in {
           environment = {
             "DB_DATABASE_NAME" = "immich";
             "DB_HOSTNAME" = "immich_postgres";
-            "DB_PASSWORD" = cfg.databasePw;
+            "DB_PASSWORD_FILE" = cfg.databasePw;
             "DB_USERNAME" = "postgres";
             "IMMICH_VERSION" = cfg.immichVersion;
             "REDIS_HOSTNAME" = "immich_redis";
@@ -173,7 +173,7 @@ in {
           image = cfg.postgresqlImage;
           environment = {
             "POSTGRES_DB" = "immich";
-            "POSTGRES_PASSWORD" = cfg.databasePw;
+            "POSTGRES_PASSWORD_FILE" = cfg.databasePw;
             "POSTGRES_USER" = "postgres";
           };
           volumes = [
@@ -227,95 +227,95 @@ in {
             "podman-compose-immich-root.target"
           ];
         };
-        virtualisation.oci-containers.containers."immich_server" = {
-          image = "ghcr.io/immich-app/immich-server:${cfg.immichVersion}";
-          environment = {
-            "DB_DATABASE_NAME" = "immich";
-            "DB_HOSTNAME" = "immich_postgres";
-            "DB_PASSWORD" = cfg.databasePw;
-            "DB_USERNAME" = "postgres";
-            "IMMICH_VERSION" = cfg.immichVersion;
-            "REDIS_HOSTNAME" = "immich_redis";
-            "TYPESENSE_API_KEY" = cfg.databasePw;
-            "UPLOAD_LOCATION" = "/immich/data-upload";
-          };
-          volumes = [
-            "/etc/localtime:/etc/localtime:ro"
-            "/immich/data-upload:/usr/src/app/upload:rw"
-          ];
-          ports = [
-            "2283:2283/tcp"
-          ];
-          dependsOn = [
-            "immich_postgres"
-            "immich_redis"
-          ];
-          log-driver = "journald";
-          extraOptions = [
-            "--network-alias=immich-server"
-            "--network=immich_default"
-          ];
-        };
-        systemd.services."podman-immich_server" = {
-          serviceConfig = {
-            Restart = lib.mkOverride 90 "always";
-          };
-          after = [
-            "podman-network-immich_default.service"
-          ];
-          requires = [
-            "podman-network-immich_default.service"
-          ];
-          partOf = [
-            "podman-compose-immich-root.target"
-          ];
-          wantedBy = [
-            "podman-compose-immich-root.target"
-          ];
-        };
-
-        virtualisation.oci-containers.containers."immich_db_dumper" = {
-          image = cfg.backupImage;
-          environment = {
-            "BACKUP_DIR" = "/db_dumps";
-            "BACKUP_NUM_KEEP" = "4";
-            "POSTGRES_DB" = "immich";
-            "POSTGRES_HOST" = "database";
-            "POSTGRES_PASSWORD" = cfg.databasePw;
-            "POSTGRES_USER" = "postgres";
-            "SCHEDULE" = "@daily";
-          };
-          volumes = [
-            "/immich/backup-postgresql:/db_dumps:rw"
-          ];
-          dependsOn = [
-            "immich_postgres"
-          ];
-          log-driver = "journald";
-          extraOptions = [
-            "--network-alias=backup"
-            "--network=immich_default"
-          ];
-        };
-
-        systemd.services."podman-immich_db_dumper" = {
-          serviceConfig = {
-            Restart = lib.mkOverride 90 "no";
-          };
-          after = [
-            "podman-network-immich_default.service"
-          ];
-          requires = [
-            "podman-network-immich_default.service"
-          ];
-          partOf = [
-            "podman-compose-immich-root.target"
-          ];
-          wantedBy = [
-            "podman-compose-immich-root.target"
-          ];
-        };
-
+#        virtualisation.oci-containers.containers."immich_server" = {
+#          image = "ghcr.io/immich-app/immich-server:${cfg.immichVersion}";
+#          environment = {
+#            "DB_DATABASE_NAME" = "immich";
+#            "DB_HOSTNAME" = "immich_postgres";
+#            "DB_PASSWORD" = cfg.databasePw;
+#            "DB_USERNAME" = "postgres";
+#            "IMMICH_VERSION" = cfg.immichVersion;
+#            "REDIS_HOSTNAME" = "immich_redis";
+#            "TYPESENSE_API_KEY" = cfg.databasePw;
+#            "UPLOAD_LOCATION" = "/immich/data-upload";
+#          };
+#          volumes = [
+#            "/etc/localtime:/etc/localtime:ro"
+#            "/immich/data-upload:/usr/src/app/upload:rw"
+#          ];
+#          ports = [
+#            "2283:2283/tcp"
+#          ];
+#          dependsOn = [
+#            "immich_postgres"
+#            "immich_redis"
+#          ];
+#          log-driver = "journald";
+#          extraOptions = [
+#            "--network-alias=immich-server"
+#            "--network=immich_default"
+#          ];
+#        };
+#        systemd.services."podman-immich_server" = {
+#          serviceConfig = {
+#            Restart = lib.mkOverride 90 "always";
+#          };
+#          after = [
+#            "podman-network-immich_default.service"
+#          ];
+#          requires = [
+#            "podman-network-immich_default.service"
+#          ];
+#          partOf = [
+#            "podman-compose-immich-root.target"
+#          ];
+#          wantedBy = [
+#            "podman-compose-immich-root.target"
+#          ];
+#        };
+#
+#        virtualisation.oci-containers.containers."immich_db_dumper" = {
+#          image = cfg.backupImage;
+#          environment = {
+#            "BACKUP_DIR" = "/db_dumps";
+#            "BACKUP_NUM_KEEP" = "4";
+#            "POSTGRES_DB" = "immich";
+#            "POSTGRES_HOST" = "database";
+#            "POSTGRES_PASSWORD" = cfg.databasePw;
+#            "POSTGRES_USER" = "postgres";
+#            "SCHEDULE" = "@daily";
+#          };
+#          volumes = [
+#            "/immich/backup-postgresql:/db_dumps:rw"
+#          ];
+#          dependsOn = [
+#            "immich_postgres"
+#          ];
+#          log-driver = "journald";
+#          extraOptions = [
+#            "--network-alias=backup"
+#            "--network=immich_default"
+#          ];
+#        };
+#
+#        systemd.services."podman-immich_db_dumper" = {
+#          serviceConfig = {
+#            Restart = lib.mkOverride 90 "no";
+#          };
+#          after = [
+#            "podman-network-immich_default.service"
+#          ];
+#          requires = [
+#            "podman-network-immich_default.service"
+#          ];
+#          partOf = [
+#            "podman-compose-immich-root.target"
+#          ];
+#          wantedBy = [
+#            "podman-compose-immich-root.target"
+#          ];
+#        };
+#
         # Networks
         systemd.services."podman-network-immich_default" = {
           path = [ pkgs.podman ];
