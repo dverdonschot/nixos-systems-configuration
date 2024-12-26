@@ -56,6 +56,7 @@ in {
           ];
         };
 
+        services.journald.extraConfig = "SystemMaxUse=100M";
         services.promtail = {
           enable = true;
           configuration = {

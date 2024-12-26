@@ -69,6 +69,7 @@ in {
           openssl
         ];
 
+        services.journald.extraConfig = "SystemMaxUse=100M";
         virtualisation.docker = {
           enable = true;
           rootless = {

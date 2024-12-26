@@ -85,6 +85,7 @@ in {
           ];
         };
 
+        services.journald.extraConfig = "SystemMaxUse=100M";
         services.prometheus = {
           enable = true;
           globalConfig.scrape_interval = "1m";

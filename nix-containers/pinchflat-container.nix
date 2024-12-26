@@ -77,6 +77,9 @@ in {
 
         networking.nameservers = [ "1.1.1.1" ];
         networking.useHostResolvConf = false;
+        # open https port
+        networking.firewall.allowedTCPPorts = [ 443 ];
+
         virtualisation.docker = {
           enable = true;
           rootless = {
@@ -85,6 +88,7 @@ in {
           };
         };
 
+        services.journald.extraConfig = "SystemMaxUse=100M";
         services.tailscale = {
           enable = true;
           # permit caddy to get certs from tailscale
@@ -114,9 +118,6 @@ in {
           '';
         };
 
-
-        # open https port
-        networking.firewall.allowedTCPPorts = [ 443 ];
 
         system.stateVersion = "25.05";
 

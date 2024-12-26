@@ -39,7 +39,6 @@ in {
         };
       };
 
-
       config = { pkgs, ... }: {
         environment.systemPackages = with pkgs; [
           vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
@@ -66,7 +65,7 @@ in {
             intel-compute-runtime # OpenCL filter support (hardware tonemapping and subtitle burn-in)
           ];
         };
-
+        services.journald.extraConfig = "SystemMaxUse=100M";
         services.nextcloud = {
           enable = true;
           hostName = "nextcloud.tail5bbc4.ts.net";

@@ -82,6 +82,7 @@
   services.xserver.displayManager.gdm.enable = true;
   services.xserver.desktopManager.gnome.enable = true;
 
+  services.journald.extraConfig = "SystemMaxUse=200M";
   # Configure keymap in X11
   services.xserver.xkb = {
     layout = "us";

@@ -85,6 +85,7 @@ in {
           };
         };
 
+        services.journald.extraConfig = "SystemMaxUse=100M";
         services.tailscale = {
           enable = true;
           # permit caddy to get certs from tailscale

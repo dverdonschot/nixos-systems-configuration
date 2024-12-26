@@ -86,6 +86,7 @@ in {
           };
         };
 
+        services.journald.extraConfig = "SystemMaxUse=100M";
         services.minio = {
           enable = true;
           listenAddress = ":9000";
@@ -103,8 +104,6 @@ in {
           permitCertUid = "caddy";
         };
         
-
-
         services.caddy = {
           enable = true;
           extraConfig = ''

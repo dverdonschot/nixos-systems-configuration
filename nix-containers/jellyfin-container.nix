@@ -69,6 +69,7 @@ in {
           ];
         };
 
+        services.journald.extraConfig = "SystemMaxUse=100M";
         services.jellyfin = {
           enable = true; 
           openFirewall = true; 
