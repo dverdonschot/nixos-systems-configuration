@@ -12,9 +12,9 @@
       #../../nix-containers/loki-container.nix
       ../../nix-containers/search-container.nix
       ../../nix-containers/forgejo-container.nix
+      ../../nix-containers/loki-container.nix
       ../../nix-containers/prometheus-container.nix
       ../../nix-containers/grafana-container.nix
-      ../../nix-containers/immich-container.nix
     ];
 
   # Bootloader.
@@ -315,24 +315,13 @@
     enable = true;
     tailNet = "tail5bbc4.ts.net";
   };
+  
+  services.loki-container = {
+    enable = true;
+    tailNet = "tail5bbc4.ts.net";
+  };
 
-  # Secret for immich postgress db : https://github.com/ryantm/agenix
-  #age.secrets.dbpw.file = ../../secrets/DBPW.age;
 
-  #services.immich-container = {
-  #  enable = true;
-  #  immichVersion = "v1.23.0";
-  #  postgresqlImage = "tensorchord/pgvecto-rs:pg14-v0.2.0@sha256:90724186f0a3517cf6914295b5ab410db9ce23190a2d9d0b9dd6463e3fa298f0";
-  #  redisImage = "redis:6.2-alpine@sha256:51d6c56749a4243096327e3fb964a48ed92254357108449cb6e23999c37773c5";
-  #  backupImage = "prodrigestivill/postgres-backup-local";
-  #  immichUpload = "/mnt/immich/immich-photos";
-  #  immichModelcache = "/mnt/immich/immich-modelcache";
-  #  postgresqlPath = "/mnt/immich/postgresql";
-  #  postgresqlBackup = "/mnt/immich/backup-postgresql";
-  #  databasePw = config.age.secrets.dbpw.path;
-  #  tailNet = "tail5bbc4.ts.net";
-  #  ipAddress = "192.168.100.27";
-  #};
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
