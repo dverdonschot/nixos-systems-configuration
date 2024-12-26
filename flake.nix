@@ -8,7 +8,7 @@
       nixpkgs.url = "nixpkgs/nixos-unstable";
     };
 
-    outputs = {self, nixpkgs, microvm, agenix, ...}@inputs:
+    outputs = {self, nixpkgs, microvm, ...}@inputs:
       let
         lib = nixpkgs.lib;
         system = "x86_64-linux";
