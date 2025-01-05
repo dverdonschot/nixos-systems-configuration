@@ -42,3 +42,8 @@ sudo nix flake update
 sudo nixos-rebuild switch --flake . --impure
 ```
 
+# Fedora workstation
+
+```bash
+nix run ~/code/nixos-systems-configuration/nix-any-os-home-manager/.#home-manager -- switch --flake ~/code/nixos-systems-configuration/nix-any-os-home-manager/.#fedora --impure
+```
