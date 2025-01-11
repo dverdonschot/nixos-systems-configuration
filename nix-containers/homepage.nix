@@ -9,10 +9,6 @@ in {
       type = types.str;
       default = "tail1abc2.ts.net";
     };
-    proxmoxUrl = mkOption {
-      type = types.str;
-      default = "https://proxmox:8006";
-    };
   };
   
   config = mkIf cfg.enable {
@@ -146,17 +142,17 @@ in {
                     href = "https://grafana.${cfg.tailNet}";
                   };
                 }
+                {
+                  "Netdata" = {
+                    icon = "netdata";
+                    description = "Netdata for detailed monitoring";
+                    href = "https://um790.${cfg.tailNet}:1999";
+                  }
+                }
               ];
             }
             {
               "Infra" = [
-                {
-                  "Proxmox" = {
-                    icon = "proxmox";
-                    description = "Proxmox";
-                    href = "${cfg.proxmoxUrl}";
-                  };
-                }
                 {
                   "Home Assistant" = {
                     icon = "home-assistant";
@@ -190,9 +186,9 @@ in {
                   };
                 }
                 {
-                  "Arthurtube" = {
-                    icon = "youtube";
-                    description = "Download things from youtube with metube";
+                  "Pinchflat" = {
+                    icon = "pinchflat";
+                    description = "Locally sync youtube channels with metadata for jellyfin";
                     href = "https://arthurtube.${cfg.tailNet}";
                   };
                 }

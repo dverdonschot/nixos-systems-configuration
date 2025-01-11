@@ -15,6 +15,7 @@
       ../../nix-containers/loki-container.nix
       ../../nix-containers/prometheus-container.nix
       ../../nix-containers/grafana-container.nix
+      ../../nix-containers/hoarder-container.nix
     ];
 
   # Bootloader.
@@ -82,6 +83,19 @@
   services.xserver.displayManager.gdm.enable = true;
   services.xserver.desktopManager.gnome.enable = true;
 
+  # Gnome remote desktop
+  services.xrdp.enable = true;
+  services.xrdp.defaultWindowManager = "${pkgs.gnome-session-ctl}/bin/gnome-session";
+  services.xrdp.openFirewall = true;
+
+  # Disable the GNOME3/GDM auto-suspend feature that cannot be disabled in GUI!
+  # If no user is logged in, the machine will power down after 20 minutes.
+  systemd.targets.sleep.enable = false;
+  systemd.targets.suspend.enable = false;
+  systemd.targets.hibernate.enable = false;
+  systemd.targets.hybrid-sleep.enable = false;
+
+
   services.journald.extraConfig = "SystemMaxUse=200M";
   # Configure keymap in X11
   services.xserver.xkb = {
@@ -124,7 +138,7 @@
   users.users.ewt = {
     isNormalUser = true;
     description = "ewt";
-    extraGroups = [ "networkmanager" "wheel" "libvirtd" "docker" "podman" ];
+    extraGroups = [ "networkmanager" "wheel" "libvirtd" "docker" "podman" "audio" "video" ];
     packages = with pkgs; [
     #  thunderbird
     ];
@@ -189,6 +203,7 @@
     wl-clipboard
     gnome-remote-desktop
     gnome-terminal
+    gnome-tweaks
     google-chrome
     tree
     nix-index
@@ -208,6 +223,7 @@
     win-virtio
     win-spice
     quickemu
+    toolbox
     #quickgui
     # containers
     # services
@@ -218,16 +234,27 @@
     # cli 
     oh-my-posh
     powerline-fonts
+    nerd-fonts._0xproto
     font-awesome
     # development
     devenv
     direnv
     vscode
+    retroarchFull
     nodejs_22
+    # create fhs environments
+    steam-run
   ];
 
   fonts.fontDir.enable = true; 
-  fonts.packages = with pkgs; [ pkgs.hack-font ]; 
+  fonts.packages = with pkgs; [ 
+    pkgs.hack-font 
+    pkgs.powerline-fonts
+    pkgs.font-awesome
+    pkgs.nerd-fonts._0xproto
+  ]; 
+
+
   fonts.fontconfig = {
     defaultFonts = {
       monospace = ["FiraCode"];
@@ -240,8 +267,13 @@
   services.openssh = {
     enable = true;
   };
-  services.tailscale.enable = true;
-  services.gnome.gnome-remote-desktop.enable = true;
+
+  services.tailscale = {
+    enable = true;
+    # permit caddy to get certs from tailscale
+    permitCertUid = "caddy";
+  };
+#  services.gnome.gnome-remote-desktop.enable = true;
 
   services.prometheus.exporters.node = {
     enable = true;
@@ -251,8 +283,8 @@
 
   systemd.packages = with pkgs; [ lact ];
   systemd.services.lactd.wantedBy = ["multi-user.target"];
-  # 3389 is for gnome RDP
-  networking.firewall.allowedTCPPorts = [ 3389 ];
+  # 3389 is for gnome RDP # 1999 for netdata
+  networking.firewall.allowedTCPPorts = [ 3389 1999 ];
   networking.firewall.allowedUDPPorts = [ 3389 ];
 
   programs.bash = {
@@ -268,6 +300,168 @@
     NIXPKGS_ALLOW_UNFREE = 1;
   };
 
+  # promtail
+  users.extraGroups.docker.members = [ "promtail" ];
+  systemd.services.promtail.serviceConfig = {
+    ExecStartPost = [
+      "-/bin/sh -c 'ln -sf /var/run/docker.sock /run/promtail/docker.sock'"
+    ];
+  };
+  services.promtail = {
+    enable = true;
+    configuration = {
+      server = {
+        http_listen_port = 3031;
+        grpc_listen_port = 0;
+      };
+      positions = {
+        filename = "/tmp/positions.yaml";
+      };
+      clients = [{
+        url = "https://loki.tail5bbc4.ts.net:/loki/api/v1/push";
+      }];
+      scrape_configs = [
+        {
+          job_name = "journal";
+          journal = {
+            max_age = "12h";
+            path = "/var/log/journal";
+            labels = {
+              job = "systemd-journal";
+              host = "um790";
+            };
+          };
+          relabel_configs = [{
+            source_labels = [ "__journal__systemd_unit" ];
+            target_label = "unit";
+          }];
+        }
+        {
+          job_name = "docker";
+          docker_sd_configs = [
+            {
+              host = "unix:///var/run/docker.sock";
+            }
+          ];
+          relabel_configs = [
+            {
+              source_labels = [ "__meta_docker_container_name" ];
+              target_label = "container";
+              action = "replace";
+              regex = "/?(.*)";
+            }
+            {
+              source_labels = [ "__meta_docker_container_label_com_docker_swarm_service_name" ];
+              target_label = "swarm_service";
+              action = "replace";
+            }
+            {
+              source_labels = [ "__meta_docker_container_label_org_label_schema_group" ];
+              target_label = "group";
+              action = "replace";
+            }
+            {
+              source_labels = [ "__meta_docker_container_label_org_label_schema_stack_name" ];
+              target_label = "stack";
+              action = "replace";
+            }
+            {
+              source_labels = [ "__meta_docker_container_id" ];
+              target_label = "container_id";
+            }
+            {
+              source_labels = [ "__meta_docker_network_name" ];
+              target_label = "network";
+            }
+            {
+              source_labels = [ "__meta_docker_container_port_publish_mode" ];
+              target_label = "port_mode";
+            }
+            {
+              source_labels = [ "__meta_docker_container_port_published" ];
+              target_label = "port_published";
+            }
+            {
+              source_labels = [ "__meta_docker_container_port_target" ];
+              target_label = "port_target";
+            }
+            {
+              source_labels = [ "__meta_docker_container_port_protocol" ];
+              target_label = "port_protocol";
+            }
+          ];
+          pipeline_stages = [
+            { docker = {}; }
+            {
+              json = {
+                expressions = {
+                  level = "level";
+                  msg = "msg";
+                };
+              };
+            }
+            {
+              labels = {
+                level = "level";
+              };
+            }
+          ];
+        }
+      ];
+    };
+  };
+
+  # netdata is turned to false to prevent it from eating cpu when not used.
+  services.netdata = {
+    enable = false;
+    config = {
+      global = {
+        "memory mode" = "ram";
+        "debug log" = "none";
+        "access log" = "none";
+        "error log" = "syslog";
+      };
+    };
+  };
+
+  services.caddy = {
+    enable = true;
+    extraConfig = ''
+      um790.tail5bbc4.ts.net:1999 {
+        reverse_proxy localhost:19999
+      }
+    '';
+  };
+#  services.promtail = {
+#    enable = true;
+#    configuration = {
+#      server = {
+#        http_listen_port = 3031;
+#        grpc_listen_port = 0;
+#      };
+#      positions = {
+#        filename = "/tmp/positions.yaml";
+#      };
+#      clients = [{
+#        url = "https://loki.tail5bbc4.ts.net:/loki/api/v1/push";
+#      }];
+#      scrape_configs = [{
+#        job_name = "journal";
+#        journal = {
+#          max_age = "12h";
+#          path = "/var/log/journal";
+#          labels = {
+#            job = "systemd-journal";
+#            host = "um790";
+#          };
+#        };
+#        relabel_configs = [{
+#          source_labels = [ "__journal__systemd_unit" ];
+#          target_label = "unit";
+#        }];
+#      }];
+#    };
+#  };
   
   # nvim
   programs.neovim = {
@@ -320,6 +514,12 @@
     enable = true;
     tailNet = "tail5bbc4.ts.net";
   };
+
+  services.hoarder-container = {
+    enable = true;
+    tailNet = "tail5bbc4.ts.net";
+  };
+
 
 
 

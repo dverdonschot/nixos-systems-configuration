@@ -167,7 +167,7 @@
         filename = "/tmp/positions.yaml";
       };
       clients = [{
-        url = "http://loki.tail5bbc4.ts.net:3100/loki/api/v1/push";
+        url = "https://loki.tail5bbc4.ts.net/loki/api/v1/push";
       }];
       scrape_configs = [{
         job_name = "journal";
@@ -175,7 +175,7 @@
           max_age = "12h";
           labels = {
             job = "systemd-journal";
-            host = "pihole";
+            host = "media";
           };
         };
         relabel_configs = [{

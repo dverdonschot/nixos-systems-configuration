@@ -140,6 +140,7 @@
     oh-my-posh
     hack-font
     powerline-fonts
+    powerline-symbols
     font-awesome
     tmux
     libgcc
