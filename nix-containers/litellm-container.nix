@@ -1,21 +1,21 @@
 { lib, pkgs, config, ... }:
 with lib;
 let
-  cfg = config.services.ollama-container;
+  cfg = config.services.litellm-container;
 in {
-  options.services.ollama-container = {
-    enable = mkEnableOption "Enable ollama Container service";
+  options.services.litellm-container = {
+    enable = mkEnableOption "Enable litellm Container service";
     tailNet = mkOption {
       type = types.str;
       default = "tail1abc2.ts.net";
     };
     containerName = mkOption {
       type = types.str;
-      default = "ollama";
+      default = "litellm";
     };
     ipAddress = mkOption {
       type = types.str;
-      default = "192.168.100.28";
+      default = "192.168.100.29";
     };
   };
   
@@ -36,6 +36,10 @@ in {
         "/${cfg.containerName}" = {
           hostPath = "/mnt/${cfg.containerName}/data";
           isReadOnly = false;
+        };
+        "/.env/.litellm.env" = {
+          hostPath = "/home/ewt/.env/litellm.env";
+          isReadOnly = true;
         };
       };
 
@@ -98,24 +102,21 @@ in {
         
         virtualisation.oci-containers.backend = "docker";
         virtualisation.oci-containers.containers = {
-          openwebui = {
-            image = "ghcr.io/open-webui/open-webui:main";
+          litellm = {
+            image = "ghcr.io/berriai/litellm:main-latest";
             autoStart = true;
             ports = [
-              "8080:8080"
+              "4000:4000"
             ];
             volumes = [
-              "/openwebui_data:/app/backend/data"
+              "/litellm/config/litellm_config.yaml:/app/config.yaml"
             ];
-          };
-          ollama = {
-            image = "ollama/ollama:latest";
-            ports = [
-              # changing host port to 12434, as I want to expose 11434 later on.
-              "12434:11434"
+            cmd = [
+              "--config /app/config.yaml"
+              "--detailed_debug"
             ];
-            volumes = [
-              "/ollama_data:/root/.ollama"
+            environmentFiles = [
+              "/.env/.litellm.env"
             ];
           };
         };
@@ -124,16 +125,13 @@ in {
           enable = true;
           extraConfig = ''
             ${cfg.containerName}.${cfg.tailNet} {
-              reverse_proxy ${cfg.ipAddress}:8080
-            }
-            ${cfg.containerName}.${cfg.tailNet}:11434 {
-              reverse_proxy ${cfg.ipAddress}:12434
+              reverse_proxy ${cfg.ipAddress}:4000
             }
           '';
         };
 
         # open https port
-        networking.firewall.allowedTCPPorts = [ 443 11434 12434 ];
+        networking.firewall.allowedTCPPorts = [ 443 4000 ];
 
         system.stateVersion = "25.05";
 

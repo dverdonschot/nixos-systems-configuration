@@ -17,6 +17,7 @@
       ../../nix-containers/grafana-container.nix
       ../../nix-containers/hoarder-container.nix
       ../../nix-containers/ollama-container.nix
+      ../../nix-containers/litellm-container.nix
     ];
 
   # Bootloader.
@@ -525,6 +526,12 @@
     enable = true;
     tailNet = "tail5bbc4.ts.net";
   };
+
+  services.litellm-container = {
+    enable = true;
+    tailNet = "tail5bbc4.ts.net";
+  };
+
 
 
 
