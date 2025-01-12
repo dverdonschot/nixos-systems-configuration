@@ -1,21 +1,21 @@
 { lib, pkgs, config, ... }:
 with lib;
 let
-  cfg = config.services.hoarder-container;
+  cfg = config.services.ollama-container;
 in {
-  options.services.hoarder-container = {
-    enable = mkEnableOption "Enable hoarder Container service";
+  options.services.ollama-container = {
+    enable = mkEnableOption "Enable ollama Container service";
     tailNet = mkOption {
       type = types.str;
       default = "tail1abc2.ts.net";
     };
     containerName = mkOption {
       type = types.str;
-      default = "hoarder";
+      default = "ollama";
     };
     ipAddress = mkOption {
       type = types.str;
-      default = "192.168.100.27";
+      default = "192.168.100.28";
     };
   };
   
@@ -35,14 +35,6 @@ in {
       bindMounts = {
         "/${cfg.containerName}" = {
           hostPath = "/mnt/${cfg.containerName}/data";
-          isReadOnly = false;
-        };
-        "/.env/.hoarder.env" = {
-          hostPath = "/home/ewt/.env/hoarder.env";
-          isReadOnly = true;
-        };
-        "/meili_data" = {
-          hostPath = "/mnt/${cfg.containerName}/meili_data";
           isReadOnly = false;
         };
       };
@@ -106,56 +98,24 @@ in {
         
         virtualisation.oci-containers.backend = "docker";
         virtualisation.oci-containers.containers = {
-          hoarder = {
-            image = "ghcr.io/hoarder-app/hoarder:latest";
-            ports = [
-              "3000:3000"
-            ];
-            environment = {
-              MEILI_ADDR = "http://meilisearch:7700";
-              BROWSER_WEB_URL = "http://chrome:9222";
-              OLLAMA_BASE_URL = "https://ollama.tail5bbc4.ts.net:11434";
-              INFERENCE_TEXT_MODEL = "llama3.1";
-              INFERENCE_IMAGE_MODEL = "llava";
-              DATA_DIR = "/data";
-              HOARDER_VERSION = "release";
-              NEXTAUTH_URL="http://localhost:3000";
-            };
-            environmentFiles = [
-              "/.env/.hoarder.env"
-            ];
-            extraOptions = ["--pull=always"];
+          openwebui = {
+            image = "ghcr.io/open-webui/open-webui:main";
             autoStart = true;
+            ports = [
+              "8080:8080"
+            ];
             volumes = [
-              "/${cfg.containerName}:/data"
+              "/openwebui_data:/app/backend/data"
             ];
           };
-          chrome = {
-            image = "gcr.io/zenika-hub/alpine-chrome:latest";
-            autoStart = true;
-            cmd = [
-              "--no-sandbox"
-              "--disable-gpu"
-              "--disable-dev-shm-usage"
-              "--remote-debugging-address=0.0.0.0"
-              "--remote-debugging-port=9222"
-              "--hide-scrollbars"
-            ];
-          };
-          meilisearch = {
-            image = "getmeili/meilisearch:latest";
-            autoStart = true;
-            environmentFiles = [
-              "/.env/.hoarder.env"
-            ];
+          ollama = {
+            image = "ollama/ollama:latest";
             ports = [
-              "7700:7700"
+              # changing host port to 12434, as I want to expose 11434 later on.
+              "12434:11434"
             ];
-            environment = {
-              MEILI_NO_ANALYTICS="true";
-            };
             volumes = [
-              "/meili_data:/meili_data"
+              "/ollama_data:/root/.ollama"
             ];
           };
         };
@@ -164,16 +124,16 @@ in {
           enable = true;
           extraConfig = ''
             ${cfg.containerName}.${cfg.tailNet} {
-              reverse_proxy ${cfg.ipAddress}:3000
+              reverse_proxy ${cfg.ipAddress}:8080
             }
-            ${cfg.containerName}.${cfg.tailNet}:7701 {
-              reverse_proxy ${cfg.ipAddress}:7700
+            ${cfg.containerName}.${cfg.tailNet}:11434 {
+              reverse_proxy ${cfg.ipAddress}:12434
             }
           '';
         };
 
         # open https port
-        networking.firewall.allowedTCPPorts = [ 443 12432 12433 12434 ];
+        networking.firewall.allowedTCPPorts = [ 443 11434 ];
 
         system.stateVersion = "25.05";
 

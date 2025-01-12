@@ -16,6 +16,7 @@
       ../../nix-containers/prometheus-container.nix
       ../../nix-containers/grafana-container.nix
       ../../nix-containers/hoarder-container.nix
+      ../../nix-containers/ollama-container.nix
     ];
 
   # Bootloader.
@@ -520,6 +521,10 @@
     tailNet = "tail5bbc4.ts.net";
   };
 
+  services.ollama-container = {
+    enable = true;
+    tailNet = "tail5bbc4.ts.net";
+  };
 
 
 
