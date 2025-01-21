@@ -1,17 +1,17 @@
 { lib, pkgs, config, ... }:
 with lib;
 let
-  cfg = config.services.meilisearch-container;
+  cfg = config.services.vectordb-container;
 in {
-  options.services.meilisearch-container = {
-    enable = mkEnableOption "Enable meilisearch container service";
+  options.services.vectordb-container = {
+    enable = mkEnableOption "Enable vectordb container service";
     tailNet = mkOption {
       type = types.str;
       default = "tail1abc2.ts.net";
     };
     containerName = mkOption {
       type = types.str;
-      default = "meilisearch";
+      default = "vectordb";
     };
     ipAddress = mkOption {
       type = types.str;
@@ -26,7 +26,7 @@ in {
     # using the "option" above. 
     # Options for modules imported in "imports" can be set here.
 
-    containers.meilisearch = {
+    containers.vectordb = {
       autoStart = true;
       enableTun = true;
       privateNetwork = true;
@@ -35,6 +35,10 @@ in {
       bindMounts = {
         "/${cfg.containerName}/environment/" = {
           hostPath = "/mnt/${cfg.containerName}/environment";
+        };
+        "/.env/.vectordb.env" = {
+          hostPath = "/home/ewt/.env/vectordb.env";
+          isReadOnly = true;
         };
       };
 
@@ -87,14 +91,57 @@ in {
 
         networking.nameservers = [ "100.100.100.100" "1.1.1.1" ];
         networking.useHostResolvConf = false;
-        
-        services.journald.extraConfig = "SystemMaxUse=100M";
-        services.meilisearch = {
+        virtualisation.docker = {
           enable = true;
-          environment = "development";
-          listenAddress = "0.0.0.0";
-          listenPort = 7700;
-          masterKeyEnvironmentFile = "/${cfg.containerName}/environment/${cfg.containerName}.env";
+          autoPrune = {
+            enable = true;
+            dates = "weekly";
+          };
+          rootless = {
+            enable = false;
+            setSocketVariable = true;
+          };
+        };
+
+        services.journald.extraConfig = "SystemMaxUse=100M";
+        services.tailscale = {
+          enable = true;
+          # permit caddy to get certs from tailscale
+          permitCertUid = "caddy";
+        };
+        
+        virtualisation.oci-containers.backend = "docker";
+        virtualisation.oci-containers.containers = {
+          vectordb = {
+            image = "ankane/pgvector:latest";
+            autoStart = true;
+            environment = {
+              POSTGRES_USER = "ewt";
+              POSTGRES_DB = "${cfg.containerName}";
+            };
+            environmentFiles = [
+              "/.env/.${cfg.containerName}.env"
+            ];
+            ports = [
+              "5433:5432"
+            ];
+          };
+          rag_api = {
+            image = "ghcr.io/danny-avila/librechat-rag-api-dev-lite:latest";
+            environment = {
+              DB_HOST = "${cfg.containerName}";
+              DB_PORT = "5432";
+              RAG_PORT = "${RAG_PORT}:-8000"
+            };
+            environmentFiles = [
+              "/.env/.${cfg.containerName}.env"
+            ];
+            autoStart = true;
+            dependsOn = ["vector"];
+            ports = [
+              "8000:8000"
+            ];
+          };
         };
 
         services.tailscale = {
@@ -107,13 +154,16 @@ in {
           enable = true;
           extraConfig = ''
             ${cfg.containerName}.${cfg.tailNet} {
-              reverse_proxy localhost:7700
+              reverse_proxy localhost:8000
+            }
+            ${cfg.containerName}.${cfg.tailNet}:5432 {
+              reverse_proxy ${cfg.ipAddress}:4533
             }
           '';
         };
 
         # open https port
-        networking.firewall.allowedTCPPorts = [ 443 ];
+        networking.firewall.allowedTCPPorts = [ 443 5432 ];
 
         system.stateVersion = "25.05";
       };
