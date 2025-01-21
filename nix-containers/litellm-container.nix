@@ -33,8 +33,8 @@ in {
       hostAddress = "192.168.100.10";
       localAddress = "${cfg.ipAddress}";
       bindMounts = {
-        "/${cfg.containerName}" = {
-          hostPath = "/mnt/${cfg.containerName}/data";
+        "/${cfg.containerName}/config" = {
+          hostPath = "/mnt/${cfg.containerName}/config";
           isReadOnly = false;
         };
         "/.env/.litellm.env" = {
@@ -79,7 +79,7 @@ in {
           openssl
         ];
 
-        networking.nameservers = [ "1.1.1.1" ];
+        networking.nameservers = [ "100.100.100.100" "1.1.1.1" ];
         networking.useHostResolvConf = false;
         virtualisation.docker = {
           enable = true;
@@ -112,8 +112,8 @@ in {
               "/litellm/config/litellm_config.yaml:/app/config.yaml"
             ];
             cmd = [
-              "--config /app/config.yaml"
-              "--detailed_debug"
+              "--config=/app/config.yaml"
+              #"--detailed_debug"
             ];
             environmentFiles = [
               "/.env/.litellm.env"

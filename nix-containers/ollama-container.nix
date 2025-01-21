@@ -75,7 +75,7 @@ in {
           openssl
         ];
 
-        networking.nameservers = [ "1.1.1.1" ];
+        networking.nameservers = [ "100.100.100.100" "1.1.1.1" ];
         networking.useHostResolvConf = false;
         virtualisation.docker = {
           enable = true;
