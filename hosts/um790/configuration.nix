@@ -22,6 +22,7 @@
       ../../nix-containers/vectordb-container.nix
       ../../nix-containers/mongodb-container.nix
       ../../nix-containers/ragapi-container.nix
+      ../../nix-containers/librechat-container.nix
     ];
 
   # Bootloader.
@@ -526,6 +527,11 @@
     tailNet = "tail5bbc4.ts.net";
   };
 
+  services.librechat-container = {
+    enable = true;
+    tailNet = "tail5bbc4.ts.net";
+  };
+  
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
   # on your system were taken. It‘s perfectly fine and recommended to leave
