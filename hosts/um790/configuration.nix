@@ -21,6 +21,7 @@
       ../../nix-containers/meilisearch-container.nix
       ../../nix-containers/vectordb-container.nix
       ../../nix-containers/mongodb-container.nix
+      ../../nix-containers/ragapi-container.nix
     ];
 
   # Bootloader.
@@ -519,8 +520,11 @@
     enable = true;
     tailNet = "tail5bbc4.ts.net";
   };
-
-
+  
+  services.ragapi-container = {
+    enable = true;
+    tailNet = "tail5bbc4.ts.net";
+  };
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
