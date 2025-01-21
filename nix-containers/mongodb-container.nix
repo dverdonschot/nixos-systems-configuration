@@ -33,10 +33,6 @@ in {
       hostAddress = "192.168.100.10";
       localAddress = "${cfg.ipAddress}";
       bindMounts = {
-        "/.env/.mongodb.env" = {
-          hostPath = "/home/ewt/.env/mongodb.env";
-          isReadOnly = true;
-        };
         "/${cfg.containerName}" = {
           hostPath = "/mnt/${cfg.containerName}";
           isReadOnly = false;
@@ -111,13 +107,8 @@ in {
           mongodb = {
             image = "mongo";
             autoStart = true;
-            user = "${UID}:${GID}";
-
             volumes = [
               "/mongodb:/data/db"
-            ];
-            cmd = [
-              "mondod --noauth"
             ];
             ports = [
               "27017:27017"
