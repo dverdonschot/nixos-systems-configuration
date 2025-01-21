@@ -1,21 +1,21 @@
 { lib, pkgs, config, ... }:
 with lib;
 let
-  cfg = config.services.vectordb-container;
+  cfg = config.services.mongodb-container;
 in {
-  options.services.vectordb-container = {
-    enable = mkEnableOption "Enable vectordb container service";
+  options.services.mongodb-container = {
+    enable = mkEnableOption "Enable mongodb container service";
     tailNet = mkOption {
       type = types.str;
       default = "tail1abc2.ts.net";
     };
     containerName = mkOption {
       type = types.str;
-      default = "vectordb";
+      default = "mongodb";
     };
     ipAddress = mkOption {
       type = types.str;
-      default = "192.168.100.31";
+      default = "192.168.100.32";
     };
   };
   
@@ -26,16 +26,20 @@ in {
     # using the "option" above. 
     # Options for modules imported in "imports" can be set here.
 
-    containers.vectordb = {
+    containers.mongodb = {
       autoStart = true;
       enableTun = true;
       privateNetwork = true;
       hostAddress = "192.168.100.10";
       localAddress = "${cfg.ipAddress}";
       bindMounts = {
-        "/.env/.vectordb.env" = {
-          hostPath = "/home/ewt/.env/vectordb.env";
+        "/.env/.mongodb.env" = {
+          hostPath = "/home/ewt/.env/mongodb.env";
           isReadOnly = true;
+        };
+        "/${cfg.containerName}" = {
+          hostPath = "/mnt/${cfg.containerName}";
+          isReadOnly = false;
         };
       };
 
@@ -104,34 +108,19 @@ in {
         
         virtualisation.oci-containers.backend = "docker";
         virtualisation.oci-containers.containers = {
-          vectordb = {
-            image = "ankane/pgvector:latest";
+          mongodb = {
+            image = "mongo";
             autoStart = true;
-            environment = {
-              POSTGRES_USER = "ewt";
-              POSTGRES_DB = "${cfg.containerName}";
-            };
-            environmentFiles = [
-              "/.env/.${cfg.containerName}.env"
+            user = "${UID}:${GID}";
+
+            volumes = [
+              "/mongodb:/data/db"
+            ];
+            cmd = [
+              "mondod --noauth"
             ];
             ports = [
-              "5433:5432"
-            ];
-          };
-          rag_api = {
-            image = "ghcr.io/danny-avila/librechat-rag-api-dev-lite:latest";
-            environment = {
-              DB_HOST = "${cfg.containerName}";
-              DB_PORT = "5432";
-              RAG_PORT = "8000";
-            };
-            environmentFiles = [
-              "/.env/.${cfg.containerName}.env"
-            ];
-            autoStart = true;
-            dependsOn = ["vector"];
-            ports = [
-              "8000:8000"
+              "27017:27017"
             ];
           };
         };
@@ -146,16 +135,13 @@ in {
           enable = true;
           extraConfig = ''
             ${cfg.containerName}.${cfg.tailNet} {
-              reverse_proxy localhost:8000
-            }
-            ${cfg.containerName}.${cfg.tailNet}:5432 {
-              reverse_proxy ${cfg.ipAddress}:5433
+              reverse_proxy localhost:27017
             }
           '';
         };
 
         # open https port
-        networking.firewall.allowedTCPPorts = [ 443 5432 ];
+        networking.firewall.allowedTCPPorts = [ 443 27017 ];
 
         system.stateVersion = "25.05";
       };

@@ -20,6 +20,7 @@
       ../../nix-containers/litellm-container.nix
       ../../nix-containers/meilisearch-container.nix
       ../../nix-containers/vectordb-container.nix
+      ../../nix-containers/mongodb-container.nix
     ];
 
   # Bootloader.
@@ -510,6 +511,11 @@
   };
 
   services.vectordb-container = {
+    enable = true;
+    tailNet = "tail5bbc4.ts.net";
+  };
+
+  services.mongodb-container = {
     enable = true;
     tailNet = "tail5bbc4.ts.net";
   };
