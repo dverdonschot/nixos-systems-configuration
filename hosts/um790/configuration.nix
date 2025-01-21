@@ -18,6 +18,7 @@
       ../../nix-containers/hoarder-container.nix
       ../../nix-containers/ollama-container.nix
       ../../nix-containers/litellm-container.nix
+      ../../nix-containers/meilisearch-container.nix
     ];
 
   # Bootloader.
@@ -434,36 +435,6 @@
       }
     '';
   };
-#  services.promtail = {
-#    enable = true;
-#    configuration = {
-#      server = {
-#        http_listen_port = 3031;
-#        grpc_listen_port = 0;
-#      };
-#      positions = {
-#        filename = "/tmp/positions.yaml";
-#      };
-#      clients = [{
-#        url = "https://loki.tail5bbc4.ts.net:/loki/api/v1/push";
-#      }];
-#      scrape_configs = [{
-#        job_name = "journal";
-#        journal = {
-#          max_age = "12h";
-#          path = "/var/log/journal";
-#          labels = {
-#            job = "systemd-journal";
-#            host = "um790";
-#          };
-#        };
-#        relabel_configs = [{
-#          source_labels = [ "__journal__systemd_unit" ];
-#          target_label = "unit";
-#        }];
-#      }];
-#    };
-#  };
   
   # nvim
   programs.neovim = {
@@ -528,6 +499,11 @@
   };
 
   services.litellm-container = {
+    enable = true;
+    tailNet = "tail5bbc4.ts.net";
+  };
+
+  services.meilisearch-container = {
     enable = true;
     tailNet = "tail5bbc4.ts.net";
   };
