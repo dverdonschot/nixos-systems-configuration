@@ -19,6 +19,7 @@
       ../../nix-containers/ollama-container.nix
       ../../nix-containers/litellm-container.nix
       ../../nix-containers/meilisearch-container.nix
+      ../../nix-containers/vectordb-container.nix
     ];
 
   # Bootloader.
@@ -508,6 +509,10 @@
     tailNet = "tail5bbc4.ts.net";
   };
 
+  services.vectordb-container = {
+    enable = true;
+    tailNet = "tail5bbc4.ts.net";
+  };
 
 
 
