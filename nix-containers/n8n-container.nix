@@ -1,21 +1,21 @@
 { lib, pkgs, config, ... }:
 with lib;
 let
-  cfg = config.services.librechat-container;
+  cfg = config.services.n8n-container;
 in {
-  options.services.librechat-container = {
-    enable = mkEnableOption "Enable librechat container service";
+  options.services.n8n-container = {
+    enable = mkEnableOption "Enable n8n container service";
     tailNet = mkOption {
       type = types.str;
       default = "tail1abc2.ts.net";
     };
     containerName = mkOption {
       type = types.str;
-      default = "librechat";
+      default = "n8n";
     };
     ipAddress = mkOption {
       type = types.str;
-      default = "192.168.100.34";
+      default = "192.168.100.35";
     };
   };
   
@@ -26,27 +26,19 @@ in {
     # using the "option" above. 
     # Options for modules imported in "imports" can be set here.
 
-    containers.librechat = {
+    containers.n8n = {
       autoStart = true;
       enableTun = true;
       privateNetwork = true;
       hostAddress = "192.168.100.10";
       localAddress = "${cfg.ipAddress}";
       bindMounts = {
-        "/.env/.librechat.env" = {
-          hostPath = "/home/ewt/.env/librechat.env";
+        "/.env/.n8n.env" = {
+          hostPath = "/home/ewt/.env/n8n.env";
           isReadOnly = true;
         };
         "/${cfg.containerName}/config" = {
           hostPath = "/mnt/${cfg.containerName}/config";
-          isReadOnly = false;
-        };
-        "/${cfg.containerName}/logs" = {
-          hostPath = "/mnt/${cfg.containerName}/logs";
-          isReadOnly = false;
-        };
-        "/${cfg.containerName}/public-images" = {
-          hostPath = "/mnt/${cfg.containerName}/public-images";
           isReadOnly = false;
         };
       };
@@ -116,26 +108,24 @@ in {
         
         virtualisation.oci-containers.backend = "docker";
         virtualisation.oci-containers.containers = {
-          librechat = {
-            image = "ghcr.io/danny-avila/librechat-dev:latest";
+          n8n = {
+            image = "docker.n8n.io/n8nio/n8n";
             environment = {
-              HOST = "0.0.0.0";
-              MONGO_URI = "mongodb://mongodb.${cfg.tailNet}:/vectordb";
-              MEILI_HOST = "https://meilisearch.${cfg.tailNet}";
-              RAG_PORT = "443";
-              RAG_API_URL = "https://ragapi.${cfg.tailNet}";
+              N8N_HOST=n8n.tail5bbc4.ts.net;
+              N8N_PORT=5678;
+              N8N_PROTOCOL=https;
+              NODE_ENV=production;
+              WEBHOOK_URL=https://${DOMAIN_NAME}${N8N_PATH}
             };
             environmentFiles = [
               "/.env/.${cfg.containerName}.env"
             ];
             autoStart = true;
             ports = [
-              "3080:3080"
+              "5678:5678"
             ];
             volumes = [
-              "/${cfg.containerName}/config/librechat.yaml:/app/librechat.yaml"
-              "/${cfg.containerName}/public-images:/app/client/public/images"
-              "/${cfg.containerName}/logs/:/app/api/logs"
+              "/${cfg.containerName}/data:/home/node/.n8n"
             ];
           };
         };
@@ -150,13 +140,13 @@ in {
           enable = true;
           extraConfig = ''
             ${cfg.containerName}.${cfg.tailNet} {
-              reverse_proxy localhost:3080
+              reverse_proxy localhost:5678
             }
           '';
         };
 
         # open https port
-        networking.firewall.allowedTCPPorts = [ 443 3080 ];
+        networking.firewall.allowedTCPPorts = [ 443 5678 ];
 
         system.stateVersion = "25.05";
       };
