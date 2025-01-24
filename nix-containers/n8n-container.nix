@@ -111,11 +111,11 @@ in {
           n8n = {
             image = "docker.n8n.io/n8nio/n8n";
             environment = {
-              N8N_HOST=n8n.tail5bbc4.ts.net;
-              N8N_PORT=5678;
-              N8N_PROTOCOL=https;
-              NODE_ENV=production;
-              WEBHOOK_URL=https://${DOMAIN_NAME}${N8N_PATH}
+              N8N_HOST="${cfg.containerName}.${cfg.tailNet}";
+              N8N_PORT="5678";
+              N8N_PROTOCOL="https";
+              NODE_ENV="production";
+              WEBHOOK_URL="https://${cfg.tailNet}/n8n";
             };
             environmentFiles = [
               "/.env/.${cfg.containerName}.env"
@@ -125,7 +125,7 @@ in {
               "5678:5678"
             ];
             volumes = [
-              "/${cfg.containerName}/data:/home/node/.n8n"
+              "/${cfg.containerName}/config:/home/node/.n8n"
             ];
           };
         };
