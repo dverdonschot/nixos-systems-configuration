@@ -1,21 +1,21 @@
 { lib, pkgs, config, ... }:
 with lib;
 let
-  cfg = config.services.n8n-container;
+  cfg = config.services.browserless-container;
 in {
-  options.services.n8n-container = {
-    enable = mkEnableOption "Enable n8n container service";
+  options.services.browserless-container = {
+    enable = mkEnableOption "Enable browserless container service";
     tailNet = mkOption {
       type = types.str;
       default = "tail1abc2.ts.net";
     };
     containerName = mkOption {
       type = types.str;
-      default = "n8n";
+      default = "browserless";
     };
     ipAddress = mkOption {
       type = types.str;
-      default = "192.168.100.35";
+      default = "192.168.100.36";
     };
   };
   
@@ -26,15 +26,15 @@ in {
     # using the "option" above. 
     # Options for modules imported in "imports" can be set here.
 
-    containers.n8n = {
+    containers.browserless = {
       autoStart = true;
       enableTun = true;
       privateNetwork = true;
       hostAddress = "192.168.100.10";
       localAddress = "${cfg.ipAddress}";
       bindMounts = {
-        "/.env/.n8n.env" = {
-          hostPath = "/home/ewt/.env/n8n.env";
+        "/.env/.${cfg.containerName}.env" = {
+          hostPath = "/home/ewt/.env/${cfg.containerName}.env";
           isReadOnly = true;
         };
         "/${cfg.containerName}/config" = {
@@ -108,24 +108,17 @@ in {
         
         virtualisation.oci-containers.backend = "docker";
         virtualisation.oci-containers.containers = {
-          n8n = {
-            image = "docker.n8n.io/n8nio/n8n";
+          browserless = {
+            image = "ghcr.io/browserless/chromium";
             environment = {
-              N8N_HOST="${cfg.containerName}.${cfg.tailNet}";
-              N8N_PORT="5678";
-              N8N_PROTOCOL="https";
-              NODE_ENV="production";
-              WEBHOOK_URL="https://n8n.${cfg.tailNet}/n8n-hook";
+              "CONCURRENT=10" 
             };
             environmentFiles = [
               "/.env/.${cfg.containerName}.env"
             ];
             autoStart = true;
             ports = [
-              "5678:5678"
-            ];
-            volumes = [
-              "n8n_data:/home/node/.n8n"
+              "3000:3000"
             ];
           };
         };
@@ -140,13 +133,13 @@ in {
           enable = true;
           extraConfig = ''
             ${cfg.containerName}.${cfg.tailNet} {
-              reverse_proxy localhost:5678
+              reverse_proxy localhost:3000
             }
           '';
         };
 
         # open https port
-        networking.firewall.allowedTCPPorts = [ 443 5678 ];
+        networking.firewall.allowedTCPPorts = [ 443 3000 ];
 
         system.stateVersion = "25.05";
       };
