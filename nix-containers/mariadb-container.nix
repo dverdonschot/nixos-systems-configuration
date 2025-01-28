@@ -1,21 +1,21 @@
 { lib, pkgs, config, ... }:
 with lib;
 let
-  cfg = config.services.browserless-container;
+  cfg = config.services.mariadb-container;
 in {
-  options.services.browserless-container = {
-    enable = mkEnableOption "Enable browserless container service";
+  options.services.mariadb-container = {
+    enable = mkEnableOption "Enable mariadb container service";
     tailNet = mkOption {
       type = types.str;
       default = "tail1abc2.ts.net";
     };
     containerName = mkOption {
       type = types.str;
-      default = "browserless";
+      default = "mariadb";
     };
     ipAddress = mkOption {
       type = types.str;
-      default = "192.168.100.36";
+      default = "192.168.100.38";
     };
   };
   
@@ -26,22 +26,23 @@ in {
     # using the "option" above. 
     # Options for modules imported in "imports" can be set here.
 
-    containers.browserless = {
+    containers.mariadb = {
       autoStart = true;
       enableTun = true;
       privateNetwork = true;
       hostAddress = "192.168.100.10";
       localAddress = "${cfg.ipAddress}";
       bindMounts = {
-        "/.env/.${cfg.containerName}.env" = {
-          hostPath = "/home/ewt/.env/${cfg.containerName}.env";
+        "/.env/.mariadb.env" = {
+          hostPath = "/home/ewt/.env/mariadb.env";
           isReadOnly = true;
         };
-        "/${cfg.containerName}" = {
-          hostPath = "/mnt/${cfg.containerName}";
+        "/${cfg.containerName}/mysql_data" = {
+          hostPath = "/mnt/${cfg.containerName}/mysql_data";
           isReadOnly = false;
         };
       };
+
 
       extraFlags = [ "--private-users-ownership=chown" ];
       additionalCapabilities = [
@@ -107,18 +108,33 @@ in {
         
         virtualisation.oci-containers.backend = "docker";
         virtualisation.oci-containers.containers = {
-          browserless = {
-            image = "ghcr.io/browserless/chromium";
+          mariadb = {
+            image = "ghcr.io/mariadb/mariadb:11.7.1-noble-rc";
+            autoStart = true;
             environment = {
-              CONCURRENT = "10"; 
+              MARIADB_DATABASE = "romm";
+              MARIADB_USER = "romm-user";
             };
+            ports = [
+              "3306:3306"
+            ];
             environmentFiles = [
               "/.env/.${cfg.containerName}.env"
             ];
-            autoStart = true;
-            ports = [
-              "3000:3000"
+            volumes = [
+              "/${cfg.containerName}/mysql_data:/var/lib/mysql:rw"
             ];
+            log-driver = "journald";
+            #extraOptions = [
+            #  "--health-cmd=[\"healthcheck.sh\", \"--connect\", \"--innodb_initialized\"]"
+            #  "--health-interval=10s"
+            #  "--health-retries=5"
+            #  "--health-start-period=30s"
+            #  "--health-startup-interval=10s"
+            #  "--health-timeout=5s"
+            #  "--network-alias=mariadb-db"
+            #  "--network=mariadb_default"
+            #];
           };
         };
 
@@ -132,13 +148,13 @@ in {
           enable = true;
           extraConfig = ''
             ${cfg.containerName}.${cfg.tailNet} {
-              reverse_proxy localhost:3000
+              reverse_proxy localhost:3306
             }
           '';
         };
 
         # open https port
-        networking.firewall.allowedTCPPorts = [ 443 3000 ];
+        networking.firewall.allowedTCPPorts = [ 443 3306 ];
 
         system.stateVersion = "25.05";
       };

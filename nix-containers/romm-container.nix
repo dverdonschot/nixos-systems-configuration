@@ -15,7 +15,7 @@ in {
     };
     ipAddress = mkOption {
       type = types.str;
-      default = "192.168.100.36";
+      default = "192.168.100.37";
     };
   };
   
@@ -128,36 +128,11 @@ in {
         
         virtualisation.oci-containers.backend = "docker";
         virtualisation.oci-containers.containers = {
-          romm-db = {
-            image = "mariadb:latest";
-            autoStart = true;
-            environment = {
-              MARIADB_DATABASE = "romm";
-              MARIADB_USER = "romm-user";
-            };
-            environmentFiles = [
-              "/.env/.${cfg.containerName}.env"
-            ];
-            volumes = [
-              "/${cfg.containerName}/mysql_data:/var/lib/mysql:rw"
-            ];
-            log-driver = "journald";
-            extraOptions = [
-              "--health-cmd=[\"healthcheck.sh\", \"--connect\", \"--innodb_initialized\"]"
-              "--health-interval=10s"
-              "--health-retries=5"
-              "--health-start-period=30s"
-              "--health-startup-interval=10s"
-              "--health-timeout=5s"
-              "--network-alias=romm-db"
-              "--network=romm_default"
-            ];
-          };
           romm = {
-            image = "rommapp/romm:latest";
+            image = "ghcr.io/rommapp/romm:latest";
             autoStart = true;
             environment = {
-              DB_HOST = "romm-db";
+              DB_HOST = "mariadb.${tailNet}";
               DB_NAME = "romm";
               DB_USER = "romm-user";
             };
@@ -174,9 +149,6 @@ in {
             ports = [
               "8080:8080"
             ];
-            dependsOn = [
-              "romm-db"
-            ];
           };
         };
 
@@ -190,13 +162,13 @@ in {
           enable = true;
           extraConfig = ''
             ${cfg.containerName}.${cfg.tailNet} {
-              reverse_proxy localhost:5432
+              reverse_proxy localhost:8080
             }
           '';
         };
 
         # open https port
-        networking.firewall.allowedTCPPorts = [ 443 5432 ];
+        networking.firewall.allowedTCPPorts = [ 443 8080 ];
 
         system.stateVersion = "25.05";
       };
