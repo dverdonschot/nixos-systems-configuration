@@ -37,8 +37,8 @@ in {
           hostPath = "/home/ewt/.env/${cfg.containerName}.env";
           isReadOnly = true;
         };
-        "/${cfg.containerName}/config" = {
-          hostPath = "/mnt/${cfg.containerName}/config";
+        "/${cfg.containerName}" = {
+          hostPath = "/mnt/${cfg.containerName}";
           isReadOnly = false;
         };
       };
@@ -111,7 +111,7 @@ in {
           browserless = {
             image = "ghcr.io/browserless/chromium";
             environment = {
-              "CONCURRENT=10" 
+              CONCURRENT = "10"; 
             };
             environmentFiles = [
               "/.env/.${cfg.containerName}.env"

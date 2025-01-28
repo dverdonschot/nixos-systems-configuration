@@ -122,8 +122,8 @@ in {
               HOST = "0.0.0.0";
               MONGO_URI = "mongodb://mongodb.${cfg.tailNet}:/vectordb";
               MEILI_HOST = "https://meilisearch.${cfg.tailNet}";
-              RAG_PORT = "443";
-              RAG_API_URL = "https://ragapi.${cfg.tailNet}";
+              RAG_PORT = "8000";
+              RAG_API_URL = "http://ragapi.${cfg.tailNet}";
             };
             environmentFiles = [
               "/.env/.${cfg.containerName}.env"

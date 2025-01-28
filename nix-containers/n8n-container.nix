@@ -115,7 +115,7 @@ in {
               N8N_PORT="5678";
               N8N_PROTOCOL="https";
               NODE_ENV="production";
-              WEBHOOK_URL="https://n8n.${cfg.tailNet}/n8n-hook";
+              WEBHOOK_URL="https://n8n.${cfg.tailNet}";
             };
             environmentFiles = [
               "/.env/.${cfg.containerName}.env"

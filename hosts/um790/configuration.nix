@@ -16,6 +16,7 @@
       ../../nix-containers/prometheus-container.nix
       ../../nix-containers/grafana-container.nix
       ../../nix-containers/hoarder-container.nix
+      ../../nix-containers/romm-container.nix
       ../../nix-containers/ollama-container.nix
       ../../nix-containers/litellm-container.nix
       ../../nix-containers/meilisearch-container.nix
@@ -538,11 +539,17 @@
     enable = true;
     tailNet = "tail5bbc4.ts.net";
   }; 
+
   services.browserless-container = {
     enable = true;
     tailNet = "tail5bbc4.ts.net";
   };
-  
+
+  services.romm-container = {
+    enable = true;
+    tailNet = "tail5bbc4.ts.net";
+  };
+   
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
   # on your system were taken. It‘s perfectly fine and recommended to leave

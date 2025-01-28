@@ -1,21 +1,21 @@
 { lib, pkgs, config, ... }:
 with lib;
 let
-  cfg = config.services.ragapi-container;
+  cfg = config.services.romm-container;
 in {
-  options.services.ragapi-container = {
-    enable = mkEnableOption "Enable ragapi container service";
+  options.services.romm-container = {
+    enable = mkEnableOption "Enable romm container service";
     tailNet = mkOption {
       type = types.str;
       default = "tail1abc2.ts.net";
     };
     containerName = mkOption {
       type = types.str;
-      default = "ragapi";
+      default = "romm";
     };
     ipAddress = mkOption {
       type = types.str;
-      default = "192.168.100.33";
+      default = "192.168.100.36";
     };
   };
   
@@ -26,16 +26,40 @@ in {
     # using the "option" above. 
     # Options for modules imported in "imports" can be set here.
 
-    containers.ragapi = {
+    containers.romm = {
       autoStart = true;
       enableTun = true;
       privateNetwork = true;
       hostAddress = "192.168.100.10";
       localAddress = "${cfg.ipAddress}";
       bindMounts = {
-        "/.env/.ragapi.env" = {
-          hostPath = "/home/ewt/.env/ragapi.env";
+        "/.env/.romm.env" = {
+          hostPath = "/home/ewt/.env/romm.env";
           isReadOnly = true;
+        };
+        "/${cfg.containerName}/library" = {
+          hostPath = "/mnt/${cfg.containerName}/library";
+          isReadOnly = false;
+        };
+        "/${cfg.containerName}/assets" = {
+          hostPath = "/mnt/${cfg.containerName}/assets";
+          isReadOnly = false;
+        };
+        "/${cfg.containerName}/config" = {
+          hostPath = "/mnt/${cfg.containerName}/config";
+          isReadOnly = false;
+        };
+        "/${cfg.containerName}/resources" = {
+          hostPath = "/mnt/${cfg.containerName}/resources";
+          isReadOnly = false;
+        };
+        "/${cfg.containerName}/redis_data" = {
+          hostPath = "/mnt/${cfg.containerName}/redis_data";
+          isReadOnly = false;
+        };
+        "/${cfg.containerName}/mysql_data" = {
+          hostPath = "/mnt/${cfg.containerName}/mysql_data";
+          isReadOnly = false;
         };
       };
 
@@ -104,19 +128,54 @@ in {
         
         virtualisation.oci-containers.backend = "docker";
         virtualisation.oci-containers.containers = {
-          rag_api = {
-            image = "ghcr.io/danny-avila/librechat-rag-api-dev:latest";
+          romm-db = {
+            image = "mariadb:latest";
+            autoStart = true;
             environment = {
-              DB_HOST = "vectordb.tail5bbc4.ts.net";
-              DB_PORT = "5432";
-              RAG_PORT = "8000";
+              MARIADB_DATABASE = "romm";
+              MARIADB_USER = "romm-user";
             };
             environmentFiles = [
               "/.env/.${cfg.containerName}.env"
             ];
+            volumes = [
+              "/${cfg.containerName}/mysql_data:/var/lib/mysql:rw"
+            ];
+            log-driver = "journald";
+            extraOptions = [
+              "--health-cmd=[\"healthcheck.sh\", \"--connect\", \"--innodb_initialized\"]"
+              "--health-interval=10s"
+              "--health-retries=5"
+              "--health-start-period=30s"
+              "--health-startup-interval=10s"
+              "--health-timeout=5s"
+              "--network-alias=romm-db"
+              "--network=romm_default"
+            ];
+          };
+          romm = {
+            image = "rommapp/romm:latest";
             autoStart = true;
+            environment = {
+              DB_HOST = "romm-db";
+              DB_NAME = "romm";
+              DB_USER = "romm-user";
+            };
+            environmentFiles = [
+              "/.env/.${cfg.containerName}.env"
+            ];
+            volumes = [
+              "/${cfg.containerName}/resources:/romm/resources:rw" # Resources fetched from IGDB (covers, screenshots, etc.)
+              "/${cfg.containerName}/redis_data:/redis-data:rw" # Cached data for background tasks
+              "/${cfg.containerName}/library:/romm/library:rw" # Your game library. Check https://github.com/rommapp/romm?tab=readme-ov-file#folder-structure for more details.
+              "/${cfg.containerName}/assets:/romm/assets:rw" # Uploaded saves, states, etc.
+              "/${cfg.containerName}/config:/romm/config:rw" # Path where config.yml is stored
+            ];
             ports = [
-              "8000:8000"
+              "8080:8080"
+            ];
+            dependsOn = [
+              "romm-db"
             ];
           };
         };
@@ -131,13 +190,13 @@ in {
           enable = true;
           extraConfig = ''
             ${cfg.containerName}.${cfg.tailNet} {
-              reverse_proxy localhost:8000
+              reverse_proxy localhost:5432
             }
           '';
         };
 
         # open https port
-        networking.firewall.allowedTCPPorts = [ 443 8000 ];
+        networking.firewall.allowedTCPPorts = [ 443 5432 ];
 
         system.stateVersion = "25.05";
       };
