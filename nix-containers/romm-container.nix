@@ -132,9 +132,9 @@ in {
             image = "ghcr.io/rommapp/romm:latest";
             autoStart = true;
             environment = {
-              DB_HOST = "mariadb.${tailNet}";
+              DB_HOST = "mariadb.${cfg.tailNet}";
               DB_NAME = "romm";
-              DB_USER = "romm-user";
+              DB_USER = "romm";
             };
             environmentFiles = [
               "/.env/.${cfg.containerName}.env"

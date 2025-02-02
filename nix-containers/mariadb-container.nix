@@ -74,6 +74,7 @@ in {
           jq
           zip
           openssl
+          mariadb
         ];
 
         nixpkgs.config.packageOverrides = pkgs: {
@@ -113,7 +114,7 @@ in {
             autoStart = true;
             environment = {
               MARIADB_DATABASE = "romm";
-              MARIADB_USER = "romm-user";
+              MARIADB_USER = "romm";
             };
             ports = [
               "3306:3306"
@@ -125,6 +126,9 @@ in {
               "/${cfg.containerName}/mysql_data:/var/lib/mysql:rw"
             ];
             log-driver = "journald";
+            cmd = [
+              "--bind-address=0.0.0.0"
+            ];
             #extraOptions = [
             #  "--health-cmd=[\"healthcheck.sh\", \"--connect\", \"--innodb_initialized\"]"
             #  "--health-interval=10s"
