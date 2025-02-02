@@ -71,6 +71,22 @@
               }
             ];
           };
+          odroid = lib.nixosSystem {
+            inherit system;
+            specialArgs = {
+              inherit inputs;
+              userName = "ewt";
+              userEmail = "36795362+dverdonschot@users.noreply.github.com"; 
+            };
+            modules = [ 
+              ./hosts/odroid/configuration.nix
+              {
+                home-manager.useGlobalPkgs = true;
+                home-manager.useUserPackages = true;
+                home-manager.users.ewt = import home-manager/home-minimal.nix;
+              }
+            ];
+          };
           wsl = lib.nixosSystem {
             inherit system;
             specialArgs = {inherit inputs; };
