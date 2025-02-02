@@ -188,8 +188,6 @@
     niv
     monitor
     bottom
-    # AMD powertuning
-    lact
     # images
     pinta
     tiv
@@ -201,14 +199,10 @@
     win-virtio
     win-spice
     quickemu
-    toolbox
     #quickgui
     # containers
     # services
     tailscale
-    steam
-    ollama
-    alpaca
     # cli 
     oh-my-posh
     powerline-fonts
@@ -218,8 +212,6 @@
     devenv
     direnv
     vscode
-    retroarchFull
-    nodejs_22
     # create fhs environments
     steam-run
   ];
