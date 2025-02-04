@@ -178,15 +178,11 @@
     wget
     git
     unzip
-    pciutils
-    fzf
     btop
     tmux
     wl-clipboard
     gnome-remote-desktop
     gnome-terminal
-    gnome-tweaks
-    google-chrome
     tree
     nix-index
     niv
@@ -202,6 +198,8 @@
     spice-protocol
     win-virtio
     win-spice
+    forgejo-runner
+
     quickemu
     #quickgui
     # containers

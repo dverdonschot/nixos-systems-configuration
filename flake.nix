@@ -94,38 +94,6 @@
               ./hosts/wsl/configuration.nix
             ];
           };
-          media-server = lib.nixosSystem {
-            inherit system;
-            specialArgs = {inherit inputs;
-              userName = "ewt";
-              userEmail = "36795362+dverdonschot@users.noreply.github.com"; 
-            };
-            modules = [ 
-              ./hosts/media-server/configuration.nix
-              {
-                home-manager.useGlobalPkgs = true;
-                home-manager.useUserPackages = true;
-                home-manager.users.ewt = import home-manager/home-minimal.nix;
-              }
-            ];
-          };
-          monitoring-server = lib.nixosSystem {
-            inherit system;
-            specialArgs = {inherit inputs;
-              userName = "ewt";
-              userEmail = "36795362+dverdonschot@users.noreply.github.com"; 
-            };
-            modules = [ 
-              microvm.nixosModules.host
-              ./hosts/monitoring-server/configuration.nix
-              {
-                networking.useNetworkd = true;
-                home-manager.useGlobalPkgs = true;
-                home-manager.useUserPackages = true;
-                home-manager.users.ewt = import home-manager/home-minimal.nix;
-              }
-            ];
-          };
         };
     };
 }
