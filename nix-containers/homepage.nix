@@ -154,7 +154,7 @@ in {
                     icon = "netdata";
                     description = "Netdata for detailed monitoring";
                     href = "https://um790.${cfg.tailNet}:1999";
-                  }
+                  };
                 }
               ];
             }
