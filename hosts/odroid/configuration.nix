@@ -252,7 +252,7 @@
   services.prometheus.exporters.node = {
     enable = true;
     port = 9100;
-    enabledCollectors = [ "systemd" ];
+    enabledCollectors = [ "systemd" "cpu" "diskstats" "ethtool" "filesystem" "hwmon" "interrupts" "netdev" "sysctl" ];
   };
 
   systemd.packages = with pkgs; [ lact ];
