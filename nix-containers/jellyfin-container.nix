@@ -31,9 +31,6 @@ in {
         "/metube" = {
           hostPath = "/mnt/metube";
         };
-        "/arthurtube" = {
-          hostPath = "/mnt/arthurtube";
-        };
         "/pinchflat" = {
           hostPath = "/mnt/pinchflat";
         };
@@ -82,19 +79,14 @@ in {
           permitCertUid = "caddy";
         };
         
-
-
         services.caddy = {
           enable = true;
           extraConfig = ''
-
             jellyfin.${cfg.tailNet} {
               reverse_proxy localhost:8096
             }
-
           '';
         };
-
 
         # open https port
         networking.firewall.allowedTCPPorts = [ 443 ];
