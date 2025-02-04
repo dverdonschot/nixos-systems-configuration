@@ -10,12 +10,6 @@
       ./hardware-configuration.nix
       <home-manager/nixos>
       #../../nix-containers/loki-container.nix
-      ../../nix-containers/search-container.nix
-      ../../nix-containers/forgejo-container.nix
-      ../../nix-containers/loki-container.nix
-      ../../nix-containers/prometheus-container.nix
-      ../../nix-containers/grafana-container.nix
-      ../../nix-containers/hoarder-container.nix
       ../../nix-containers/romm-container.nix
       ../../nix-containers/mariadb-container.nix
       ../../nix-containers/ollama-container.nix
@@ -466,39 +460,6 @@
         start = [ tokyonight-nvim];
       };
     };
-  };
-
-  services.search-container = {
-    enable = true;
-    tailNet = "tail5bbc4.ts.net";
-    ipAddress = "192.168.100.25";
-  };
-  services.forgejo-container = {
-    enable = true;
-    tailNet = "tail5bbc4.ts.net";
-    ipAddress = "192.168.100.26";
-  };
-
-  services.prometheus-container = {
-    enable = true;
-    tailNet = "tail5bbc4.ts.net";
-    containerName = "prometheus";
-    ipAddress = "192.168.100.22";
-  };
-
-  services.grafana-container = {
-    enable = true;
-    tailNet = "tail5bbc4.ts.net";
-  };
-  
-  services.loki-container = {
-    enable = true;
-    tailNet = "tail5bbc4.ts.net";
-  };
-
-  services.hoarder-container = {
-    enable = true;
-    tailNet = "tail5bbc4.ts.net";
   };
 
   services.ollama-container = {

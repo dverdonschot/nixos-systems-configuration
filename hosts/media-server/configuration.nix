@@ -13,7 +13,6 @@
       ../../nix-containers/homepage.nix
       ../../nix-containers/jellyfin-container.nix
       ../../nix-containers/metube-container.nix
-      ../../nix-containers/alby-container.nix
       ../../nix-containers/pinchflat-container.nix
     ];
 
@@ -212,13 +211,6 @@
     tailNet = "tail5bbc4.ts.net";
     containerName = "metube";
     ipAddress = "192.168.100.15";
-  };
-
-  services.alby-container = {
-    enable = true;
-    tailNet = "tail5bbc4.ts.net";
-    containerName = "alby";
-    ipAddress = "192.168.100.19";
   };
 
   services.pinchflat-container = {

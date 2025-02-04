@@ -15,6 +15,10 @@
       ../../nix-containers/prometheus-container.nix
       ../../nix-containers/grafana-container.nix
       ../../nix-containers/hoarder-container.nix
+      ../../nix-containers/homepage.nix
+      ../../nix-containers/jellyfin-container.nix
+      ../../nix-containers/metube-container.nix
+      ../../nix-containers/pinchflat-container.nix
     ];
 
   # Bootloader.
@@ -460,7 +464,30 @@
     tailNet = "tail5bbc4.ts.net";
   };
 
+  services.homepage = {
+    enable = true;
+    tailNet = "tail5bbc4.ts.net";
+    proxmoxUrl = "https://proxmox.th:8006";
+  };
+  
+  services.jellyfin-container = {
+    enable = true;
+    tailNet = "tail5bbc4.ts.net";
+  };
 
+  services.metube-container = {
+    enable = true;
+    tailNet = "tail5bbc4.ts.net";
+    containerName = "metube";
+    ipAddress = "192.168.100.15";
+  };
+
+  services.pinchflat-container = {
+    enable = true;
+    tailNet = "tail5bbc4.ts.net";
+    containerName = "pinchflat";
+    ipAddress = "192.168.100.21";
+  };
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
   # on your system were taken. It‘s perfectly fine and recommended to leave
