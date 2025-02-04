@@ -99,6 +99,13 @@ in {
                     href = "https://search.${cfg.tailNet}";
                   };
                 }
+                {
+                  "Hoarder" = {
+                    icon = "hoarder";
+                    description = "Hoard Resources per topic";
+                    href = "https://hoarder.${cfg.tailNet}";
+                  };
+                }
               ];
             }
             {

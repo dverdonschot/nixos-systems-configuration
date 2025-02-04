@@ -467,7 +467,6 @@
   services.homepage = {
     enable = true;
     tailNet = "tail5bbc4.ts.net";
-    proxmoxUrl = "https://proxmox.th:8006";
   };
   
   services.jellyfin-container = {
