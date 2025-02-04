@@ -25,9 +25,6 @@ in {
       hostAddress = "192.168.100.10";
       localAddress = "192.168.100.13";
       bindMounts = {
-        "/films" = {
-          hostPath = "/home/ewt/films";
-        };
         "/metube" = {
           hostPath = "/mnt/metube";
         };
