@@ -199,7 +199,6 @@
     win-virtio
     win-spice
     forgejo-runner
-
     quickemu
     #quickgui
     # containers
