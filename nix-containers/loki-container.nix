@@ -9,6 +9,18 @@ in {
       type = types.str;
       default = "tail1abc2.ts.net";
     };
+    containerName = mkOption {
+      type = types.str;
+      default = "loki";
+    };
+    ipAddress = mkOption {
+      type = types.str;
+      default = "192.168.100.23";
+    };
+    hostAddress = mkOption {
+      type = types.str;
+      default = "192.168.100.10";
+    };
   };
   
   config = mkIf cfg.enable {
@@ -22,8 +34,8 @@ in {
       autoStart = true;
       enableTun = true;
       privateNetwork = true;
-      hostAddress = "192.168.100.10";
-      localAddress = "192.168.100.23";
+      hostAddress = "${cfg.hostAddress}";
+      localAddress = "${cfg.ipAddress}";
       bindMounts = {
         "/var/lib/loki" = {
           hostPath = "/mnt/loki";

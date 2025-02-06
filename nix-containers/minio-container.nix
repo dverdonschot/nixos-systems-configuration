@@ -11,11 +11,15 @@ in {
     };
     containerName = mkOption {
       type = types.str;
-      default = "metube";
+      default = "minio";
     };
     ipAddress = mkOption {
       type = types.str;
       default = "192.168.100.18";
+    };
+    hostAddress = mkOption {
+      type = types.str;
+      default = "192.168.100.10";
     };
   };
   
@@ -30,15 +34,15 @@ in {
       autoStart = true;
       enableTun = true;
       privateNetwork = true;
-      hostAddress = "192.168.100.10";
+      hostAddress = "${cfg.hostAddress}";
       localAddress = "${cfg.ipAddress}";
       bindMounts = {
         "/${cfg.containerName}" = {
           hostPath = "/mnt/${cfg.containerName}";
           isReadOnly = false;
         };
-        "/.env/minio.env" = {
-          hostPath = "/home/ewt/.env/minio.env";
+        "/.env/${cfg.containerName}.env" = {
+          hostPath = "/mnt/${cfg.containerName}/.env/${cfg.containerName}.env";
           isReadOnly = true;
         };
       };

@@ -12,7 +12,20 @@ in {
     tailNet = mkOption {
       type = types.str;
       default = "tail1abc2.ts.net";
-    };  };
+    };
+    containerName = mkOption {
+      type = types.str;
+      default = "nextcloud";
+    };
+    ipAddress = mkOption {
+      type = types.str;
+      default = "192.168.100.16";
+    };
+    hostAddress = mkOption {
+      type = types.str;
+      default = "192.168.100.10";
+    };
+  };
   
   config = mkIf cfg.enable {
     # Option definitions.
@@ -25,8 +38,8 @@ in {
       autoStart = true;
       enableTun = true;
       privateNetwork = true;
-      hostAddress = "192.168.100.10";
-      localAddress = "192.168.100.16";
+      hostAddress = "${cfg.hostAddress}";
+      localAddress = "${cfg.ipAddress}";
       bindMounts = {
         "/nextcloud" = {
           hostPath = "/mnt/nextcloud";
@@ -113,7 +126,6 @@ in {
         services.caddy = {
           enable = true;
           extraConfig = ''
-
             nextcloud.${cfg.tailNet} {
               reverse_proxy localhost:80
             }

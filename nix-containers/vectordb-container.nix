@@ -17,6 +17,10 @@ in {
       type = types.str;
       default = "192.168.100.31";
     };
+    hostAddress = mkOption {
+      type = types.str;
+      default = "192.168.100.10";
+    };
   };
   
   config = mkIf cfg.enable {
@@ -30,11 +34,11 @@ in {
       autoStart = true;
       enableTun = true;
       privateNetwork = true;
-      hostAddress = "192.168.100.10";
+      hostAddress = "${cfg.hostAddress}";
       localAddress = "${cfg.ipAddress}";
       bindMounts = {
-        "/.env/.vectordb.env" = {
-          hostPath = "/home/ewt/.env/vectordb.env";
+        "/.env/.${cfg.containerName}.env" = {
+          hostPath = "/mnt/${cfg.containerName}/.env/${cfg.containerName}.env";
           isReadOnly = true;
         };
       };

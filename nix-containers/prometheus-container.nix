@@ -17,6 +17,10 @@ in {
       type = types.str;
       default = "192.168.100.22";
     };
+    hostAddress = mkOption {
+      type = types.str;
+      default = "192.168.100.10";
+    };
   };
   
   config = mkIf cfg.enable {
@@ -30,8 +34,8 @@ in {
       autoStart = true;
       enableTun = true;
       privateNetwork = true;
-      hostAddress = "192.168.100.10";
-      localAddress = "192.168.100.22";
+      hostAddress = "${cfg.hostAddress}";
+      localAddress = "${cfg.ipAddress}";
       bindMounts = {
         "/var/lib/prometheus" = {
           hostPath = "/mnt/prometheus";

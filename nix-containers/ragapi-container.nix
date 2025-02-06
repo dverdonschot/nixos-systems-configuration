@@ -17,6 +17,10 @@ in {
       type = types.str;
       default = "192.168.100.33";
     };
+    hostAddress = mkOption {
+      type = types.str;
+      default = "192.168.100.10";
+    };
   };
   
   config = mkIf cfg.enable {
@@ -30,11 +34,12 @@ in {
       autoStart = true;
       enableTun = true;
       privateNetwork = true;
-      hostAddress = "192.168.100.10";
+      hostAddress = "${cfg.hostAddress}";
       localAddress = "${cfg.ipAddress}";
       bindMounts = {
         "/.env/.ragapi.env" = {
           hostPath = "/home/ewt/.env/ragapi.env";
+          hostPath = "/mnt/${cfg.containerName}/.env/${cfg.containerName}.env";
           isReadOnly = true;
         };
       };

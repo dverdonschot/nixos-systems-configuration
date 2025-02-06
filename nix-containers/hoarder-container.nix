@@ -17,6 +17,10 @@ in {
       type = types.str;
       default = "192.168.100.27";
     };
+    hostAddress = mkOption {
+      type = types.str;
+      default = "192.168.100.10";
+    };
   };
   
   config = mkIf cfg.enable {
@@ -31,6 +35,7 @@ in {
       enableTun = true;
       privateNetwork = true;
       hostAddress = "192.168.100.10";
+      hostAddress = "${cfg.hostAddress}";
       localAddress = "${cfg.ipAddress}";
       bindMounts = {
         "/${cfg.containerName}" = {
@@ -38,7 +43,7 @@ in {
           isReadOnly = false;
         };
         "/.env/.hoarder.env" = {
-          hostPath = "/home/ewt/.env/hoarder.env";
+          hostPath = "/mnt/${cfg.containerName}/.env/${cfg.containerName}.env";
           isReadOnly = true;
         };
         "/meili_data" = {
@@ -122,7 +127,7 @@ in {
               NEXTAUTH_URL="http://localhost:3000";
             };
             environmentFiles = [
-              "/.env/.hoarder.env"
+              "/.env/.${cfg.containerName}.env"
             ];
             extraOptions = ["--pull=always"];
             autoStart = true;
@@ -146,7 +151,7 @@ in {
             image = "getmeili/meilisearch:latest";
             autoStart = true;
             environmentFiles = [
-              "/.env/.hoarder.env"
+              "/.env/.${cfg.containerName}.env"
             ];
             ports = [
               "7700:7700"
