@@ -34,7 +34,6 @@ in {
       autoStart = true;
       enableTun = true;
       privateNetwork = true;
-      hostAddress = "192.168.100.10";
       hostAddress = "${cfg.hostAddress}";
       localAddress = "${cfg.ipAddress}";
       bindMounts = {
