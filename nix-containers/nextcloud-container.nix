@@ -84,7 +84,7 @@ in {
           hostName = "nextcloud.tail5bbc4.ts.net";
           # Need to manually increment with every major upgrade.
           # Let NixOS install and configure the database automatically.
-          package = pkgs.nextcloud29;
+          #package = pkgs.nextcloud29;
           database.createLocally = true;
           # Let NixOS install and configure Redis caching automatically.
           configureRedis = true;
