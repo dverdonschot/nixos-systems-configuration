@@ -19,6 +19,7 @@
       ../../nix-containers/jellyfin-container.nix
       ../../nix-containers/metube-container.nix
       ../../nix-containers/pinchflat-container.nix
+      ../../nix-containers/nextcloud-container.nix
     ];
 
   # Bootloader.
@@ -484,6 +485,13 @@
     containerName = "pinchflat";
     ipAddress = "192.168.100.21";
   };
+
+  services.nextcloud-container = {
+    enable = true;
+    tailNet = "tail5bbc4.ts.net";
+    containerName = "nextcloud";
+    ipAddress = "192.168.100.16";
+  };  
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
   # on your system were taken. It‘s perfectly fine and recommended to leave
