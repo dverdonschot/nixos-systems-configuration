@@ -38,7 +38,6 @@ in {
       localAddress = "${cfg.ipAddress}";
       bindMounts = {
         "/.env/.ragapi.env" = {
-          hostPath = "/home/ewt/.env/ragapi.env";
           hostPath = "/mnt/${cfg.containerName}/.env/${cfg.containerName}.env";
           isReadOnly = true;
         };
