@@ -84,7 +84,7 @@ in {
           hostName = "nextcloud.tail5bbc4.ts.net";
           # Need to manually increment with every major upgrade.
           # Let NixOS install and configure the database automatically.
-          #package = pkgs.nextcloud29;
+          package = pkgs.nextcloud29;
           database.createLocally = true;
           # Let NixOS install and configure Redis caching automatically.
           configureRedis = true;
@@ -93,12 +93,12 @@ in {
           https = true;
           autoUpdateApps.enable = true;
           extraAppsEnable = true;
-          extraApps = with config.services.nextcloud.package.packages.apps; {
+          #extraApps = with config.services.nextcloud.package.packages.apps; {
             # List of apps we want to install and are already packaged in
             # https://github.com/NixOS/nixpkgs/blob/master/pkgs/servers/nextcloud/packages/nextcloud-apps.json
-            inherit calendar contacts notes onlyoffice tasks cookbook qownnotesapi;
+            #inherit calendar contacts notes onlyoffice tasks cookbook qownnotesapi;
             # Custom app example.
-          };
+          #};
           settings = {
             overwriteProtocol = "https";
             default_phone_region = "NL";
