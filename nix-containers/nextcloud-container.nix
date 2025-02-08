@@ -34,7 +34,7 @@ in {
     # using the "option" above. 
     # Options for modules imported in "imports" can be set here.
 
-    containers.nextcloud-container = {
+    containers.${cfg.containerName} = {
       autoStart = true;
       enableTun = true;
       privateNetwork = true;
@@ -62,7 +62,6 @@ in {
           jq
           zip
           openssl
-          nextcloud28
         ];
 
         nixpkgs.config.packageOverrides = pkgs: {
@@ -79,12 +78,13 @@ in {
           ];
         };
         services.journald.extraConfig = "SystemMaxUse=100M";
+        environment.etc."nextcloud-admin-pass".text = "VeryHardTemporaryPassword123!";
         services.nextcloud = {
           enable = true;
           hostName = "nextcloud.tail5bbc4.ts.net";
           # Need to manually increment with every major upgrade.
           # Let NixOS install and configure the database automatically.
-          package = pkgs.nextcloud29;
+          package = pkgs.nextcloud30;
           database.createLocally = true;
           # Let NixOS install and configure Redis caching automatically.
           configureRedis = true;
@@ -111,6 +111,8 @@ in {
           # Suggested by Nextcloud's health check.
           phpOptions."opcache.interned_strings_buffer" = "16";
         };
+        # change default port to 8080 for nextcloud
+        services.nginx.virtualHosts."localhost".listen = [ { addr = "127.0.0.1"; port = 8080; } ];
         # Nightly database backups.
         #services.postgresqlBackup = {
         #  enable = true;
@@ -127,7 +129,7 @@ in {
           enable = true;
           extraConfig = ''
             nextcloud.${cfg.tailNet} {
-              reverse_proxy localhost:80
+              reverse_proxy localhost:8080
             }
 
           '';
@@ -135,7 +137,7 @@ in {
 
 
         # open https port
-        networking.firewall.allowedTCPPorts = [ 443 ];
+        networking.firewall.allowedTCPPorts = [ 443 8080 ];
 
         system.stateVersion = "25.05";
       };
