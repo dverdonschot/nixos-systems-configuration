@@ -30,7 +30,7 @@ in {
     # using the "option" above. 
     # Options for modules imported in "imports" can be set here.
 
-    containers.ragapi = {
+    containers.${cfg.containerName} = {
       autoStart = true;
       enableTun = true;
       privateNetwork = true;
