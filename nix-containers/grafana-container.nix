@@ -11,7 +11,7 @@ in {
     };
     containerName = mkOption {
       type = types.str;
-      default = "grafanaj";
+      default = "grafana";
     };
     ipAddress = mkOption {
       type = types.str;
