@@ -91,6 +91,7 @@ in {
 
         services.journald.extraConfig = "SystemMaxUse=100M";
 
+        boot.kernel.sysctl = {"kernel.keys.maxkeys" = 5000;};
         virtualisation.oci-containers.backend = "docker";
         virtualisation.oci-containers.containers = {
           redis = {
