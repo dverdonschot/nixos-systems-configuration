@@ -75,6 +75,20 @@ in {
             intel-compute-runtime # OpenCL filter support (hardware tonemapping and subtitle burn-in)
           ];
         };
+        networking.nameservers = [ "100.100.100.100" "1.1.1.1" ];
+        networking.useHostResolvConf = false;
+        virtualisation.docker = {
+          enable = true;
+          autoPrune = {
+            enable = true;
+            dates = "weekly";
+          };
+          rootless = {
+            enable = false;
+            setSocketVariable = true;
+          };
+        };
+
         services.journald.extraConfig = "SystemMaxUse=100M";
 
         virtualisation.oci-containers.backend = "docker";
