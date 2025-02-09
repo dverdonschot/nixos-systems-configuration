@@ -136,13 +136,13 @@ in {
           enable = true;
           extraConfig = ''
             ${cfg.containerName}.${cfg.tailNet} {
-              reverse_proxy localhost:3306
+              reverse_proxy localhost:6379
             }
           '';
         };
 
         # open https port
-        networking.firewall.allowedTCPPorts = [ 443 3306 ];
+        networking.firewall.allowedTCPPorts = [ 443 6379 ];
 
         system.stateVersion = "25.05";
       };

@@ -41,14 +41,12 @@ in {
       hostAddress = "${cfg.hostAddress}";
       localAddress = "${cfg.ipAddress}";
       bindMounts = {
-        "/nextcloud" = {
-          hostPath = "/mnt/nextcloud";
+        "/.env/.${cfg.containerName}.env" = {
+          hostPath = "/mnt/${cfg.containerName}/.env/${cfg.containerName}.env";
+          isReadOnly = true;
         };
-        "/nextcloud-security" = {
-          hostPath = "/mnt/nextcloud-security";
-        };
-        "/nextcloud-database" = {
-          hostPath = "/mnt/nextcloud-database";
+        "/${cfg.containerName}" = {
+          hostPath = "/mnt/${cfg.containerName}/data";
         };
       };
 
@@ -78,46 +76,30 @@ in {
           ];
         };
         services.journald.extraConfig = "SystemMaxUse=100M";
-        environment.etc."nextcloud-admin-pass".text = "VeryHardTemporaryPassword123!";
-        services.nextcloud = {
-          enable = true;
-          hostName = "nextcloud.tail5bbc4.ts.net";
-          # Need to manually increment with every major upgrade.
-          # Let NixOS install and configure the database automatically.
-          package = pkgs.nextcloud30;
-          database.createLocally = true;
-          # Let NixOS install and configure Redis caching automatically.
-          configureRedis = true;
-          # Increase the maximum file upload size.
-          maxUploadSize = "16G";
-          https = true;
-          autoUpdateApps.enable = true;
-          extraAppsEnable = true;
-          #extraApps = with config.services.nextcloud.package.packages.apps; {
-            # List of apps we want to install and are already packaged in
-            # https://github.com/NixOS/nixpkgs/blob/master/pkgs/servers/nextcloud/packages/nextcloud-apps.json
-            #inherit calendar contacts notes onlyoffice tasks cookbook qownnotesapi;
-            # Custom app example.
-          #};
-          settings = {
-            overwriteProtocol = "https";
-            default_phone_region = "NL";
+
+        virtualisation.oci-containers.backend = "docker";
+        virtualisation.oci-containers.containers = {
+          redis = {
+            image = "nextcloud:stable";
+            autoStart = true;
+            environment = {
+              MYSQL_DATABASE = "nextcloud";
+              MYSQL_USER = "nextcloud";
+              MYSQL_HOST = "mariadb.${cfg.tailNet}";
+              REDIS_HOST = "redis.${cfg.tailNet}";
+            };
+            ports = [
+              "8080:80"
+            ];
+            volumes = [
+              "/${cfg.containerName}"
+            ];
+            environmentFiles = [
+              "/.env/.${cfg.containerName}.env"
+            ];
+            log-driver = "journald";
           };
-          config = {
-            dbtype = "pgsql";
-            adminuser = "admin";
-            adminpassFile = "/nextcloud-security/adminpass";
-          };
-          # Suggested by Nextcloud's health check.
-          phpOptions."opcache.interned_strings_buffer" = "16";
         };
-        # change default port to 8080 for nextcloud
-        services.nginx.virtualHosts."localhost".listen = [ { addr = "127.0.0.1"; port = 8080; } ];
-        # Nightly database backups.
-        #services.postgresqlBackup = {
-        #  enable = true;
-        #  startAt = "*-*-* 01:15:00";
-        #};
 
         services.tailscale = {
           enable = true;
