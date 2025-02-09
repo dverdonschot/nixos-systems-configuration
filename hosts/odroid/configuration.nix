@@ -21,6 +21,7 @@
       ../../nix-containers/pinchflat-container.nix
       ../../nix-containers/nextcloud-container.nix
       ../../nix-containers/mariadb-container.nix
+      ../../nix-containers/redis-container.nix
     ];
 
   # Bootloader.
@@ -493,11 +494,21 @@
     containerName = "nextcloud";
     ipAddress = "192.168.100.16";
   };
-  
+
   services.mariadb-container = {
     enable = true;
     tailNet = "tail5bbc4.ts.net";
-  };  
+    containerName = "mariadb";
+    ipAddress = "192.168.100.38";
+  };
+
+  services.redis-container = {
+    enable = true;
+    tailNet = "tail5bbc4.ts.net";
+    containerName = "redis";
+    ipAddress = "192.168.100.39";
+  };
+
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
   # on your system were taken. It‘s perfectly fine and recommended to leave
