@@ -20,6 +20,7 @@
       ../../nix-containers/metube-container.nix
       ../../nix-containers/pinchflat-container.nix
       ../../nix-containers/nextcloud-container.nix
+      ../../nix-containers/mariadb-container.nix
     ];
 
   # Bootloader.
@@ -491,6 +492,11 @@
     tailNet = "tail5bbc4.ts.net";
     containerName = "nextcloud";
     ipAddress = "192.168.100.16";
+  };
+  
+  services.mariadb-container = {
+    enable = true;
+    tailNet = "tail5bbc4.ts.net";
   };  
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
