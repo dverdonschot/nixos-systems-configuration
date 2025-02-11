@@ -103,7 +103,29 @@ in {
             {
               job_name = "tailscale";
               static_configs = [{
-                targets = [ "hoarder.${cfg.tailNet}:5252" ];
+                targets = [ 
+                  "hoarder.${cfg.tailNet}:5252"
+                  "mariadb.${cfg.tailNet}:5252"
+                  "grafana.${cfg.tailNet}:5252"
+                  "forgejo.${cfg.tailNet}:5252"
+                  "homepage.${cfg.tailNet}:5252"
+                  "loki.${cfg.tailNet}:5252"
+                  "metube.${cfg.tailNet}:5252"
+                  "pinchflat.${cfg.tailNet}:5252"
+                  "prometheus.${cfg.tailNet}:5252"
+                  "redis.${cfg.tailNet}:5252"
+                  "search.${cfg.tailNet}:5252"
+                  "browserless.${cfg.tailNet}:5252"
+                  "librechat.${cfg.tailNet}:5252"
+                  "litellm.${cfg.tailNet}:5252"
+                  "meilisearch.${cfg.tailNet}:5252"
+                  "mongodb.${cfg.tailNet}:5252"
+                  "n8n.${cfg.tailNet}:5252"
+                  "ollama.${cfg.tailNet}:5252"
+                  "ragapi.${cfg.tailNet}:5252"
+                  "romm.${cfg.tailNet}:5252"
+                  "vectordb.${cfg.tailNet}:5252"
+                ];
               }];
             }
           ];
