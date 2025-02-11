@@ -121,6 +121,7 @@ in {
                   "librechat.${cfg.tailNet}:5252"
                   "litellm.${cfg.tailNet}:5252"
                   "meilisearch.${cfg.tailNet}:5252"
+                  "nextcloud.${cfg.tailNet}:5252"
                   "mongodb.${cfg.tailNet}:5252"
                   "n8n.${cfg.tailNet}:5252"
                   "ollama.${cfg.tailNet}:5252"
