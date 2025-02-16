@@ -105,6 +105,10 @@ in {
           openwebui = {
             image = "ghcr.io/open-webui/open-webui:main";
             autoStart = true;
+            environment = {
+              ENABLE_IMAGE_GENERATION = "True";
+              AUTOMATIC1111_BASE_URL = "http://host.docker.internal:7860/";
+            };
             ports = [
               "8080:8080"
             ];

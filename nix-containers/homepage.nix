@@ -161,13 +161,6 @@ in {
                     href = "https://grafana.${cfg.tailNet}";
                   };
                 }
-                {
-                  "Netdata" = {
-                    icon = "netdata";
-                    description = "Netdata for detailed monitoring";
-                    href = "https://um790.${cfg.tailNet}:1999";
-                  };
-                }
               ];
             }
             {
