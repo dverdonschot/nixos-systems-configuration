@@ -189,21 +189,29 @@ in {
                     description = "LibreChat";
                     href = "https://librechat.${cfg.tailNet}";
                   };
+                }
+                {
                   "open-webui" = {
                     icon = "open-webui";
                     description = "Open WebUI with Ollama";
                     href = "https://ollama.${cfg.tailNet}";
                   };
+                }
+                {
                   "litellm" = {
                     icon = "litellm";
                     description = "Connect to any LLM from litellm";
                     href = "https://litellm.${cfg.tailNet}";
                   };
+                }
+                {
                   "n8n" = {
                     icon = "n8n";
                     description = "Build Workflows between tools";
                     href = "https://n8n.${cfg.tailNet}";
                   };
+                }
+                {
                   "meilisearch" = {
                     icon = "meilisearch";
                     description = "open source AI Search engine";
@@ -220,16 +228,22 @@ in {
                     description = "VectorDB integrated postgresql database";
                     href = "https://vectordb.${cfg.tailNet}";
                   };
+                }
+                {
                   "Mariadb" = {
                     icon = "mariadb";
                     description = "mariadb database";
                     href = "https://mariadb.${cfg.tailNet}";
                   };
+                }
+                {
                   "Mongodb" = {
                     icon = "mongodb";
                     description = "mongodb database";
                     href = "https://mongodb.${cfg.tailNet}";
                   };
+                }
+                {
                   "Redis" = {
                     icon = "redis";
                     description = "Redis Caching database";
