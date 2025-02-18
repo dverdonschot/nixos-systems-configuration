@@ -91,7 +91,7 @@ in {
           listenPort = 8082;
           openFirewall = true;
           settings = {
-            title = "My Home Services";
+            title = "HomeBase Services";
             favicon = "https://www.google.com/favicon.ico";
           };
           services = [
@@ -182,6 +182,63 @@ in {
               ];
             }
             {
+              "AI related" = [
+                {
+                  "Librechat" = {
+                    icon = "librechat";
+                    description = "LibreChat";
+                    href = "https://librechat.${cfg.tailNet}";
+                  };
+                  "open-webui" = {
+                    icon = "open-webui";
+                    description = "Open WebUI with Ollama";
+                    href = "https://ollama.${cfg.tailNet}";
+                  };
+                  "litellm" = {
+                    icon = "litellm";
+                    description = "Connect to any LLM from litellm";
+                    href = "https://litellm.${cfg.tailNet}";
+                  };
+                  "n8n" = {
+                    icon = "n8n";
+                    description = "Build Workflows between tools";
+                    href = "https://n8n.${cfg.tailNet}";
+                  };
+                  "meilisearch" = {
+                    icon = "meilisearch";
+                    description = "open source AI Search engine";
+                    href = "https://meilisearch.${cfg.tailNet}";
+                  };
+                }
+              ];
+            }
+            {
+              "Databases" = [
+                {
+                  "Vectordb" = {
+                    icon = "postgresql";
+                    description = "VectorDB integrated postgresql database";
+                    href = "https://vectordb.${cfg.tailNet}";
+                  };
+                  "Mariadb" = {
+                    icon = "mariadb";
+                    description = "mariadb database";
+                    href = "https://mariadb.${cfg.tailNet}";
+                  };
+                  "Mongodb" = {
+                    icon = "mongodb";
+                    description = "mongodb database";
+                    href = "https://mongodb.${cfg.tailNet}";
+                  };
+                  "Redis" = {
+                    icon = "redis";
+                    description = "Redis Caching database";
+                    href = "https://redis.${cfg.tailNet}";
+                  };
+                }
+              ];
+            }
+            {
               "Media" = [
                 {
                   "JellyFin" = {
@@ -202,6 +259,13 @@ in {
                     icon = "pinchflat";
                     description = "Locally sync youtube channels with metadata for jellyfin";
                     href = "https://arthurtube.${cfg.tailNet}";
+                  };
+                }
+                {
+                  "Romm" = {
+                    icon = "romm";
+                    description = "Catalog for retro games";
+                    href = "https://romm.${cfg.tailNet}";
                   };
                 }
               ];
