@@ -218,6 +218,13 @@ in {
                     href = "https://meilisearch.${cfg.tailNet}";
                   };
                 }
+                {
+                  "browserless" = {
+                    icon = "browserless";
+                    description = "headless browser";
+                    href = "https://browserless.${cfg.tailNet}/docs";
+                  };
+                }
               ];
             }
             {
@@ -242,8 +249,6 @@ in {
                     description = "mongodb database";
                     href = "https://mongodb.${cfg.tailNet}";
                   };
-                }
-                {
                   "Redis" = {
                     icon = "redis";
                     description = "Redis Caching database";
