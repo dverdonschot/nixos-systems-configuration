@@ -22,7 +22,48 @@ Nixos containers are based on systemd-nspawn containers and work like chroot on 
 Nixos Containers have their own host-name, combine that with tailscale and you can have a tailscale dns name for each container that will automaticly get a ssl certificate.
 The ssl certificate is used with caddy to host any service on port 443 with a valid certificate.
 
-Nix-containers requires a little setup to create a NAT interface for the nixos-containers.
+Nix-containers requires a little setup to create a NAT interface for the nixos-containers on the main host.
+
+```
+  # Enable networking
+  networking = {
+    networkmanager = {
+      enable = true;
+      # added for nixos containers
+      unmanaged = ["interface-name:ve-*"];
+    };
+    hostName = "servername";
+    # add NAT for nixos containers
+    nat = {
+      enable = true;
+      internalInterfaces = ["ve-+"];
+      externalInterface = "eth0";
+      enableIPv6 = false;
+    };
+  };
+```
+
+Now you can add the container you want to the import, or modify one to you own taste.:
+
+```
+{
+  imports =
+    [ # Include the results of the hardware scan.
+      ./hardware-configuration.nix
+      <home-manager/nixos>
+      ../../nix-containers/ollama-container.nix
+    ];
+```
+
+Now you can use the service, and enable it, 
+Change the values for the variables, there may be more depending on the service:
+
+```
+  services.ollama-container = {
+    enable = true;
+    tailNet = "tail12535.ts.net";
+  };
+```
 
 # Deploy this flake on a new box
 
