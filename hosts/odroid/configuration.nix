@@ -170,6 +170,22 @@
     };
     spiceUSBRedirection.enable = true;
   };
+
+  virtualisation.oci-containers.containers = {
+    isponsorblocktv = {
+      image = "ghrc.io/dmunozv04/isponsorblocktv";
+      autoStart = true;
+      cmd = [
+        "--setup-cli"
+        "--net=host"
+      ];
+      log-driver = "journald";
+      volumes = [
+        "/mnt/isponsorblocktv:/app/data"
+      ];
+    };
+  };
+
   programs.virt-manager.enable = true;
   services.spice-vdagentd.enable = true;
 
