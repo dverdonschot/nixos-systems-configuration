@@ -12,13 +12,13 @@
       ../../nix-containers/romm-container.nix
       ../../nix-containers/ollama-container.nix
       ../../nix-containers/litellm-container.nix
-      ../../nix-containers/meilisearch-container.nix
-      ../../nix-containers/vectordb-container.nix
-      ../../nix-containers/mongodb-container.nix
-      ../../nix-containers/ragapi-container.nix
-      ../../nix-containers/librechat-container.nix
-      ../../nix-containers/n8n-container.nix
-      ../../nix-containers/browserless-container.nix
+      #../../nix-containers/meilisearch-container.nix
+      #../../nix-containers/vectordb-container.nix
+      #../../nix-containers/mongodb-container.nix
+      #../../nix-containers/ragapi-container.nix
+      #../../nix-containers/librechat-container.nix
+      #../../nix-containers/n8n-container.nix
+      #../../nix-containers/browserless-container.nix
     ];
 
   # Bootloader.
@@ -465,45 +465,45 @@
     tailNet = "tail5bbc4.ts.net";
   };
 
-  services.litellm-container = {
-    enable = true;
-    tailNet = "tail5bbc4.ts.net";
-  };
+  #services.litellm-container = {
+  #  enable = true;
+  #  tailNet = "tail5bbc4.ts.net";
+  #};
 
-  services.meilisearch-container = {
-    enable = true;
-    tailNet = "tail5bbc4.ts.net";
-  };
+  #services.meilisearch-container = {
+  #  enable = true;
+  #  tailNet = "tail5bbc4.ts.net";
+  #};
 
-  services.vectordb-container = {
-    enable = true;
-    tailNet = "tail5bbc4.ts.net";
-  };
+  #services.vectordb-container = {
+  #  enable = true;
+  #  tailNet = "tail5bbc4.ts.net";
+  #};
 
-  services.mongodb-container = {
-    enable = true;
-    tailNet = "tail5bbc4.ts.net";
-  };
+  #services.mongodb-container = {
+  #  enable = true;
+  a  tailNet = "tail5bbc4.ts.net";
+  #};
   
-  services.ragapi-container = {
-    enable = true;
-    tailNet = "tail5bbc4.ts.net";
-  };
+  #services.ragapi-container = {
+  #  enable = true;
+  #  tailNet = "tail5bbc4.ts.net";
+  #};
 
-  services.librechat-container = {
-    enable = true;
-    tailNet = "tail5bbc4.ts.net";
-  };
+  #services.librechat-container = {
+  #  enable = true;
+  #  tailNet = "tail5bbc4.ts.net";
+  #};
    
-  services.n8n-container = {
-    enable = true;
-    tailNet = "tail5bbc4.ts.net";
-  }; 
+  #services.n8n-container = {
+  #  enable = true;
+  #  tailNet = "tail5bbc4.ts.net";
+  #}; 
 
-  services.browserless-container = {
-    enable = true;
-    tailNet = "tail5bbc4.ts.net";
-  };
+  #services.browserless-container = {
+  #  enable = true;
+  #  tailNet = "tail5bbc4.ts.net";
+  #};
 
   services.romm-container = {
     enable = true;
