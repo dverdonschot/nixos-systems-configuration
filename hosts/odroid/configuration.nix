@@ -22,6 +22,7 @@
       ../../nix-containers/nextcloud-container.nix
       ../../nix-containers/mariadb-container.nix
       ../../nix-containers/redis-container.nix
+      ../../nix-containers/romm-container.nix
     ];
 
   # Bootloader.
@@ -524,6 +525,14 @@
     containerName = "redis";
     ipAddress = "192.168.100.39";
   };
+  
+  services.romm-container = {
+    enable = true;
+    tailNet = "tail5bbc4.ts.net";
+    containerName = "romm";
+    ipAddress = "192.168.100.37";
+  };
+
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions

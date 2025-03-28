@@ -9,7 +9,6 @@
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
       <home-manager/nixos>
-      ../../nix-containers/romm-container.nix
       ../../nix-containers/ollama-container.nix
       ../../nix-containers/litellm-container.nix
       #../../nix-containers/meilisearch-container.nix
@@ -482,7 +481,7 @@
 
   #services.mongodb-container = {
   #  enable = true;
-  a  tailNet = "tail5bbc4.ts.net";
+  #  tailNet = "tail5bbc4.ts.net";
   #};
   
   #services.ragapi-container = {
@@ -505,11 +504,6 @@
   #  tailNet = "tail5bbc4.ts.net";
   #};
 
-  services.romm-container = {
-    enable = true;
-    tailNet = "tail5bbc4.ts.net";
-  };
-  
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
   # on your system were taken. It‘s perfectly fine and recommended to leave
