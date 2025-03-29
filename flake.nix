@@ -89,9 +89,18 @@
           };
           wsl = lib.nixosSystem {
             inherit system;
-            specialArgs = {inherit inputs; };
+            specialArgs = {
+              inherit inputs;
+              userName = "nixos";
+              userEmail = "36795362+dverdonschot@users.noreply.github.com"; 
+            };
             modules = [ 
               ./hosts/wsl/configuration.nix
+              {
+                home-manager.useGlobalPkgs = true;
+                home-manager.useUserPackages = true;
+                home-manager.users.nixos = import home-manager/home-nix.nix;
+              }
             ];
           };
         };
