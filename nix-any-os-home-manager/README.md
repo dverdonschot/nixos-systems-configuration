@@ -17,9 +17,14 @@ build-users-group = nixbld
 ```bash
 git clone https://github.com/dverdonschot/nixos-systems-configuration.git
 cd nix-systems-configuration/nix-any-os-home-manager
-nix run .#home-manager -- switch --flake .#fedora
 
-## OR
+# backup bashrc and bash_profile
+mv ~/.bashrc ~/bashrc_backup
+mv ~/.bash_profile ~/bash_profile
+
+# now run nix home-manager
+nix run .#home-manager -- switch --flake .#fedora
+# OR
 nix run ~/nixos-systems-configuration/nix-any-os-home-manager/.#home-manager -- switch --flake ~/nixos-systems-configuration/nix-any-os-home-manager/.#fedora
 ```
 
