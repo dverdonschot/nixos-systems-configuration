@@ -199,6 +199,7 @@
     git
     unzip
     pciutils
+    roo-code
     fzf
     btop
     tmux
