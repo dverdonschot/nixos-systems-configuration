@@ -113,7 +113,7 @@
     enable32Bit = true;
   };
   # Enable sound with pipewire.
-  hardware.pulseaudio.enable = false;
+  services.pulseaudio.enable = false;
   security = {
     rtkit.enable = true;
     sudo.extraConfig = ''
@@ -199,10 +199,10 @@
     git
     unzip
     pciutils
-    roo-code
     fzf
     btop
     tmux
+    #logseq
     wl-clipboard
     gnome-remote-desktop
     gnome-terminal

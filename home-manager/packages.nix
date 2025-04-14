@@ -3,6 +3,7 @@ pkgs: with pkgs; [
   exercism
   ollama
   pinta
+  appimage-run
   cmake
   curl
   iputils

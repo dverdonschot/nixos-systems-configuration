@@ -13,7 +13,7 @@ in
     home.stateVersion = "23.11";
     home.username = "ewt";
     home.homeDirectory = "/home/ewt";
-    nixpkgs.config.allowUnfree = true;
+    #nixpkgs.config.allowUnfree = true;
     home.packages = packages pkgs;
 
     home.sessionVariables.GTK_THEME = "palenight";
@@ -110,31 +110,33 @@ in
     programs.vscode = {
       enable = true;
       package = pkgs.vscodium;
-      extensions = with pkgs.vscode-extensions; [
-        dracula-theme.theme-dracula
-        vscodevim.vim
-        yzhang.markdown-all-in-one
-        ms-python.python
-        bbenoist.nix
-        jnoortheen.nix-ide
-        ms-toolsai.jupyter
-        rust-lang.rust-analyzer
-        eamodio.gitlens
-        redhat.vscode-yaml
-        wholroyd.jinja
-        dart-code.dart-code
-        dart-code.flutter
-      ];
-      keybindings = [
-        {
-          key = "ctrl+b left";
-          command = "workbench.action.navigateLeft";
-        }
-        {
-          key = "ctrl+b right";
-          command = "workbench.action.navigateRight";
-        }
-      ];
+      profiles.default = {
+        extensions = with pkgs.vscode-extensions; [
+          dracula-theme.theme-dracula
+          vscodevim.vim
+          yzhang.markdown-all-in-one
+          ms-python.python
+          bbenoist.nix
+          jnoortheen.nix-ide
+          ms-toolsai.jupyter
+          rust-lang.rust-analyzer
+          eamodio.gitlens
+          redhat.vscode-yaml
+          wholroyd.jinja
+          dart-code.dart-code
+          dart-code.flutter
+        ];
+        keybindings = [
+          {
+            key = "ctrl+b left";
+            command = "workbench.action.navigateLeft";
+          }
+          {
+            key = "ctrl+b right";
+            command = "workbench.action.navigateRight";
+          }
+        ];
+      };
     };
     programs.direnv = {
       enable = true;
