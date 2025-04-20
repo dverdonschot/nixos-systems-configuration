@@ -38,7 +38,7 @@ in {
       localAddress = "${cfg.ipAddress}";
       bindMounts = {
         "/${cfg.containerName}" = {
-          hostPath = "/mnt/${cfg.containerName}/data";
+          hostPath = "/mnt/data/${cfg.containerName}/data";
           isReadOnly = false;
         };
       };

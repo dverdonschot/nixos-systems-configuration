@@ -38,31 +38,31 @@ in {
       localAddress = "${cfg.ipAddress}";
       bindMounts = {
         "/.env/.${cfg.containerName}.env" = {
-          hostPath = "/mnt/${cfg.containerName}/.env/${cfg.containerName}.env";
+          hostPath = "/mnt/data/${cfg.containerName}/.env/${cfg.containerName}.env";
           isReadOnly = true;
         };
         "/${cfg.containerName}/library" = {
-          hostPath = "/mnt/${cfg.containerName}/library";
+          hostPath = "/mnt/data/${cfg.containerName}/library";
           isReadOnly = false;
         };
         "/${cfg.containerName}/assets" = {
-          hostPath = "/mnt/${cfg.containerName}/assets";
+          hostPath = "/mnt/data/${cfg.containerName}/assets";
           isReadOnly = false;
         };
         "/${cfg.containerName}/config" = {
-          hostPath = "/mnt/${cfg.containerName}/config";
+          hostPath = "/mnt/data/${cfg.containerName}/config";
           isReadOnly = false;
         };
         "/${cfg.containerName}/resources" = {
-          hostPath = "/mnt/${cfg.containerName}/resources";
+          hostPath = "/mnt/data/${cfg.containerName}/resources";
           isReadOnly = false;
         };
         "/${cfg.containerName}/redis_data" = {
-          hostPath = "/mnt/${cfg.containerName}/redis_data";
+          hostPath = "/mnt/data/${cfg.containerName}/redis_data";
           isReadOnly = false;
         };
         "/${cfg.containerName}/mysql_data" = {
-          hostPath = "/mnt/${cfg.containerName}/mysql_data";
+          hostPath = "/mnt/data/${cfg.containerName}/mysql_data";
           isReadOnly = false;
         };
       };

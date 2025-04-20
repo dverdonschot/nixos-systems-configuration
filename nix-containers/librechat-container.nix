@@ -38,19 +38,19 @@ in {
       localAddress = "${cfg.ipAddress}";
       bindMounts = {
         "/.env/.${cfg.containerName}.env" = {
-          hostPath = "/mnt/${cfg.containerName}/.env/${cfg.containerName}.env";
+          hostPath = "/mnt/data/${cfg.containerName}/.env/${cfg.containerName}.env";
           isReadOnly = true;
         };
         "/${cfg.containerName}/config" = {
-          hostPath = "/mnt/${cfg.containerName}/config";
+          hostPath = "/mnt/data/${cfg.containerName}/config";
           isReadOnly = false;
         };
         "/${cfg.containerName}/logs" = {
-          hostPath = "/mnt/${cfg.containerName}/logs";
+          hostPath = "/mnt/data/${cfg.containerName}/logs";
           isReadOnly = false;
         };
         "/${cfg.containerName}/public-images" = {
-          hostPath = "/mnt/${cfg.containerName}/public-images";
+          hostPath = "/mnt/data/${cfg.containerName}/public-images";
           isReadOnly = false;
         };
       };

@@ -38,7 +38,7 @@ in {
       localAddress = "${cfg.ipAddress}";
       bindMounts = {
         "/${cfg.containerName}/environment/" = {
-          hostPath = "/mnt/${cfg.containerName}/environment";
+          hostPath = "/mnt/data/${cfg.containerName}/environment";
         };
       };
 

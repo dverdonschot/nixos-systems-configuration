@@ -38,7 +38,7 @@ in {
       localAddress = "${cfg.ipAddress}";
       bindMounts = {
         "/var/lib/loki" = {
-          hostPath = "/mnt/loki";
+          hostPath = "/mnt/data/loki";
           isReadOnly = false;
         };
       };

@@ -38,7 +38,7 @@ in {
       localAddress = "${cfg.ipAddress}";
       bindMounts = {
         "/var/lib/prometheus" = {
-          hostPath = "/mnt/prometheus";
+          hostPath = "/mnt/data/prometheus";
         };
       };
 

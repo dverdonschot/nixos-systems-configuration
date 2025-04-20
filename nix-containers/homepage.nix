@@ -36,11 +36,6 @@ in {
       privateNetwork = true;
       hostAddress = "${cfg.hostAddress}";
       localAddress = "${cfg.ipAddress}";
-      bindMounts = {
-        "/films" = {
-          hostPath = "/mnt/films";
-        };
-      };
 
       extraFlags = [ "--private-users-ownership=chown" ];
       additionalCapabilities = [

@@ -38,10 +38,10 @@ in {
       localAddress = "${cfg.ipAddress}";
       bindMounts = {
         "/metube" = {
-          hostPath = "/mnt/metube";
+          hostPath = "/mnt/data/metube";
         };
         "/pinchflat" = {
-          hostPath = "/mnt/pinchflat";
+          hostPath = "/mnt/data/pinchflat";
         };
       };
 

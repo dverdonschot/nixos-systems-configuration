@@ -38,15 +38,15 @@ in {
       localAddress = "${cfg.ipAddress}";
       bindMounts = {
         "/${cfg.containerName}" = {
-          hostPath = "/mnt/${cfg.containerName}/data";
+          hostPath = "/mnt/data/${cfg.containerName}/data";
           isReadOnly = false;
         };
         "/.env/.hoarder.env" = {
-          hostPath = "/mnt/${cfg.containerName}/.env/${cfg.containerName}.env";
+          hostPath = "/mnt/data/${cfg.containerName}/.env/${cfg.containerName}.env";
           isReadOnly = true;
         };
         "/meili_data" = {
-          hostPath = "/mnt/${cfg.containerName}/meili_data";
+          hostPath = "/mnt/data/${cfg.containerName}/meili_data";
           isReadOnly = false;
         };
       };

@@ -38,11 +38,11 @@ in {
       localAddress = "${cfg.ipAddress}";
       bindMounts = {
         "/.env/.${cfg.containerName}.env" = {
-          hostPath = "/mnt/${cfg.containerName}/.env/${cfg.containerName}.env";
+          hostPath = "/mnt/data/${cfg.containerName}/.env/${cfg.containerName}.env";
           isReadOnly = true;
         };
         "/${cfg.containerName}/config" = {
-          hostPath = "/mnt/${cfg.containerName}/config";
+          hostPath = "/mnt/data/${cfg.containerName}/config";
           isReadOnly = false;
         };
       };
