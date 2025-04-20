@@ -188,7 +188,7 @@
       ];
       log-driver = "journald";
       volumes = [
-        "/mnt/isponsorblocktv:/app/data"
+        "/mnt/data/isponsorblocktv:/app/data"
       ];
     };
   };
