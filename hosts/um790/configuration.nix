@@ -227,6 +227,7 @@
     win-spice
     quickemu
     toolbox
+    lima
     #quickgui
     # containers
     # services

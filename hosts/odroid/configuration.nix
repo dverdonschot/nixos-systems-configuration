@@ -55,6 +55,12 @@
     };
   };
 
+  fileSystems."/mnt/data" = {
+    device = "/dev/nvme0n1p1";
+    fsType = "btrfs";
+    options = [ "compress=zstd" ];
+  };
+  
   # Added weekly garbage collection
   nix = {
     gc = {
@@ -199,6 +205,7 @@
     git
     unzip
     btop
+    parted
     tmux
     wl-clipboard
     gnome-remote-desktop
