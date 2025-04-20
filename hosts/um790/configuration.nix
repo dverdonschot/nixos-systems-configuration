@@ -115,6 +115,12 @@
   # Enable sound with pipewire.
   services.pulseaudio.enable = false;
   security = {
+    sudo.extraRules = [
+      {
+        users = [ "ewt" ];
+        commands = [ { command = "ALL"; options = [ "NOPASSWD" ]; } ];
+      }
+    ];
     rtkit.enable = true;
     sudo.extraConfig = ''
       Defaults        timestamp_timeout=30

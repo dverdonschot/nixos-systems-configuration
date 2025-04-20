@@ -144,6 +144,13 @@
     ];
   };
 
+  security.sudo.extraRules = [
+      {
+        users = [ "ewt" ];
+        commands = [ { command = "ALL"; options = [ "NOPASSWD" ]; } ];
+      }
+    ];
+  } 
   # Install firefox.
   programs.firefox.enable = true;
 
