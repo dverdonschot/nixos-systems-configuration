@@ -23,6 +23,10 @@
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
+  # specific UM790 fix to prevent reboots when running idle
+  boot.kernelParams = 
+    [ "processor.max_cstate=1"
+      "idle=nowait"];
 
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
