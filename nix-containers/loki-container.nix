@@ -69,8 +69,8 @@ in {
           ];
         };
 
-        services.journald.extraConfig = "SystemMaxUse=100M";
-        
+        services.journald.extraConfig = "SystemMaxUse=100M";        
+        time.timeZone = "Europe/Amsterdam";
         services.loki = {
           enable = true;
           configFile = ./loki/loki.yaml;

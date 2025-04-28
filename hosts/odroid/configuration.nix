@@ -322,7 +322,7 @@
         filename = "/tmp/positions.yaml";
       };
       clients = [{
-        url = "https://loki.tail5bbc4.ts.net:/loki/api/v1/push";
+        url = "http://loki.tail5bbc4.ts.net:3100/loki/api/v1/push";
       }];
       scrape_configs = [
         {
