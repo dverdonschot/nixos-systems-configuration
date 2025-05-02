@@ -47,6 +47,7 @@ in {
         };
         "/${cfg.containerName}" = {
           hostPath = "/mnt/data/${cfg.containerName}/data";
+          isReadOnly = false;
         };
       };
 
@@ -127,7 +128,7 @@ in {
               "8080:80"
             ];
             volumes = [
-              "/${cfg.containerName}"
+              "/${cfg.containerName}:/var/www/html"
             ];
             environmentFiles = [
               "/.env/.${cfg.containerName}.env"
