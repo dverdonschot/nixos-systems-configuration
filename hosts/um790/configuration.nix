@@ -8,6 +8,7 @@
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
+       ../../modules/udev/keyboard-udev-rules.nix
       <home-manager/nixos>
       ../../nix-containers/ollama-container.nix
       ../../nix-containers/litellm-container.nix
@@ -238,6 +239,14 @@
     quickemu
     toolbox
     lima
+    # microcrontrollers
+    pciutils
+    usbutils
+    qmk
+    esptool
+    esphome
+    arduino
+    haskellPackages.udev
     #quickgui
     # containers
     # services
