@@ -3,6 +3,7 @@ pkgs: with pkgs; [
   exercism
   ollama
   pinta
+  brave
   appimage-run
   cmake
   curl
