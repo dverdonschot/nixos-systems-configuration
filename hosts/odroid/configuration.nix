@@ -22,6 +22,7 @@
       ../../nix-containers/nextcloud-container.nix
       ../../nix-containers/mariadb-container.nix
       ../../nix-containers/redis-container.nix
+      ../../nix-containers/ntfy-sh-container.nix
       ../../nix-containers/romm-container.nix
     ];
 
@@ -545,6 +546,15 @@
     containerName = "romm";
     ipAddress = "192.168.100.37";
   };
+  
+  services.ntfy-sh-container = {
+    enable = true;
+    tailNet = "tail5bbc4.ts.net";
+    containerName = "ntfy-sh";
+    ipAddress = "192.168.100.41";
+  };
+
+
 
 
   # This value determines the NixOS release from which the default

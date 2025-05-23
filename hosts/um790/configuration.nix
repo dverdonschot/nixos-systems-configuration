@@ -222,7 +222,6 @@
     tree
     nix-index
     niv
-    monitor
     bottom
     # AMD powertuning
     lact
@@ -263,7 +262,7 @@
     devenv
     direnv
     vscode
-    retroarchFull
+    #retroarchFull
     nodejs_22
     # create fhs environments
     steam-run
