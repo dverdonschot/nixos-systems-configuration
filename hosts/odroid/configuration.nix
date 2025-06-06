@@ -220,7 +220,6 @@
     tree
     nix-index
     niv
-    monitor
     bottom
     # images
     pinta
