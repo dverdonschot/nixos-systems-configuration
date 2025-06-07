@@ -25,9 +25,16 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
   # specific UM790 fix to prevent reboots when running idle
-  boot.kernelParams = 
-    [ "processor.max_cstate=1"
-      "idle=nowait"];
+  boot.kernelParams = [ 
+    "processor.max_cstate=1"
+    "idle=nowait"
+  ];
+  boot.kernelModules = [ 
+    "usbserial"
+    "ftdi_sio"
+    "cp210x"
+    "ch341"
+  ];
 
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
@@ -151,7 +158,7 @@
   users.users.ewt = {
     isNormalUser = true;
     description = "ewt";
-    extraGroups = [ "networkmanager" "wheel" "libvirtd" "docker" "podman" "audio" "video" ];
+    extraGroups = [ "networkmanager" "wheel" "libvirtd" "docker" "podman" "audio" "video" "dailout" ];
     packages = with pkgs; [
     #  thunderbird
     ];
@@ -160,6 +167,11 @@
   # Enable automatic login for the user.
   services.displayManager.autoLogin.enable = true;
   services.displayManager.autoLogin.user = "ewt";
+  
+  # Enable udev rules for microcontrollers
+  services.udev.packages = [
+    pkgs.esphome
+  ];
 
   # Workaround for GNOME autologin: https://github.com/NixOS/nixpkgs/issues/103746#issuecomment-945091229
   systemd.services."getty@tty1".enable = false;

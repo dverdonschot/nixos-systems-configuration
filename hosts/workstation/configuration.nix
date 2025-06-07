@@ -120,7 +120,9 @@ in
     variant = "";
   };
 
-
+  services.udev.packages = [
+    pkgs.esphome
+  ];
 
   # Enable CUPS to print documents.
   services.printing.enable = true;
