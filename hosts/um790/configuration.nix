@@ -158,7 +158,7 @@
   users.users.ewt = {
     isNormalUser = true;
     description = "ewt";
-    extraGroups = [ "networkmanager" "wheel" "libvirtd" "docker" "podman" "audio" "video" "dailout" ];
+    extraGroups = [ "networkmanager" "wheel" "libvirtd" "docker" "podman" "audio" "video" "dialout" ];
     packages = with pkgs; [
     #  thunderbird
     ];
@@ -496,10 +496,10 @@
     tailNet = "tail5bbc4.ts.net";
   };
 
-  #services.litellm-container = {
-  #  enable = true;
-  #  tailNet = "tail5bbc4.ts.net";
-  #};
+  services.litellm-container = {
+    enable = true;
+    tailNet = "tail5bbc4.ts.net";
+  };
 
   #services.meilisearch-container = {
   #  enable = true;

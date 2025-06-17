@@ -13,6 +13,10 @@ in {
       type = types.str;
       default = "litellm";
     };
+    homeLocation = mkOption {
+      type = types.str;
+      default = "/home/ewt/nix-containers";
+    };
     ipAddress = mkOption {
       type = types.str;
       default = "192.168.100.29";
@@ -38,11 +42,11 @@ in {
       localAddress = "${cfg.ipAddress}";
       bindMounts = {
         "/${cfg.containerName}/config" = {
-          hostPath = "/mnt/data/${cfg.containerName}/config";
+          hostPath = "${cfg.homeLocation}/${cfg.containerName}/data/${cfg.containerName}/config";
           isReadOnly = false;
         };
-        "/.env/.${cfg.containerName}.env" = {
-          hostPath = "/mnt/data/${cfg.containerName}/.env/${cfg.containerName}.env";
+        "/${cfg.containerName}/.env/.${cfg.containerName}.env" = {
+          hostPath = "${cfg.homeLocation}/${cfg.containerName}/.env/${cfg.containerName}.env";
           isReadOnly = true;
         };
       };
@@ -113,14 +117,14 @@ in {
               "4000:4000"
             ];
             volumes = [
-              "/litellm/config/litellm_config.yaml:/app/config.yaml"
+              "/${cfg.containerName}/config/litellm_config.yaml:/app/config.yaml"
             ];
             cmd = [
               "--config=/app/config.yaml"
               #"--detailed_debug"
             ];
             environmentFiles = [
-              "/.env/.${cfg.containerName}.env"
+              "/${cfg.containerName}/.env/.${cfg.containerName}.env"
             ];
           };
         };
