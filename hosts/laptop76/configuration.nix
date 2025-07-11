@@ -36,7 +36,7 @@
   };
 
   time.timeZone = "Europe/Amsterdam";
-  hardware.pulseaudio.enable = false;
+  services.pulseaudio.enable = false;
   security.rtkit.enable = true;
   
   # Enable the X11 windowing system.
