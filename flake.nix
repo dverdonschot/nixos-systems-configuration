@@ -32,10 +32,11 @@
             };
             modules = [ 
               ./hosts/workstation/configuration.nix
+              inputs.home-manager.nixosModules.home-manager
               {
                 home-manager.useGlobalPkgs = true;
                 home-manager.useUserPackages = true;
-                home-manager.users.ewt = import home-manager/home.nix;
+                home-manager.users.ewt = import ./home-manager/home.nix;
               }
             ];
           };
@@ -48,10 +49,11 @@
             };
             modules = [ 
               ./hosts/laptop76/configuration.nix
+              inputs.home-manager.nixosModules.home-manager
               {
                 home-manager.useGlobalPkgs = true;
                 home-manager.useUserPackages = true;
-                home-manager.users.ewt = import home-manager/home.nix;
+                home-manager.users.ewt = import ./home-manager/laptop76-home.nix;
               }
             ];
           };
@@ -64,10 +66,11 @@
             };
             modules = [ 
               ./hosts/um790/configuration.nix
+              inputs.home-manager.nixosModules.home-manager
               {
                 home-manager.useGlobalPkgs = true;
                 home-manager.useUserPackages = true;
-                home-manager.users.ewt = import home-manager/home.nix;
+                home-manager.users.ewt = import ./home-manager/home.nix;
               }
             ];
           };
@@ -80,10 +83,11 @@
             };
             modules = [ 
               ./hosts/odroid/configuration.nix
+              inputs.home-manager.nixosModules.home-manager
               {
                 home-manager.useGlobalPkgs = true;
                 home-manager.useUserPackages = true;
-                home-manager.users.ewt = import home-manager/home-minimal.nix;
+                home-manager.users.ewt = import ./home-manager/home-minimal.nix;
               }
             ];
           };
@@ -96,10 +100,11 @@
             };
             modules = [ 
               ./hosts/wsl/configuration.nix
+              inputs.home-manager.nixosModules.home-manager
               {
                 home-manager.useGlobalPkgs = true;
                 home-manager.useUserPackages = true;
-                home-manager.users.nixos = import home-manager/home-nix.nix;
+                home-manager.users.nixos = import ./home-manager/home-nix.nix;
               }
             ];
           };
