@@ -5,10 +5,15 @@
   env.GREET = "devenv";
 
   # https://devenv.sh/packages/
-  packages = [ pkgs.git ];
+  packages = [ 
+    pkgs.git 
+    pkgs.nodejs_20
+  ];
+
 
   # https://devenv.sh/languages/
-  # languages.rust.enable = true;
+  languages.deno.enable = true;
+  languages.javascript.enable = true;
 
   # https://devenv.sh/processes/
   # processes.cargo-watch.exec = "cargo-watch";
@@ -18,12 +23,26 @@
 
   # https://devenv.sh/scripts/
   scripts.hello.exec = ''
-    echo Let's configure some Nix with $GREET
+    echo hello from $GREET
   '';
 
+  env = {
+    NPM_CONFIG_PREFIX = "/home/ewt/.npm-global";
+    PATH = "/home/ewt/.npm-global/bin:$PATH"; 
+  };
+
+
   enterShell = ''
-    hello
+    mkdir -p /home/ewt/.npm-global/bin
+    export PATH="/home/ewt/.npm-global/bin:$PATH"
+    npm install -g @anthropic-ai/claude-code
   '';
+
+  # https://devenv.sh/tasks/
+  # tasks = {
+  #   "myproj:setup".exec = "mytool build";
+  #   "devenv:enterShell".after = [ "myproj:setup" ];
+  # };
 
   # https://devenv.sh/tests/
   enterTest = ''
