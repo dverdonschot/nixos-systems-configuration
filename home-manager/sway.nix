@@ -28,11 +28,7 @@
       };
 
       # Output configuration
-      output = {
-        "*" = {
-          bg = "/home/ewt/.config/wallpaper.jpg fill";
-        };
-      };
+      output = {};
 
       # Window decoration
       gaps = {
@@ -167,7 +163,7 @@
         "Print" = "exec grim - | wl-copy";
 
         # Lock screen
-        "Mod1+Shift+l" = "exec swaylock -f";
+        "Mod1+Ctrl+l" = "exec swaylock -f";
 
         # Media control
         "XF86AudioPlay" = "exec playerctl play-pause";
@@ -627,11 +623,4 @@
     nautilus            # File manager
   ];
 
-  # XDG settings
-  xdg.configFile."wallpaper.jpg" = {
-    source = pkgs.fetchurl {
-      url = "https://raw.githubusercontent.com/dracula/wallpaper/master/first-collection/nixos.png";
-      sha256 = "sha256-VVpYvd4FWwTa+9H1hWUatF9jl3k+Y76VyDCW3K7oGNM=";
-    };
-  };
 }

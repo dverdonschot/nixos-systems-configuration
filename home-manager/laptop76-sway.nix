@@ -17,15 +17,13 @@
   # Laptop76-specific packages for Sway
   home.packages = with pkgs; [
     firefox-wayland
-    nerdfonts
-  ];
+  ] ++ builtins.filter lib.attrsets.isDerivation (builtins.attrValues pkgs.nerd-fonts);
 
   # Laptop76-specific Sway overrides
   wayland.windowManager.sway.config = {
     # Laptop-specific output configuration
     output = {
       "eDP-1" = {
-        bg = "/home/ewt/.config/wallpaper.jpg fill";
         scale = "1";
       };
     };
@@ -33,7 +31,7 @@
     # Additional laptop-specific keybindings
     keybindings = lib.mkAfter {
       # Laptop lid switch handled by system, but add manual lock
-      "Mod1+Shift+l" = "exec swaylock -f";
+      "Mod1+Shift+l" = lib.mkForce "exec swaylock -f";
       
       # Laptop-specific shortcuts
       "Mod1+Tab" = "workspace next";

@@ -4,8 +4,7 @@
     home.stateVersion = "25.05";
     home.username = "ewt";
     home.homeDirectory = "/home/ewt";
-    nixpkgs.config.allowUnfree = true;
-    home.packages = with pkgs; [
+      home.packages = with pkgs; [
       curl
       librewolf-bin
     ];
