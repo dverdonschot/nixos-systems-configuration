@@ -109,7 +109,7 @@ in {
         virtualisation.oci-containers.backend = "docker";
         virtualisation.oci-containers.containers = {
           vectordb = {
-            image = "ankane/pgvector:latest";
+            image = "pgvector/pgvector:latest";
             autoStart = true;
             environment = {
               POSTGRES_USER = "ewt";

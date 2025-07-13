@@ -15,7 +15,7 @@ in {
     };
     homeLocation = mkOption {
       type = types.str;
-      default = "/home/ewt/nix-containers";
+      default = "/home/ewt/nixos-containers";
     };
     ipAddress = mkOption {
       type = types.str;
@@ -42,11 +42,11 @@ in {
       localAddress = "${cfg.ipAddress}";
       bindMounts = {
         "/${cfg.containerName}/config" = {
-          hostPath = "${cfg.homeLocation}/${cfg.containerName}/data/${cfg.containerName}/config";
+          hostPath = "${cfg.homeLocation}/${cfg.containerName}/config";
           isReadOnly = false;
         };
         "/${cfg.containerName}/.env/.${cfg.containerName}.env" = {
-          hostPath = "${cfg.homeLocation}/${cfg.containerName}/.env/${cfg.containerName}.env";
+          hostPath = "${cfg.homeLocation}/${cfg.containerName}/.env/.${cfg.containerName}.env";
           isReadOnly = true;
         };
       };
@@ -117,7 +117,7 @@ in {
               "4000:4000"
             ];
             volumes = [
-              "/${cfg.containerName}/config/litellm_config.yaml:/app/config.yaml"
+              "/${cfg.containerName}/config/config.yaml:/app/config.yaml"
             ];
             cmd = [
               "--config=/app/config.yaml"

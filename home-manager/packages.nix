@@ -6,6 +6,8 @@ pkgs: with pkgs; [
   brave
   appimage-run
   cmake
+  bandwhich
+  bluetui
   curl
   iputils
   dig
