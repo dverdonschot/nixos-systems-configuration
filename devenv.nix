@@ -16,7 +16,7 @@
   languages.javascript.enable = true;
 
   # https://devenv.sh/processes/
-  # processes.cargo-watch.exec = "cargo-watch";
+  processes.mcp-nixos.exec = "nix run github:utensils/mcp-nixos";
 
   # https://devenv.sh/services/
   # services.postgres.enable = true;
@@ -35,7 +35,7 @@
   enterShell = ''
     mkdir -p /home/ewt/.npm-global/bin
     export PATH="/home/ewt/.npm-global/bin:$PATH"
-    npm install -g @anthropic-ai/claude-code
+    npm update -g @anthropic-ai/claude-code
   '';
 
   # https://devenv.sh/tasks/

@@ -2,7 +2,7 @@
 
 {
   imports = [
-    ./home-minimal.nix
-    ./laptop76-sway.nix
+    ./home.nix
+    ./sway.nix
   ];
 }

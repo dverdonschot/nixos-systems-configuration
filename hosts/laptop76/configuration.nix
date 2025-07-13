@@ -55,17 +55,24 @@
 
   # Enable the X11 windowing system and GNOME
   services = {
+    displayManager = {
+      sessionPackages = with pkgs; [
+        sway
+      ];
+    };
     xserver = {
       enable = true;
-      displayManager.gdm = {
-        enable = true;
-        wayland = true;
-      };
       desktopManager.gnome.enable = true;
-    };
-    xserver.xkb = {
-      layout = "us";
-      variant = "";
+      displayManager = {
+        gdm = {
+          enable = true;
+          wayland = true;
+        };
+      };
+      xkb = {
+        layout = "us";
+        variant = "";
+      };
     };
     printing.enable = true;
     pipewire = {
@@ -117,6 +124,7 @@
   # Enable nix flakes
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
   nix.package = pkgs.nixVersions.stable;
+  nix.settings.trusted-users = [ "root" "ewt" ];
 
   # Allow flatpak
   services.flatpak.enable = true;
@@ -159,6 +167,7 @@
     powerline-fonts
     powerline-symbols
     font-awesome
+    devenv
     tmux
     libgcc
   ];

@@ -1,6 +1,15 @@
 { config, lib, pkgs, ... }:
 
 {
+  # Enable Wayland session variables for proper Sway integration
+  home.sessionVariables = {
+    NIXOS_OZONE_WL = "1";
+    MOZ_ENABLE_WAYLAND = "1";
+    QT_QPA_PLATFORM = "wayland";
+    CLUTTER_BACKEND = "wayland";
+    XDG_SESSION_TYPE = "wayland";
+    GDK_BACKEND = "wayland,x11";
+  };
   wayland.windowManager.sway = {
     enable = true;
     config = {
@@ -28,23 +37,53 @@
       };
 
       # Output configuration
-      output = {};
+      output = {
+        "eDP-1" = {
+          scale = "1";
+        };
+      };
 
       # Window decoration
       gaps = {
         inner = 5;
         outer = 20;
+        smartGaps = true;
       };
       
       window = {
-        border = 2;
+        border = 3;
         titlebar = false;
       };
 
       # Focus settings
       focus = {
         followMouse = true;
+        wrapping = "workspace";
       };
+
+      # Workspace switching animations
+      workspaceOutputAssign = [
+        {
+          workspace = "1:terminal";
+          output = "eDP-1";
+        }
+        {
+          workspace = "2:browser";
+          output = "eDP-1";
+        }
+        {
+          workspace = "3:code";
+          output = "eDP-1";
+        }
+        {
+          workspace = "4:files";
+          output = "eDP-1";
+        }
+        {
+          workspace = "5:media";
+          output = "eDP-1";
+        }
+      ];
 
       # Colors (Dracula theme)
       colors = {
@@ -114,11 +153,11 @@
         "Mod1+Shift+l" = "move right";
 
         # Switch to workspace
-        "Mod1+1" = "workspace number 1";
-        "Mod1+2" = "workspace number 2";
-        "Mod1+3" = "workspace number 3";
-        "Mod1+4" = "workspace number 4";
-        "Mod1+5" = "workspace number 5";
+        "Mod1+1" = "workspace 1:terminal";
+        "Mod1+2" = "workspace 2:browser";
+        "Mod1+3" = "workspace 3:code";
+        "Mod1+4" = "workspace 4:files";
+        "Mod1+5" = "workspace 5:media";
         "Mod1+6" = "workspace number 6";
         "Mod1+7" = "workspace number 7";
         "Mod1+8" = "workspace number 8";
@@ -126,19 +165,31 @@
         "Mod1+0" = "workspace number 10";
 
         # Move window to workspace
-        "Mod1+Shift+1" = "move container to workspace number 1";
-        "Mod1+Shift+2" = "move container to workspace number 2";
-        "Mod1+Shift+3" = "move container to workspace number 3";
-        "Mod1+Shift+4" = "move container to workspace number 4";
-        "Mod1+Shift+5" = "move container to workspace number 5";
+        "Mod1+Shift+1" = "move container to workspace 1:terminal";
+        "Mod1+Shift+2" = "move container to workspace 2:browser";
+        "Mod1+Shift+3" = "move container to workspace 3:code";
+        "Mod1+Shift+4" = "move container to workspace 4:files";
+        "Mod1+Shift+5" = "move container to workspace 5:media";
         "Mod1+Shift+6" = "move container to workspace number 6";
         "Mod1+Shift+7" = "move container to workspace number 7";
         "Mod1+Shift+8" = "move container to workspace number 8";
         "Mod1+Shift+9" = "move container to workspace number 9";
         "Mod1+Shift+0" = "move container to workspace number 10";
 
+        # Application shortcuts
+        "Mod1+b" = "exec firefox";
+        "Mod1+c" = "exec code";
+        "Mod1+m" = "exec spotify";
+
+        # Scratchpad
+        "Mod1+Shift+minus" = "move scratchpad";
+        "Mod1+minus" = "scratchpad show";
+
+        # Window switching
+        "Mod1+grave" = "[con_mark=_last] focus";
+
         # Layout commands
-        "Mod1+b" = "splith";
+        "Mod1+Shift+b" = "splith";
         "Mod1+v" = "splitv";
         "Mod1+s" = "layout stacking";
         "Mod1+w" = "layout tabbed";
@@ -161,6 +212,8 @@
         # Screenshot
         "Mod1+Print" = "exec grim -g \"$(slurp)\" - | wl-copy";
         "Print" = "exec grim - | wl-copy";
+        "Mod1+Shift+Print" = "exec grim -g \"$(slurp)\" ~/Pictures/screenshot-$(date +%Y%m%d-%H%M%S).png";
+        "Shift+Print" = "exec grim ~/Pictures/screenshot-$(date +%Y%m%d-%H%M%S).png";
 
         # Lock screen
         "Mod1+Ctrl+l" = "exec swaylock -f";
@@ -169,6 +222,13 @@
         "XF86AudioPlay" = "exec playerctl play-pause";
         "XF86AudioNext" = "exec playerctl next";
         "XF86AudioPrev" = "exec playerctl previous";
+
+        # Clipboard manager
+        "Mod1+Shift+v" = "exec cliphist list | wofi --dmenu | cliphist decode | wl-copy";
+        
+        # Additional laptop-specific shortcuts
+        "Mod1+Tab" = "workspace next";
+        "Mod1+Shift+Tab" = "workspace prev";
       };
 
       # Resize mode bindings
@@ -201,15 +261,42 @@
           criteria = { app_id = "nm-connection-editor"; };
           command = "floating enable";
         }
+        # Application workspace assignments
+        {
+          criteria = { app_id = "firefox"; };
+          command = "move container to workspace 2:browser";
+        }
+        {
+          criteria = { class = "Code"; };
+          command = "move container to workspace 3:code";
+        }
+        {
+          criteria = { class = "Spotify"; };
+          command = "move container to workspace 5:media";
+        }
+        {
+          criteria = { app_id = "nautilus"; };
+          command = "move container to workspace 4:files";
+        }
+        # Window opacity rules
+        {
+          criteria = { app_id = "alacritty"; };
+          command = "opacity 0.9";
+        }
+        {
+          criteria = { class = "Code"; };
+          command = "opacity 0.95";
+        }
       ];
 
       # Auto-start applications
       startup = [
-        { command = "waybar"; }
         { command = "dunst"; }
         { command = "nm-applet --indicator"; }
         { command = "blueman-applet"; }
-        { command = "swayidle -w timeout 300 'swaylock -f' timeout 600 'swaymsg \"output * power off\"' resume 'swaymsg \"output * power on\"' before-sleep 'swaylock -f'"; }
+        { command = "wl-paste --watch cliphist store"; }
+        { command = "udisks2"; }
+        { command = "swayidle -w timeout 300 'if ! playerctl -a status 2>/dev/null | grep -q Playing; then swaylock -f; fi' timeout 600 'if ! playerctl -a status 2>/dev/null | grep -q Playing; then swaymsg \"output * power off\"; fi' resume 'swaymsg \"output * power on\"' timeout 1800 'systemctl suspend' before-sleep 'swaylock -f'"; }
       ];
 
       # Bars (disable default, we'll use waybar)
@@ -220,6 +307,12 @@
     extraConfig = ''
       # Laptop-specific configurations
       bindswitch --reload --locked lid:on exec swaylock -f
+      
+      # Window focus tracking for Alt+grave
+      for_window [all] exec swaymsg "mark --replace _last"
+      
+      # Workspace transitions
+      workspace_auto_back_and_forth yes
     '';
   };
 
@@ -241,13 +334,13 @@
         "sway/workspaces" = {
           disable-scroll = true;
           all-outputs = true;
-          format = "{icon}";
+          format = "{name}";
           format-icons = {
-            "1" = "1";
-            "2" = "2";
-            "3" = "3";
-            "4" = "4";
-            "5" = "5";
+            "1:terminal" = "";
+            "2:browser" = "";
+            "3:code" = "";
+            "4:files" = "";
+            "5:media" = "";
             "6" = "6";
             "7" = "7";
             "8" = "8";
@@ -401,6 +494,10 @@
           background-color: #f8f8f2;
           color: #ff5555;
         }
+      }
+
+      window#waybar {
+        font-size: 12px;
       }
     '';
   };
@@ -590,7 +687,7 @@
         normal.family = "Hack Nerd Font";
         bold.family = "Hack Nerd Font";
         italic.family = "Hack Nerd Font";
-        size = 12.0;
+        size = 11.0;
       };
       window = {
         opacity = 0.9;
@@ -608,6 +705,7 @@
     grim                # Screenshot tool
     slurp               # Select area for screenshots
     wl-clipboard        # Wayland clipboard utilities
+    cliphist            # Clipboard manager
     brightnessctl       # Brightness control
     pavucontrol         # Audio control GUI
     networkmanagerapplet # Network manager applet
@@ -615,12 +713,17 @@
     swaylock            # Screen locker
     swayidle            # Idle daemon
     playerctl           # Media player control
+    udisks2             # Auto-mounting USB devices
     
     # Theme and appearance
     oreo-cursors-plus   # Cursor theme
     
     # Utilities
     nautilus            # File manager
-  ];
+    
+    # Applications
+    firefox-wayland     # Browser
+    spotify             # Music player
+  ] ++ builtins.filter lib.attrsets.isDerivation (builtins.attrValues pkgs.nerd-fonts);
 
 }
