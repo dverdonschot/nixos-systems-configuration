@@ -4,7 +4,6 @@
     home.stateVersion = "23.11";
     home.username = "ewt";
     home.homeDirectory = "/home/ewt";
-    nixpkgs.config.allowUnfree = true;
     home.packages = with pkgs; [
       curl
       nnn

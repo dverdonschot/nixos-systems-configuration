@@ -4,7 +4,6 @@
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
-      <home-manager/nixos>
     ];
 
   # Bootloader.
@@ -39,16 +38,41 @@
   services.pulseaudio.enable = false;
   security.rtkit.enable = true;
   
-  # Enable the X11 windowing system.
+  # Enable Sway alongside GNOME
+  programs.sway = {
+    enable = true;
+    wrapperFeatures.gtk = true;
+  };
+
+  # Enable XDG desktop portal for Wayland
+  xdg.portal = {
+    enable = true;
+    wlr.enable = true;
+    extraPortals = with pkgs; [
+      xdg-desktop-portal-gtk
+    ];
+  };
+
+  # Enable the X11 windowing system and GNOME
   services = {
+    displayManager = {
+      sessionPackages = with pkgs; [
+        sway
+      ];
+    };
     xserver = {
       enable = true;
-      displayManager.gdm.enable = true;
       desktopManager.gnome.enable = true;
-    };
-    xserver.xkb = {
-      layout = "us";
-      variant = "";
+      displayManager = {
+        gdm = {
+          enable = true;
+          wayland = true;
+        };
+      };
+      xkb = {
+        layout = "us";
+        variant = "";
+      };
     };
     printing.enable = true;
     pipewire = {
@@ -100,6 +124,7 @@
   # Enable nix flakes
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
   nix.package = pkgs.nixVersions.stable;
+  nix.settings.trusted-users = [ "root" "ewt" ];
 
   # Allow flatpak
   services.flatpak.enable = true;
@@ -142,6 +167,7 @@
     powerline-fonts
     powerline-symbols
     font-awesome
+    devenv
     tmux
     libgcc
   ];
