@@ -19,7 +19,6 @@ pkgs: with pkgs; [
   pciutils
   usbutils
   ethtool
-  jetbrains.pycharm-community-bin
   yarn
   zip
   tree
