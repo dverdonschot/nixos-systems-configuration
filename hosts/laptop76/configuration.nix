@@ -4,6 +4,7 @@
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
+      ../../modules/udev/keyboard-udev-rules.nix
     ];
 
   # Bootloader.
@@ -17,7 +18,10 @@
     networkmanager.enable = true;
     firewall = {
       enable = true;
-      #allowedTCPPorts = [ ... ];
+      #allowedTCPPorts = [ ... ];{
+      allowedTCPPorts = [
+        6443 # k3s: required so that pods can reach the API server (running on port 6443 by default)
+      ];
     };
   };
   # Select internationalisation properties.
@@ -60,15 +64,20 @@
         sway
       ];
     };
+    k3s = {
+      enable = true;
+      role = "server";
+    };
+    desktopManager.gnome.enable = true;
+    displayManager = {
+      gdm = {
+        enable = true;
+        wayland = true;
+      };
+    };
     xserver = {
       enable = true;
-      desktopManager.gnome.enable = true;
-      displayManager = {
-        gdm = {
-          enable = true;
-          wayland = true;
-        };
-      };
+
       xkb = {
         layout = "us";
         variant = "";
