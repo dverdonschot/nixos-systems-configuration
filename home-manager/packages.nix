@@ -6,6 +6,8 @@ pkgs: with pkgs; [
   brave
   appimage-run
   cmake
+  bandwhich
+  bluetui
   curl
   iputils
   dig
@@ -17,7 +19,6 @@ pkgs: with pkgs; [
   pciutils
   usbutils
   ethtool
-  jetbrains.pycharm-community-bin
   yarn
   zip
   tree

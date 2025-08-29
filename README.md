@@ -99,6 +99,7 @@ When running a profile a flake.lock file is created, this pins all packages and 
 To update nixos flake.lock file:
 
 ```bash
+sudo nix-channel --update
 sudo nix flake update
 # perform actual update
 sudo nixos-rebuild switch --flake . --impure

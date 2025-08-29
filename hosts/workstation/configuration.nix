@@ -121,7 +121,7 @@ in
   };
 
   services.udev.packages = [
-    pkgs.esphome
+    pkgs.esphwome
   ];
 
   # Enable CUPS to print documents.

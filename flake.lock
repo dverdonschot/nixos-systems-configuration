@@ -25,6 +25,7 @@
         ]
       },
       "locked": {
+
         "lastModified": 1756261190,
         "narHash": "sha256-eiy0klFK5EVJLNilutR7grsZN/7Itj9DyD75eyOf83k=",
         "owner": "nix-community",
