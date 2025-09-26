@@ -8,7 +8,7 @@
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
-      <home-manager/nixos>
+      #<home-manager/nixos>
       ../../nix-containers/search-container.nix
       ../../nix-containers/forgejo-container.nix
       ../../nix-containers/loki-container.nix
@@ -95,8 +95,8 @@
   services.xserver.enable = true;
 
   # Enable the GNOME Desktop Environment.
-  services.xserver.displayManager.gdm.enable = true;
-  services.xserver.desktopManager.gnome.enable = true;
+  services.displayManager.gdm.enable = true;
+  services.desktopManager.gnome.enable = true;
 
   # Disable the GNOME3/GDM auto-suspend feature that cannot be disabled in GUI!
   # If no user is logged in, the machine will power down after 20 minutes.
