@@ -85,6 +85,7 @@ in {
           enable = true;
           listenPort = 8082;
           openFirewall = true;
+          allowedHosts = "homepage.tail5bbc4.ts.net";
           settings = {
             title = "HomeBase Services";
             favicon = "https://www.google.com/favicon.ico";
