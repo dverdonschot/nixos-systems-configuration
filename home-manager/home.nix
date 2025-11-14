@@ -46,8 +46,10 @@ in
     programs.home-manager.enable = true;
     programs.git = {
       enable = true;
-      userName = "ewt";
-      userEmail = "36795362+dverdonschot@users.noreply.github.com";
+      settings.user = {
+        name = "ewt";
+        email = "36795362+dverdonschot@users.noreply.github.com";
+      };
       aliases = { 
         undo = "reset --soft HEAD^"; 
       };

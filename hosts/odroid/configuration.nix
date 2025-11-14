@@ -426,14 +426,45 @@
     };
   };
 
-  services.caddy = {
+  services.postgresql = {
     enable = true;
-    extraConfig = ''
-      um790.tail5bbc4.ts.net:1999 {
-        reverse_proxy localhost:19999
-      }
-    '';
+    ensureDatabases = [ "idea2coloring-dev2" ];
+    enableTCPIP = true;
+    dataDir = "/var/lib/postgresql/data";  # Default data directory path
+    settings = {
+      port = 5432;
+      listen_addresses = "*"; # replace with your Tailscale IP
+    };
+    authentication = pkgs.lib.mkOverride 10 ''
+      #type database DBuser origin-address auth-method
+      local all      all     trust
+      # ... other auth rules ...
+
+      # ipv4
+      host  all      all     127.0.0.1/32   trust
+      host  all      all     100.0.0.0/8    trust
+      # ipv6
+      host  all      all     ::1/128        trust
+      '';
+
+   };
+
+  services.redis.servers.redis1 = {
+    enable = true;
+    bind = null;
+    port = 6379;
+    openFirewall = true;
   };
+
+
+#  services.caddy = {
+#    enable = true;
+#    extraConfig = ''
+#      odriod.tail5bbc4.ts.net:5433 {
+#        reverse_proxy localhost:5432
+#      }
+#    '';
+#  };
   
   # nvim
   programs.neovim = {

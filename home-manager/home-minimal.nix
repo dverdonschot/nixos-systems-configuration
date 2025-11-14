@@ -8,7 +8,6 @@
       curl
       librewolf-bin
     ];
-
     xdg.configFile.oh-my-posh = {
       source = ../config;
       recursive = true;
@@ -18,8 +17,10 @@
 
     programs.git = {
       enable = true;
-      userName = "ewt";
-      userEmail = "36795362+dverdonschot@users.noreply.github.com";
+      settings.user = {
+        name = "ewt";
+        email = "36795362+dverdonschot@users.noreply.github.com";
+      };
     };
     
     programs.neovim = {
