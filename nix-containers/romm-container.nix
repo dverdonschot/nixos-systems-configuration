@@ -22,12 +22,12 @@ in {
       default = "192.168.100.10";
     };
   };
-  
+
   config = mkIf cfg.enable {
     # Option definitions.
     # Define what other settings, services and resources should be active.
     # Usually these depend on whether a user of this module chose to "enable" it
-    # using the "option" above. 
+    # using the "option" above.
     # Options for modules imported in "imports" can be set here.
 
     containers.${cfg.containerName} = {
@@ -90,7 +90,7 @@ in {
 
       config = { pkgs, ... }: {
         environment.systemPackages = with pkgs; [
-          vim 
+          vim
           wget
           iputils
           git
@@ -99,20 +99,6 @@ in {
           zip
           openssl
         ];
-
-        nixpkgs.config.packageOverrides = pkgs: {
-          vaapiIntel = pkgs.vaapiIntel.override { enableHybridCodec = true; };
-        };
-        hardware.graphics = {
-          enable = true;
-          extraPackages = with pkgs; [
-            intel-media-driver
-            vaapiIntel
-            vaapiVdpau
-            libvdpau-va-gl
-            intel-compute-runtime # OpenCL filter support (hardware tonemapping and subtitle burn-in)
-          ];
-        };
 
         networking.nameservers = [ "100.100.100.100" "1.1.1.1" ];
         networking.useHostResolvConf = false;
@@ -129,7 +115,7 @@ in {
         };
 
         services.journald.extraConfig = "SystemMaxUse=100M";
-        
+
         virtualisation.oci-containers.backend = "docker";
         virtualisation.oci-containers.containers = {
           romm = {

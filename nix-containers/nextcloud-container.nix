@@ -83,19 +83,6 @@ in {
           openssl
         ];
 
-        nixpkgs.config.packageOverrides = pkgs: {
-          vaapiIntel = pkgs.vaapiIntel.override { enableHybridCodec = true; };
-        };
-        hardware.graphics = {
-          enable = true;
-          extraPackages = with pkgs; [
-            intel-media-driver
-            vaapiIntel
-            vaapiVdpau
-            libvdpau-va-gl
-            intel-compute-runtime # OpenCL filter support (hardware tonemapping and subtitle burn-in)
-          ];
-        };
         networking.nameservers = [ "100.100.100.100" "1.1.1.1" ];
         networking.useHostResolvConf = false;
         virtualisation.docker = {
@@ -117,6 +104,7 @@ in {
         virtualisation.oci-containers.containers = {
           nextcloud = {
             image = "nextcloud:stable";
+
             autoStart = true;
             pull = "newer";
             environment = {

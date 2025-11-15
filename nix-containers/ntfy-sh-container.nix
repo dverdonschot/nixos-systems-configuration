@@ -22,12 +22,12 @@ in {
       default = "192.168.100.10";
     };
   };
-  
+
   config = mkIf cfg.enable {
     # Option definitions.
     # Define what other settings, services and resources should be active.
     # Usually these depend on whether a user of this module chose to "enable" it
-    # using the "option" above. 
+    # using the "option" above.
     # Options for modules imported in "imports" can be set here.
 
     containers.${cfg.containerName} = {
@@ -45,22 +45,21 @@ in {
           bind
           openssl
         ];
-
         nixpkgs.config.packageOverrides = pkgs: {
-          vaapiIntel = pkgs.vaapiIntel.override { enableHybridCodec = true; };
+          vaapiIntel = pkgs.intel-vaapi-driver.override { enableHybridCodec = true; };
         };
         hardware.graphics = {
           enable = true;
           extraPackages = with pkgs; [
             intel-media-driver
-            vaapiIntel
-            vaapiVdpau
+            intel-vaapi-driver
+            libva-vdpau-driver
             libvdpau-va-gl
             intel-compute-runtime # OpenCL filter support (hardware tonemapping and subtitle burn-in)
           ];
         };
 
-        services.journald.extraConfig = "SystemMaxUse=100M";        
+        services.journald.extraConfig = "SystemMaxUse=100M";
         time.timeZone = "Europe/Amsterdam";
         services.ntfy-sh = {
           enable = true;
@@ -75,7 +74,7 @@ in {
           # permit caddy to get certs from tailscale
           permitCertUid = "caddy";
         };
-        
+
         services.caddy = {
           enable = true;
           extraConfig = ''

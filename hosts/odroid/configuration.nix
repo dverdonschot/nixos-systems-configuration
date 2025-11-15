@@ -35,7 +35,7 @@
   # Configure network proxy if necessary
   # networking.proxy.default = "http://user:password@proxy:port/";
   # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
-  
+
 
   # Enable networking
   networking = {
@@ -61,7 +61,7 @@
     fsType = "btrfs";
     options = [ "compress=zstd" ];
   };
-  
+
   # Added weekly garbage collection
   nix = {
     gc = {
@@ -227,7 +227,7 @@
     virt-viewer
     spice spice-gtk
     spice-protocol
-    win-virtio
+    virtio-win
     win-spice
     forgejo-runner
     quickemu
@@ -235,7 +235,7 @@
     # containers
     # services
     tailscale
-    # cli 
+    # cli
     oh-my-posh
     powerline-fonts
     nerd-fonts._0xproto
@@ -248,13 +248,13 @@
     steam-run
   ];
 
-  fonts.fontDir.enable = true; 
-  fonts.packages = with pkgs; [ 
-    pkgs.hack-font 
+  fonts.fontDir.enable = true;
+  fonts.packages = with pkgs; [
+    pkgs.hack-font
     pkgs.powerline-fonts
     pkgs.font-awesome
     pkgs.nerd-fonts._0xproto
-  ]; 
+  ];
 
 
   fonts.fontconfig = {
@@ -465,7 +465,7 @@
 #      }
 #    '';
 #  };
-  
+
   # nvim
   programs.neovim = {
     enable = true;
@@ -512,7 +512,7 @@
     enable = true;
     tailNet = "tail5bbc4.ts.net";
   };
-  
+
   services.loki-container = {
     enable = true;
     tailNet = "tail5bbc4.ts.net";
@@ -527,7 +527,7 @@
     enable = true;
     tailNet = "tail5bbc4.ts.net";
   };
-  
+
   services.jellyfin-container = {
     enable = true;
     tailNet = "tail5bbc4.ts.net";
@@ -567,14 +567,14 @@
     containerName = "redis";
     ipAddress = "192.168.100.39";
   };
-  
+
   services.romm-container = {
     enable = true;
     tailNet = "tail5bbc4.ts.net";
     containerName = "romm";
     ipAddress = "192.168.100.37";
   };
-  
+
   services.ntfy-sh-container = {
     enable = true;
     tailNet = "tail5bbc4.ts.net";
