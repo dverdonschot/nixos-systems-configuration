@@ -26,12 +26,12 @@ in {
       default = "192.168.100.10";
     };
   };
-  
+
   config = mkIf cfg.enable {
     # Option definitions.
     # Define what other settings, services and resources should be active.
     # Usually these depend on whether a user of this module chose to "enable" it
-    # using the "option" above. 
+    # using the "option" above.
     # Options for modules imported in "imports" can be set here.
 
     containers.${cfg.containerName} = {
@@ -115,9 +115,10 @@ in {
         boot.kernel.sysctl = {"kernel.keys.maxkeys" = 5000;};
         virtualisation.oci-containers.backend = "docker";
         virtualisation.oci-containers.containers = {
-          redis = {
+          nextcloud = {
             image = "nextcloud:stable";
             autoStart = true;
+            pull = "newer";
             environment = {
               MYSQL_DATABASE = "nextcloud";
               MYSQL_USER = "nextcloud";
@@ -142,7 +143,7 @@ in {
           # permit caddy to get certs from tailscale
           permitCertUid = "caddy";
         };
-        
+
         services.caddy = {
           enable = true;
           extraConfig = ''

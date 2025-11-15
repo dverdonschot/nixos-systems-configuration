@@ -22,12 +22,12 @@ in {
       default = "192.168.100.10";
     };
   };
-  
+
   config = mkIf cfg.enable {
     # Option definitions.
     # Define what other settings, services and resources should be active.
     # Usually these depend on whether a user of this module chose to "enable" it
-    # using the "option" above. 
+    # using the "option" above.
     # Options for modules imported in "imports" can be set here.
 
     containers.${cfg.containerName} = {
@@ -75,6 +75,7 @@ in {
         services.journald.extraConfig = "SystemMaxUse=100M";
         virtualisation.docker = {
           enable = true;
+          autoPrune.enable = true;
           rootless = {
             enable = true;
             setSocketVariable = true;
@@ -93,13 +94,6 @@ in {
           services = [
             {
               "News" = [
-                {
-                  "FreshRSS" = {
-                    icon = "freshrss";
-                    description = "FreshRSS";
-                    href = "https://freshrss.${cfg.tailNet}";
-                  };
-                }
                 {
                   "SearXNG" = {
                     icon = "searxng";
@@ -168,7 +162,6 @@ in {
                     href = "https://homeassistant.${cfg.tailNet}";
                   };
                 }
-                {
                   "Minio S3" = {
                     icon = "minio";
                     description = " Minio S3";
@@ -292,7 +285,7 @@ in {
           # permit caddy to get certs from tailscale
           permitCertUid = "caddy";
         };
-        
+
 
 
         services.caddy = {

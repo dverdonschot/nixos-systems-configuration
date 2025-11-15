@@ -22,12 +22,12 @@ in {
       default = "192.168.100.10";
     };
   };
-  
+
   config = mkIf cfg.enable {
     # Option definitions.
     # Define what other settings, services and resources should be active.
     # Usually these depend on whether a user of this module chose to "enable" it
-    # using the "option" above. 
+    # using the "option" above.
     # Options for modules imported in "imports" can be set here.
 
     containers.${cfg.containerName} = {
@@ -94,13 +94,15 @@ in {
           enable = true;
           # permit caddy to get certs from tailscale
           permitCertUid = "caddy";
+          autoPrune.enable = true;
         };
-        
+
         virtualisation.oci-containers.backend = "docker";
         virtualisation.oci-containers.containers = {
           metube = {
             image = "ghcr.io/alexta69/metube";
             ports = ["0.0.0.0:8081:8081"];
+            pull = "newer";
             volumes = [
               "/${cfg.containerName}:/downloads"
             ];
@@ -128,4 +130,3 @@ in {
     };
   };
 }
-
