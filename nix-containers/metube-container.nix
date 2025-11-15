@@ -83,6 +83,7 @@ in {
         networking.useHostResolvConf = false;
         virtualisation.docker = {
           enable = true;
+          autoPrune.enable = true;
           rootless = {
             enable = false;
             setSocketVariable = true;
@@ -94,7 +95,6 @@ in {
           enable = true;
           # permit caddy to get certs from tailscale
           permitCertUid = "caddy";
-          autoPrune.enable = true;
         };
 
         virtualisation.oci-containers.backend = "docker";
