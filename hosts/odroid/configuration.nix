@@ -275,6 +275,11 @@
     # permit caddy to get certs from tailscale
     permitCertUid = "caddy";
   };
+
+  # Enable faasd - lightweight serverless functions
+  services.faasd = {
+    enable = true;
+  };
 #  services.gnome.gnome-remote-desktop.enable = true;
 
   services.prometheus.exporters.node = {
