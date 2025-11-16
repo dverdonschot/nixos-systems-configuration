@@ -6,7 +6,6 @@
       home-manager.inputs.nixpkgs.follows = "nixpkgs"; # Use system packages list where available
       microvm.url = "github:astro/microvm.nix";
       nixpkgs.url = "nixpkgs/nixos-unstable";
-      faasd-nix.url = "github:welteki/faasd-nix";
     };
 
     outputs = {self, nixpkgs, microvm, ...}@inputs:
@@ -15,8 +14,8 @@
         system = "x86_64-linux";
         pkgs = import nixpkgs {
           inherit system;
-          specialArgs = { 
-            inherit inputs; 
+          specialArgs = {
+            inherit inputs;
             userName = "ewt";
             userEmail = "36795362+dverdonschot@users.noreply.github.com";
           };
@@ -29,9 +28,9 @@
             specialArgs = {
               inherit inputs;
               userName = "ewt";
-              userEmail = "36795362+dverdonschot@users.noreply.github.com"; 
+              userEmail = "36795362+dverdonschot@users.noreply.github.com";
             };
-            modules = [ 
+            modules = [
               ./hosts/workstation/configuration.nix
               inputs.home-manager.nixosModules.home-manager
               {
@@ -46,9 +45,9 @@
             specialArgs = {
               inherit inputs;
               userName = "ewt";
-              userEmail = "36795362+dverdonschot@users.noreply.github.com"; 
+              userEmail = "36795362+dverdonschot@users.noreply.github.com";
             };
-            modules = [ 
+            modules = [
               ./hosts/laptop76/configuration.nix
               inputs.home-manager.nixosModules.home-manager
               {
@@ -63,9 +62,9 @@
             specialArgs = {
               inherit inputs;
               userName = "ewt";
-              userEmail = "36795362+dverdonschot@users.noreply.github.com"; 
+              userEmail = "36795362+dverdonschot@users.noreply.github.com";
             };
-            modules = [ 
+            modules = [
               ./hosts/um790/configuration.nix
               #inputs.home-manager.nixosModules.home-manager
               {
@@ -85,7 +84,6 @@
             modules = [
               ./hosts/odroid/configuration.nix
               inputs.home-manager.nixosModules.home-manager
-              inputs.faasd-nix.nixosModules.default
               {
                 home-manager.useGlobalPkgs = true;
                 home-manager.useUserPackages = true;
@@ -98,9 +96,9 @@
             specialArgs = {
               inherit inputs;
               userName = "nixos";
-              userEmail = "36795362+dverdonschot@users.noreply.github.com"; 
+              userEmail = "36795362+dverdonschot@users.noreply.github.com";
             };
-            modules = [ 
+            modules = [
               ./hosts/wsl/configuration.nix
               inputs.home-manager.nixosModules.home-manager
               {

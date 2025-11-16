@@ -24,6 +24,7 @@
       ../../nix-containers/redis-container.nix
       ../../nix-containers/ntfy-sh-container.nix
       ../../nix-containers/romm-container.nix
+      ../../nix-containers/onebackend-container.nix
     ];
 
   # Bootloader.
@@ -276,10 +277,6 @@
     permitCertUid = "caddy";
   };
 
-  # Enable faasd - lightweight serverless functions
-  services.faasd = {
-    enable = true;
-  };
 #  services.gnome.gnome-remote-desktop.enable = true;
 
   services.prometheus.exporters.node = {
@@ -587,8 +584,12 @@
     ipAddress = "192.168.100.41";
   };
 
-
-
+  services.onebackend-container = {
+    enable = true;
+    tailNet = "tail5bbc4.ts.net";
+    containerName = "onebackend";
+    ipAddress = "192.168.100.43";
+  };
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
