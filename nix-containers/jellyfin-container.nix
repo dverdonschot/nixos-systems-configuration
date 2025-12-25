@@ -1,7 +1,7 @@
 { lib, pkgs, config, ... }:
 with lib;
 let
-  cfg = config.services.homepage;
+  cfg = config.services.jellyfin-container;
 in {
   options.services.jellyfin-container = {
     enable = mkEnableOption "Enable jellyfin container service";

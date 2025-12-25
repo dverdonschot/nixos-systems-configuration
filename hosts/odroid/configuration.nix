@@ -24,7 +24,6 @@
       ../../nix-containers/redis-container.nix
       ../../nix-containers/ntfy-sh-container.nix
       ../../nix-containers/romm-container.nix
-      ../../nix-containers/onebackend-container.nix
     ];
 
   # Bootloader.
@@ -52,7 +51,7 @@
     nat = {
       enable = true;
       internalInterfaces = ["ve-+"];
-      externalInterface = "eth0";
+      externalInterface = "br0";
       enableIPv6 = false;
     };
   };
@@ -582,13 +581,6 @@
     tailNet = "tail5bbc4.ts.net";
     containerName = "ntfy-sh";
     ipAddress = "192.168.100.41";
-  };
-
-  services.onebackend-container = {
-    enable = true;
-    tailNet = "tail5bbc4.ts.net";
-    containerName = "onebackend";
-    ipAddress = "192.168.100.43";
   };
 
   # This value determines the NixOS release from which the default
