@@ -208,8 +208,7 @@
         "--privileged"
       ];
       volumes = [
-        "/mnt/data/netalertx/config:/app/config"
-        "/mnt/data/netalertx/db:/app/db"
+        "/mnt/data/netalertx:/data"
       ];
     };
   };
