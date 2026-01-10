@@ -196,6 +196,19 @@
         "/mnt/data/isponsorblocktv:/app/data"
       ];
     };
+    netalertx = {
+      image = "jokobsk/netalertx:latest";
+      autoStart = true;
+      environment = {
+        TZ = "Europe/Amsterdam";  # Adjust to your timezone
+        PORT = "20211";
+      };
+      extraOptions = [ "--network=host" ];
+      volumes = [
+        "/mnt/data/netalertx/config:/app/config"
+        "/mnt/data/netalertx/db:/app/db"
+      ];
+    };
   };
 
   programs.virt-manager.enable = true;
