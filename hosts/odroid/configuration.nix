@@ -203,7 +203,7 @@
         TZ = "Europe/Amsterdam";  # Adjust to your timezone
         PORT = "20211";
         GRAPHQL_PORT = "20214";
-        LISTEN_IFACE = "br0";
+        SCAN_IFACE = "br0";
         SCAN_SUBNETS = "192.168.50.0/24";
       };
       extraOptions = [
