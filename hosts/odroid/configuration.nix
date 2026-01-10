@@ -185,7 +185,7 @@
 
   virtualisation.oci-containers.containers = {
     isponsorblocktv = {
-      image = "ghrc.io/dmunozv04/isponsorblocktv";
+      image = "ghcr.io/dmunozv04/isponsorblocktv";
       autoStart = true;
       cmd = [
         "--setup-cli"
