@@ -203,7 +203,10 @@
         TZ = "Europe/Amsterdam";  # Adjust to your timezone
         PORT = "20211";
       };
-      extraOptions = [ "--network=host" ];
+      extraOptions = [
+        "--network=host"
+        "--privileged"
+      ];
       volumes = [
         "/mnt/data/netalertx/config:/app/config"
         "/mnt/data/netalertx/db:/app/db"
