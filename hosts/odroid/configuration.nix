@@ -207,7 +207,7 @@
       extraOptions = [
         "--network=host"
         "--privileged"
-        "--tmpfs=/tmp:uid=20211,gid=20211,mode=1700"
+        "--tmpfs=/tmp:tmpfs-uid=20211,tmpfs-gid=20211,tmpfs-mode=1700"
       ];
       volumes = [
         "/mnt/data/netalertx:/data"
