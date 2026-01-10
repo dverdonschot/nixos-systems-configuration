@@ -202,12 +202,15 @@
       environment = {
         TZ = "Europe/Amsterdam";  # Adjust to your timezone
         PORT = "20211";
-        APP_CONF_OVERRIDE = ''{"GRAPHQL_PORT":"20214"}'';
+        GRAPHQL_PORT = "20214";
       };
       extraOptions = [
         "--network=host"
-        "--privileged"
+        "--read-only"
         "--tmpfs=/tmp"
+        "--cap-add=NET_ADMIN"
+        "--cap-add=NET_BIND_SERVICE"
+        "--cap-add=NET_RAW"
       ];
       volumes = [
         "/mnt/data/netalertx:/data"
