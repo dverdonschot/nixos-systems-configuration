@@ -455,6 +455,7 @@
     ensureDatabases = [ "idea2coloring-dev2" ];
     enableTCPIP = true;
     dataDir = "/var/lib/postgresql/data";  # Default data directory path
+    extraPlugins = with pkgs.postgresql16Packages; [ pgvector ];
     settings = {
       port = 5432;
       listen_addresses = "*"; # replace with your Tailscale IP
