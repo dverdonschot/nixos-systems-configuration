@@ -615,6 +615,7 @@
     ipAddress = "192.168.100.40";
     accessKeyFile = "/mnt/data/rustfs/secrets/access-key";
     secretKeyFile = "/mnt/data/rustfs/secrets/secret-key";
+    prometheusTokenFile = "/mnt/data/rustfs/secrets/prometheus-token";
   };
 
   # This value determines the NixOS release from which the default

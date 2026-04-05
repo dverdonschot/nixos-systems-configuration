@@ -31,6 +31,11 @@ in {
       default = "/mnt/data/rustfs/secrets/secret-key";
       description = "Path to the secret key file on the host";
     };
+    prometheusTokenFile = mkOption {
+      type = types.path;
+      default = "/mnt/data/rustfs/secrets/prometheus-token";
+      description = "Path to the prometheus bearer token file on the host";
+    };
   };
 
   config = mkIf cfg.enable {

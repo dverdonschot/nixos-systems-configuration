@@ -40,6 +40,10 @@ in {
         "/var/lib/prometheus" = {
           hostPath = "/mnt/data/prometheus";
         };
+        "/etc/rustfs-prom-token" = {
+          hostPath = "/mnt/data/rustfs/secrets/prometheus-token";
+          isReadOnly = true;
+        };
       };
 
 
@@ -116,6 +120,18 @@ in {
                   "vectordb.${cfg.tailNet}:5252"
                 ];
               }];
+            }
+            {
+              job_name = "rustfs";
+              bearer_token_file = "/etc/rustfs-prom-token";
+              scheme = "https";
+              scrape_interval = "1m";
+              static_configs = [{
+                targets = [ "rustfs.${cfg.tailNet}:443" ];
+              }];
+              tls_config = {
+                insecure_skip_verify = false;
+              };
             }
           ];
         };
