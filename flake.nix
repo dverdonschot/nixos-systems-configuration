@@ -14,6 +14,7 @@
       let
         lib = nixpkgs.lib;
         system = "x86_64-linux";
+        rustfs = inputs.rustfs.packages.${system}.default;
         pkgs = import nixpkgs {
           inherit system;
           specialArgs = {
@@ -79,7 +80,7 @@
           odroid = lib.nixosSystem {
             inherit system;
             specialArgs = {
-              inherit inputs;
+              inherit inputs rustfs;
               userName = "ewt";
               userEmail = "36795362+dverdonschot@users.noreply.github.com";
             };
