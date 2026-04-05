@@ -2,7 +2,7 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, ... }:
+{ config, pkgs, lib, rustfsPkg, ... }:
 
 {
   imports =
@@ -616,7 +616,7 @@
     accessKeyFile = "/mnt/data/rustfs/secrets/access-key";
     secretKeyFile = "/mnt/data/rustfs/secrets/secret-key";
     prometheusTokenFile = "/mnt/data/rustfs/secrets/prometheus-token";
-    package = rustfs;
+    package = rustfsPkg;
   };
 
   # This value determines the NixOS release from which the default

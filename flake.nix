@@ -80,7 +80,8 @@
           odroid = lib.nixosSystem {
             inherit system;
             specialArgs = {
-              inherit inputs rustfs;
+              inherit inputs;
+              rustfsPkg = rustfs;
               userName = "ewt";
               userEmail = "36795362+dverdonschot@users.noreply.github.com";
             };
