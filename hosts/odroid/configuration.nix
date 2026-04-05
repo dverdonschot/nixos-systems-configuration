@@ -24,6 +24,7 @@
       ../../nix-containers/redis-container.nix
       ../../nix-containers/ntfy-sh-container.nix
       ../../nix-containers/romm-container.nix
+      ../../nix-containers/rustfs-container.nix
     ];
 
   # Bootloader.
@@ -605,6 +606,15 @@
     tailNet = "tail5bbc4.ts.net";
     containerName = "ntfy-sh";
     ipAddress = "192.168.100.41";
+  };
+
+  services.rustfs-container = {
+    enable = true;
+    tailNet = "tail5bbc4.ts.net";
+    containerName = "rustfs";
+    ipAddress = "192.168.100.40";
+    accessKeyFile = "/mnt/data/rustfs/secrets/access-key";
+    secretKeyFile = "/mnt/data/rustfs/secrets/secret-key";
   };
 
   # This value determines the NixOS release from which the default

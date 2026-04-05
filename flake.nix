@@ -6,9 +6,11 @@
       home-manager.inputs.nixpkgs.follows = "nixpkgs"; # Use system packages list where available
       microvm.url = "github:astro/microvm.nix";
       nixpkgs.url = "nixpkgs/nixos-unstable";
+      rustfs.url = "github:rustfs/rustfs-flake";
+      rustfs.inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    outputs = {self, nixpkgs, microvm, ...}@inputs:
+    outputs = {self, nixpkgs, microvm, rustfs, ...}@inputs:
       let
         lib = nixpkgs.lib;
         system = "x86_64-linux";
