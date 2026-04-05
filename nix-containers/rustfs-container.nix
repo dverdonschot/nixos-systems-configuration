@@ -36,14 +36,16 @@ in {
       default = "/mnt/data/rustfs/secrets/prometheus-token";
       description = "Path to the prometheus bearer token file on the host";
     };
+    package = mkOption {
+      type = types.package;
+      description = "Rustfs package to use";
+      # NOTE: this option must be set from the host flake's rustfs input.
+      # Example in flake.nix specialArgs:   inherit inputs;
+      # Then in configuration.nix: package = inputs.rustfs.packages.${pkgs.stdenv.hostPlatform.system}.default;
+    };
   };
 
   config = mkIf cfg.enable {
-    # Import rustfs flake module
-    imports = [
-      (builtins.getFlake "github:rustfs/rustfs-flake").nixosModules.rustfs
-    ];
-
     containers.${cfg.containerName} = {
       autoStart = true;
       enableTun = true;
@@ -99,17 +101,70 @@ in {
 
         services.journald.extraConfig = "SystemMaxUse=100M";
 
-        # rustfs service - native NixOS service from rustfs-flake
-        services.rustfs = {
-          enable = true;
-          volumes = "/${cfg.containerName}/data";
-          address = ":9000";
-          consoleEnable = true;
-          consoleAddress = "127.0.0.1:9001";
-          logLevel = "info";
-          # Use secrets from bind-mounted directory
-          accessKeyFile = "/${cfg.containerName}/secrets/access-key";
-          secretKeyFile = "/${cfg.containerName}/secrets/secret-key";
+        # Rustfs user and group
+        users.groups.rustfs = {};
+        users.users.rustfs = {
+          isSystemUser = true;
+          group = "rustfs";
+          description = "RustFS service user";
+        };
+
+        # RustFS service - defined inline to avoid flake import inside config
+        systemd.tmpfiles.rules = [
+          "d /${cfg.containerName}/data 0755 rustfs rustfs -"
+        ];
+
+        systemd.services.rustfs = {
+          description = "RustFS Object Storage Server";
+          after = [ "network-online.target" ];
+          wantedBy = [ "multi-user.target" ];
+          serviceConfig = {
+            Type = "simple";
+            User = "rustfs";
+            Group = "rustfs";
+            ExecStart = "${cfg.package}/bin/rustfs";
+            LoadCredential = [
+              "access-key:${cfg.accessKeyFile}"
+              "secret-key:${cfg.secretKeyFile}"
+            ];
+            # Security hardening
+            CapabilityBoundingSet = "";
+            NoNewPrivileges = true;
+            PrivateDevices = true;
+            PrivateTmp = true;
+            ProtectSystem = "strict";
+            ProtectHome = true;
+            ProtectHostname = true;
+            ProtectKernelLogs = true;
+            ProtectKernelModules = true;
+            ProtectKernelTunables = true;
+            ProtectControlGroups = true;
+            ProtectProc = "invisible";
+            ProcSubset = "pid";
+            RestrictAddressFamilies = [ "AF_INET" "AF_INET6" "AF_UNIX" ];
+            RestrictNamespaces = true;
+            RestrictRealtime = true;
+            SystemCallArchitectures = "native";
+            SystemCallFilter = [ "@system-service" "~@privileged" "~@resources" ];
+            MemoryDenyWriteExecute = true;
+            LockPersonality = true;
+            UMask = "0077";
+            Restart = "always";
+            RestartSec = "10s";
+            ReadWritePaths = [ "/${cfg.containerName}/data" ];
+            # Logging
+            StandardOutput = "journal";
+            StandardError = "journal";
+          };
+          environment = {
+            RUSTFS_VOLUMES = "/${cfg.containerName}/data";
+            RUSTFS_ADDRESS = ":9000";
+            RUSTFS_CONSOLE_ENABLE = "true";
+            RUSTFS_CONSOLE_ADDRESS = "127.0.0.1:9001";
+            RUST_LOG = "info";
+            RUSTFS_ACCESS_KEY_FILE = "%d/access-key";
+            RUSTFS_SECRET_KEY_FILE = "%d/secret-key";
+          };
         };
 
         services.tailscale = {

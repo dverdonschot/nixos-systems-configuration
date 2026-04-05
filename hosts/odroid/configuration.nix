@@ -616,6 +616,7 @@
     accessKeyFile = "/mnt/data/rustfs/secrets/access-key";
     secretKeyFile = "/mnt/data/rustfs/secrets/secret-key";
     prometheusTokenFile = "/mnt/data/rustfs/secrets/prometheus-token";
+    package = rustfs;
   };
 
   # This value determines the NixOS release from which the default
