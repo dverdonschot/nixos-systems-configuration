@@ -6,7 +6,6 @@
     home.homeDirectory = "/home/ewt";
       home.packages = with pkgs; [
       curl
-      librewolf-bin
     ];
     xdg.configFile.oh-my-posh = {
       source = ../config;
