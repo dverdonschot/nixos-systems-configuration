@@ -73,28 +73,28 @@ in {
             alloy.host = "0.0.0.0";
             alloy.ui.listen = "0.0.0.0:12345";
 
-            loki.source.journal "systemd" {
-              forward_to = [ loki.process.journal.receiver ];
+            "loki.source.journal" "systemd" {
+              forward_to = [ "loki.process" "journal".receiver ];
               labels = {
                 job = "systemd-journal";
                 host = "pihole";
               };
             };
 
-            loki.process "journal" {
+            "loki.process" "journal" {
               source = "journal";
               match_stage {
-                selector = `{job="systemd-journal"}`;
+                selector = "{job=\"systemd-journal\"}";
               }
               regex_stage {
-                expression = `(?P<unit>[^ ]+) (?P<level>[^ ]+) (?P<msg>.+)`;
+                expression = "(?P<unit>[^ ]+) (?P<level>[^ ]+) (?P<msg>.+)";
               }
               labels = {
-                unit = "${__journal__systemd_unit}";
+                unit = "__journal__systemd_unit";
               };
             };
 
-            loki.write "loki" {
+            "loki.write" "loki" {
               endpoint {
                 url = "http://loki.${cfg.tailNet}:3100/loki/api/v1/push";
               };
