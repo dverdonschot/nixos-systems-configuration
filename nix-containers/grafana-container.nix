@@ -69,7 +69,6 @@ in {
         users.extraGroups.adm.members = [ "alloy" ];
         services.alloy = {
           enable = true;
-          configPath = /etc/alloy/config.alloy;
         };
         environment.etc."alloy/config.alloy".text = ''
           alloy.host = "0.0.0.0"
