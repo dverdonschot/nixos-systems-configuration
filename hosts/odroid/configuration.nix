@@ -336,59 +336,60 @@
   };
   services.alloy = {
     enable = true;
-    settings = {
-      alloy.host = "0.0.0.0";
-      alloy.ui.listen = "0.0.0.0:12345";
-
-      "loki.source.journal" "systemd" {
-        forward_to = [ loki.process.journal.receiver ];
-        labels = {
-          job = "systemd-journal";
-          host = "odroid";
-        };
-      };
-
-      "loki.process" "journal" {
-        source = "journal";
-        match_stage {
-          selector = "{job=\"systemd-journal\"}";
-        }
-        regex_stage {
-          expression = "(?P<unit>[^ ]+) (?P<level>[^ ]+) (?P<msg>.+)";
-        }
-        labels = {
-          unit = "__journal__systemd_unit";
-        };
-      };
-
-      "loki.source.docker" "docker" {
-        labels = {
-          job = "docker";
-          host = "odroid";
-        };
-        forward_to = [ loki.process.docker.receiver ];
-      };
-
-      "loki.process" "docker" {
-        source = "docker";
-        json_stage {
-          expressions = {
-            level = "level";
-            msg = "msg";
-          };
-        }
-        labels = {
-          level = "level";
-        };
-      };
-
-      "loki.write" "loki" {
-        endpoint {
-          url = "http://loki.tail5bbc4.ts.net:3100/loki/api/v1/push";
-        };
-      };
-    };
+    configPath = /etc/alloy/config.alloy;
   };
+  environment.etc."alloy/config.alloy".text = ''
+    alloy.host = "0.0.0.0"
+    alloy.ui.listen = "0.0.0.0:12345"
+
+    loki.source.journal "systemd" {
+      forward_to = [ loki.process.journal.receiver ]
+      labels = {
+        job = "systemd-journal"
+        host = "odroid"
+      }
+    }
+
+    loki.process "journal" {
+      source = "journal"
+      match_stage {
+        selector = "{job=\"systemd-journal\"}"
+      }
+      regex_stage {
+        expression = "(?P<unit>[^ ]+) (?P<level>[^ ]+) (?P<msg>.+)"
+      }
+      labels = {
+        unit = "\u005f_journal\u005f_systemd_unit"
+      }
+    }
+
+    loki.source.docker "docker" {
+      labels = {
+        job = "docker"
+        host = "odroid"
+      }
+      forward_to = [ loki.process.docker.receiver ]
+    }
+
+    loki.process "docker" {
+      source = "docker"
+      json_stage {
+        expressions = {
+          level = "level"
+          msg = "msg"
+        }
+      }
+      labels = {
+        level = "level"
+      }
+    }
+
+    loki.write "loki" {
+      endpoint {
+        url = "http://loki.tail5bbc4.ts.net:3100/loki/api/v1/push"
+      }
+    }
+  '';
 
   # netdata is turned to false to prevent it from eating cpu when not used.
   services.netdata = {
