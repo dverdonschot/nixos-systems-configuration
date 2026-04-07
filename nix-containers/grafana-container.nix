@@ -65,33 +65,40 @@ in {
         };
 
         services.journald.extraConfig = "SystemMaxUse=100M";
-        services.promtail = {
+
+        users.extraGroups.adm.members = [ "alloy" ];
+        services.alloy = {
           enable = true;
-          configuration = {
-            server = {
-              http_listen_port = 3031;
-              grpc_listen_port = 0;
-            };
-            positions = {
-              filename = "/tmp/positions.yaml";
-            };
-            clients = [{
-              url = "http://loki.${cfg.tailNet}:3100/loki/api/v1/push";
-            }];
-            scrape_configs = [{
-              job_name = "journal";
-              journal = {
-                max_age = "12h";
-                labels = {
-                  job = "systemd-journal";
-                  host = "pihole";
-                };
+          settings = {
+            alloy.host = "0.0.0.0";
+            alloy.ui.listen = "0.0.0.0:12345";
+
+            loki.source.journal "systemd" {
+              forward_to = [ loki.process.journal.receiver ];
+              labels = {
+                job = "systemd-journal";
+                host = "pihole";
               };
-              relabel_configs = [{
-                source_labels = [ "__journal__systemd_unit" ];
-                target_label = "unit";
-              }];
-            }];
+            };
+
+            loki.process "journal" {
+              source = "journal";
+              match_stage {
+                selector = `{job="systemd-journal"}`;
+              }
+              regex_stage {
+                expression = `(?P<unit>[^ ]+) (?P<level>[^ ]+) (?P<msg>.+)`;
+              }
+              labels = {
+                unit = "${__journal__systemd_unit}";
+              };
+            };
+
+            loki.write "loki" {
+              endpoint {
+                url = "http://loki.${cfg.tailNet}:3100/loki/api/v1/push";
+              };
+            };
           };
         };
 

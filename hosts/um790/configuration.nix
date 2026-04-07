@@ -334,114 +334,66 @@
     NIXPKGS_ALLOW_UNFREE = 1;
   };
 
-  # promtail
-  users.extraGroups.docker.members = [ "promtail" ];
-  systemd.services.promtail.serviceConfig = {
+  # alloy (replaces promtail)
+  users.extraGroups.adm.members = [ "alloy" ];
+  systemd.services.alloy.serviceConfig = {
     ExecStartPost = [
-      "-/bin/sh -c 'ln -sf /var/run/docker.sock /run/promtail/docker.sock'"
+      "-/bin/sh -c 'ln -sf /var/run/docker.sock /run/alloy/docker.sock'"
     ];
   };
-  services.promtail = {
+  services.alloy = {
     enable = true;
-    configuration = {
-      server = {
-        http_listen_port = 3031;
-        grpc_listen_port = 0;
+    settings = {
+      alloy.host = "0.0.0.0";
+      alloy.ui.listen = "0.0.0.0:12345";
+
+      loki.source.journal "systemd" {
+        forward_to = [ loki.process.journal.receiver ];
+        labels = {
+          job = "systemd-journal";
+          host = "um790";
+        };
       };
-      positions = {
-        filename = "/tmp/positions.yaml";
+
+      loki.process "journal" {
+        source = "journal";
+        match_stage {
+          selector = `{job="systemd-journal"}`;
+        }
+        regex_stage {
+          expression = `(?P<unit>[^ ]+) (?P<level>[^ ]+) (?P<msg>.+)`;
+        }
+        labels = {
+          unit = "${__journal__systemd_unit}";
+        };
       };
-      clients = [{
-        url = "https://loki.tail5bbc4.ts.net:/loki/api/v1/push";
-      }];
-      scrape_configs = [
-        {
-          job_name = "journal";
-          journal = {
-            max_age = "12h";
-            path = "/var/log/journal";
-            labels = {
-              job = "systemd-journal";
-              host = "um790";
-            };
+
+      loki.source.docker "docker" {
+        labels = {
+          job = "docker";
+          host = "um790";
+        };
+        forward_to = [ loki.process.docker.receiver ];
+      };
+
+      loki.process "docker" {
+        source = "docker";
+        json_stage {
+          expressions = {
+            level = "level";
+            msg = "msg";
           };
-          relabel_configs = [{
-            source_labels = [ "__journal__systemd_unit" ];
-            target_label = "unit";
-          }];
         }
-        {
-          job_name = "docker";
-          docker_sd_configs = [
-            {
-              host = "unix:///var/run/docker.sock";
-            }
-          ];
-          relabel_configs = [
-            {
-              source_labels = [ "__meta_docker_container_name" ];
-              target_label = "container";
-              action = "replace";
-              regex = "/?(.*)";
-            }
-            {
-              source_labels = [ "__meta_docker_container_label_com_docker_swarm_service_name" ];
-              target_label = "swarm_service";
-              action = "replace";
-            }
-            {
-              source_labels = [ "__meta_docker_container_label_org_label_schema_group" ];
-              target_label = "group";
-              action = "replace";
-            }
-            {
-              source_labels = [ "__meta_docker_container_label_org_label_schema_stack_name" ];
-              target_label = "stack";
-              action = "replace";
-            }
-            {
-              source_labels = [ "__meta_docker_container_id" ];
-              target_label = "container_id";
-            }
-            {
-              source_labels = [ "__meta_docker_network_name" ];
-              target_label = "network";
-            }
-            {
-              source_labels = [ "__meta_docker_container_port_publish_mode" ];
-              target_label = "port_mode";
-            }
-            {
-              source_labels = [ "__meta_docker_container_port_published" ];
-              target_label = "port_published";
-            }
-            {
-              source_labels = [ "__meta_docker_container_port_target" ];
-              target_label = "port_target";
-            }
-            {
-              source_labels = [ "__meta_docker_container_port_protocol" ];
-              target_label = "port_protocol";
-            }
-          ];
-          pipeline_stages = [
-            { docker = {}; }
-            {
-              json = {
-                expressions = {
-                  level = "level";
-                  msg = "msg";
-                };
-              };
-            }
-            {
-              labels = {
-                level = "level";
-              };
-            }
-          ];
-        }
-      ];
+        labels = {
+          level = "${level}";
+        };
+      };
+
+      loki.write "loki" {
+        endpoint {
+          url = "https://loki.tail5bbc4.ts.net/loki/api/v1/push";
+        };
+      };
     };
   };
 
