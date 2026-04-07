@@ -534,10 +534,10 @@
     ipAddress = "192.168.100.22";
   };
 
-  services.grafana-container = {
-    enable = true;
-    tailNet = "tail5bbc4.ts.net";
-  };
+  #services.grafana-container = {
+  #  enable = true;
+  #  tailNet = "tail5bbc4.ts.net";
+  #};
 
   services.loki-container = {
     enable = true;
