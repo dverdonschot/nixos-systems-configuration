@@ -117,6 +117,7 @@ in {
         systemd.services.rustfs = {
           description = "RustFS Object Storage Server";
           after = [ "network-online.target" ];
+          wants  = [ "network-online.target" ]; 
           wantedBy = [ "multi-user.target" ];
           serviceConfig = {
             Type = "simple";
