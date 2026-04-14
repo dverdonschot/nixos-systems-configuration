@@ -125,7 +125,7 @@ in {
             Group = "rustfs";
             ExecStart = "${cfg.package}/bin/rustfs";
             LoadCredential = [
-              "acces-key:/${cfg.containerName}/secrets/access-key"
+              "access-key:/${cfg.containerName}/secrets/access-key"
               "secret-key:/${cfg.containerName}/secrets/secret-key"
             ];
             # Security hardening
