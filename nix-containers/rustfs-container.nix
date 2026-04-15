@@ -159,7 +159,7 @@ in {
           };
           environment = {
             RUSTFS_VOLUMES = "/${cfg.containerName}/data";
-            RUSTFS_ADDRESS = ":9000";
+            RUSTFS_ADDRESS = "0.0.0.0:9000";
             RUSTFS_CONSOLE_ENABLE = "true";
             RUSTFS_CONSOLE_ADDRESS = "127.0.0.1:9001";
             RUST_LOG = "info";
