@@ -53,7 +53,7 @@
       enable = true;
       internalInterfaces = ["ve-+"];
       externalInterface = "br0";
-      enableIPv6 = false;
+      #enableIPv6 = false;
     };
   };
 
