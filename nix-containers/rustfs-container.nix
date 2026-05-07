@@ -52,6 +52,8 @@ in {
       privateNetwork = true;
       hostAddress = "${cfg.hostAddress}";
       localAddress = "${cfg.ipAddress}";
+      hostAddress6 = "fd00::10";
+      localAddress6 = "fd00::40";
       bindMounts = {
         "/.env/.${cfg.containerName}.env" = {
           hostPath = "/mnt/data/${cfg.containerName}/.env/${cfg.containerName}.env";
