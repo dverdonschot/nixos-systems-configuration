@@ -67,7 +67,7 @@ in
       viAlias = true;
       vimAlias = true;
       withRuby = false;
-      withPython = true;
+      withPython3 = true;
       plugins = with pkgs.vimPlugins; [
         dracula-nvim
         nerdtree
