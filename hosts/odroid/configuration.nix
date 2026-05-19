@@ -8,7 +8,7 @@
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
-      ../../modules/technitium-dns.nix
+      ../../modules/unbound-dns.nix
       #<home-manager/nixos>
       ../../nix-containers/search-container.nix
       ../../nix-containers/forgejo-container.nix
