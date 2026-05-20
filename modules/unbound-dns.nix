@@ -39,6 +39,13 @@
         domain-insecure = [
           "home.arpa."
         ];
+        local-data = [
+          ''"odroid.home.arpa.  3600 IN A 192.168.50.152"''
+          ''"dns.home.arpa.     3600 IN A 192.168.50.152"''
+        ];
+        local-zone = [
+          ''"home.arpa." static''
+        ];
       };
 
       forward-zone = [
@@ -62,15 +69,6 @@
           name = "100.in-addr.arpa.";
           forward-addr = [ "100.100.100.100" ];
         }
-      ];
-
-      local-zone = [
-        ''"home.arpa." static''
-      ];
-
-      local-data = [
-        ''"odroid.home.arpa.  3600 IN A 192.168.50.152"''
-        ''"dns.home.arpa.     3600 IN A 192.168.50.152"''
       ];
     };
   };
