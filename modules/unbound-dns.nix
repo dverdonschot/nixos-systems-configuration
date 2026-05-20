@@ -21,8 +21,11 @@
 
     settings = {
       server = {
-        interface = [ "0.0.0.0" "::0" ];
-
+        interface = [
+          "127.0.0.1"
+          "192.168.50.152"
+          "100.124.243.21"
+        ];
         access-control = [
           "127.0.0.0/8 allow"
           "::1 allow"
