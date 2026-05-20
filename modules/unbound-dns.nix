@@ -65,12 +65,12 @@
       ];
 
       local-zone = [
-        ''"home.arpa. static"''
+        ''"home.arpa." static''
       ];
 
       local-data = [
-        ''"odroid.home.arpa.  IN A 192.168.50.152"''
-        ''"dns.home.arpa.     IN A 192.168.50.152"''
+        ''"odroid.home.arpa.  3600 IN A 192.168.50.152"''
+        ''"dns.home.arpa.     3600 IN A 192.168.50.152"''
       ];
     };
   };
