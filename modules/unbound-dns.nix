@@ -65,7 +65,7 @@
       ];
 
       local-zone = [
-        ''"home.arpa." static''
+        ''"home.arpa. static"''
       ];
 
       local-data = [
