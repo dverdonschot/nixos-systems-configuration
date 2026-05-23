@@ -10,6 +10,7 @@
       ./hardware-configuration.nix
       ../../modules/unbound-dns.nix
       ../../modules/persistant-udp-gro-tailscale.nix
+      ../../modules/tailscale-lan-router.nix
       #<home-manager/nixos>
       ../../nix-containers/search-container.nix
       ../../nix-containers/forgejo-container.nix
