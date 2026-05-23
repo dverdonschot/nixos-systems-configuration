@@ -33,7 +33,7 @@ in
   };
 
   config = mkIf cfg.enable {
-
+    networking.firewall.checkReversePath = "loose";
     networking.firewall.extraCommands = ''
       iptables -A FORWARD -s ${cfg.lanSubnet} -d ${cfg.tailnetSubnet} -o ${cfg.tailscaleInterface} -j ACCEPT
       iptables -A FORWARD -d ${cfg.lanSubnet} -s ${cfg.tailnetSubnet} -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
