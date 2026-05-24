@@ -303,6 +303,14 @@
     permitCertUid = "caddy";
   };
 
+  services.tailscaleLanRouter = {
+    enable = true;
+    lanSubnet = "192.168.50.0/24";
+    tailnetSubnet = "100.64.0.0/10";
+    tailscaleInterface = "tailscale0";
+    masquerade = true;
+  };
+
 #  services.gnome.gnome-remote-desktop.enable = true;
 
   services.prometheus.exporters.node = {
