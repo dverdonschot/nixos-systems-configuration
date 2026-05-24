@@ -311,6 +311,8 @@
     masquerade = true;
   };
 
+  services.persistantUdpGroTailscale.enable = true;
+
 #  services.gnome.gnome-remote-desktop.enable = true;
 
   services.prometheus.exporters.node = {
