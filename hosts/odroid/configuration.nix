@@ -317,6 +317,7 @@
   services.prometheus.exporters.node = {
     enable = true;
     port = 9100;
+    addr = "0.0.0.0";
     enabledCollectors = [ "systemd" "cpu" "diskstats" "ethtool" "filesystem" "hwmon" "interrupts" "netdev" "sysctl" ];
   };
 
