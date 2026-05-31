@@ -38,7 +38,7 @@ in {
       hostAddress = "${cfg.hostAddress}";
       localAddress = "${cfg.ipAddress}";
       bindMounts.grafana-secret = {
-        hostPath = "/mnt/grafana/secrets/grafana-secret-key";
+        hostPath = "/mnt/data/grafana/secrets/grafana-secret-key";
         mountPoint = "/run/secrets/grafana-secret-key";
         isReadOnly = true;
       };
