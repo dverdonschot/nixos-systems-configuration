@@ -87,7 +87,7 @@ in {
             {
               job_name = "hosts";
               static_configs = [{
-                targets = [ "media.${cfg.tailNet}:9100" "um790.${cfg.tailNet}:9100" "odroid.${cfg.tailNet}:9100" ];
+                targets = [ "um790.${cfg.tailNet}:9100" "odroid.${cfg.tailNet}:9100" "laptop76.${cfg.tailNet}:9100" ];
               }];
             }
             {
@@ -105,17 +105,8 @@ in {
                   "metube.${cfg.tailNet}:5252"
                   "pinchflat.${cfg.tailNet}:5252"
                   "prometheus.${cfg.tailNet}:5252"
-                  "redis.${cfg.tailNet}:5252"
                   "search.${cfg.tailNet}:5252"
-                  "browserless.${cfg.tailNet}:5252"
-                  "librechat.${cfg.tailNet}:5252"
-                  "litellm.${cfg.tailNet}:5252"
-                  "meilisearch.${cfg.tailNet}:5252"
                   "nextcloud.${cfg.tailNet}:5252"
-                  "mongodb.${cfg.tailNet}:5252"
-                  "n8n.${cfg.tailNet}:5252"
-                  "ollama.${cfg.tailNet}:5252"
-                  "ragapi.${cfg.tailNet}:5252"
                   "romm.${cfg.tailNet}:5252"
                   "vectordb.${cfg.tailNet}:5252"
                 ];
