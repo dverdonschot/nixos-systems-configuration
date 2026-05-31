@@ -23,7 +23,7 @@ in {
     };
 
   };
-
+  
   config = mkIf cfg.enable {
     # Option definitions.
     # Define what other settings, services and resources should be active.
@@ -37,7 +37,11 @@ in {
       privateNetwork = true;
       hostAddress = "${cfg.hostAddress}";
       localAddress = "${cfg.ipAddress}";
-
+      bindMounts.grafana-secret = {
+        hostPath = "/mnt/grafana/secrets/grafana-secret-key";
+        mountPoint = "/run/secrets/grafana-secret-key";
+        isReadOnly = true;
+      };
       config = { pkgs, ... }: {
         environment.systemPackages = with pkgs; [
           vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
@@ -111,7 +115,10 @@ in {
             };
           };
           enable = true;
-
+          settings = {
+            security.secret_key =
+              "$__file{/run/secrets/grafana-secret-key}";
+          };
           provision = {
             enable = true;
             #datasources = [
