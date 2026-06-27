@@ -96,6 +96,7 @@ in {
                 targets = [
                   "odroid.${cfg.tailNet}:5252"
                   "um790.${cfg.tailNet}:5252"
+                  "laptop76.${cfg.tailNet}:5252"
                   "hoarder.${cfg.tailNet}:5252"
                   "mariadb.${cfg.tailNet}:5252"
                   "grafana.${cfg.tailNet}:5252"

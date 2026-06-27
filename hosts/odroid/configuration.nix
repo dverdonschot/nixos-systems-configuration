@@ -190,7 +190,7 @@
 
   virtualisation.oci-containers.containers = {
     isponsorblocktv = {
-      image = "ghcr.io/dmunozv04/isponsorblocktv";
+      image = "ghcr.io/dmunozv04/isponsorblocktv:latest";
       autoStart = true;
       cmd = [
         "--setup-cli"
@@ -343,56 +343,63 @@
   # alloy (replaces promtail)
   users.extraGroups.adm.members = [ "alloy" ];
   systemd.services.alloy.serviceConfig = {
-    ExecStartPost = [
-      "-/bin/sh -c 'ln -sf /var/run/docker.sock /run/alloy/docker.sock'"
-    ];
+    RuntimeDirectory = "alloy";
   };
   services.alloy = {
     enable = true;
   };
   environment.etc."alloy/config.alloy".text = ''
-    alloy.host = "0.0.0.0"
-    alloy.ui.listen = "0.0.0.0:12345"
 
     loki.source.journal "systemd" {
-      forward_to = [ loki.process.journal.receiver ]
+      forward_to = [loki.process.journal.receiver]
       labels = {
-        job = "systemd-journal"
-        host = "odroid"
+        job  = "systemd-journal",
+        host = "odroid",
       }
     }
 
     loki.process "journal" {
-      source = "journal"
-      match_stage {
-        selector = "{job=\"systemd-journal\"}"
-      }
-      regex_stage {
+      forward_to = [loki.write.loki.receiver]
+
+      stage.regex {
         expression = "(?P<unit>[^ ]+) (?P<level>[^ ]+) (?P<msg>.+)"
       }
-      labels = {
-        unit = "\u005f_journal\u005f_systemd_unit"
+
+      stage.labels {
+        values = {
+          unit = "__journal__systemd_unit",
+        }
       }
+    }
+
+    discovery.docker "docker" {
+      host = "unix:///var/run/docker.sock"
     }
 
     loki.source.docker "docker" {
+      forward_to = [loki.process.docker.receiver]
+      targets = discovery.docker.docker.targets
+      host = "unix:///var/run/docker.sock"
       labels = {
-        job = "docker"
-        host = "odroid"
+        job  = "docker",
+        host = "odroid",
       }
-      forward_to = [ loki.process.docker.receiver ]
     }
 
     loki.process "docker" {
-      source = "docker"
-      json_stage {
+      forward_to = [loki.write.loki.receiver]
+
+      stage.json {
         expressions = {
-          level = "level"
-          msg = "msg"
+          level = "level",
+          msg   = "msg",
         }
       }
-      labels = {
-        level = "level"
+
+      stage.labels {
+        values = {
+          level = "level",
+        }
       }
     }
 
