@@ -175,7 +175,12 @@ in
         Group           = "forge-runner";
         RemainAfterExit = "yes";
         ExecStartPre    = "${pkgs.coreutils}/bin/sleep 5";
-        ExecStart       = registerArgs;
+        # LoadCredential= mounts the token file at
+        # $CREDENTIALS_DIRECTORY/token inside the unit. systemd sets
+        # $CREDENTIALS_DIRECTORY=/run/credentials/<unitname> automatically.
+        # The mounted copy is owned by the unit's User.
+        LoadCredential  = "token:${cfg.tokenFile}";
+        ExecStart       = "${pkgs.bash}/bin/bash -c 'exec ${pkgs.forgejo-runner}/bin/forgejo-runner register --config ${configFile} --token \"$(cat \"$CREDENTIALS_DIRECTORY/token\")\" --no-interactive --name ${escapeShellArg cfg.name} ${concatMapStringsSep " " (l: "--label ${escapeShellArg l}") cfg.labels}'";
         # Belt-and-braces: if .runner exists, skip cleanly.
         ConditionPathExists = "!/var/lib/forge-runner/.runner";
       };
