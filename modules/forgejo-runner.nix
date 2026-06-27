@@ -57,6 +57,7 @@ let
     "--token $(cat ${cfg.tokenFile})"
     "--name ${escapeShellArg cfg.name}"
     "--labels ${escapeShellArg (lib.concatStringsSep "," cfg.labels)}"
+    "--no-interactive"
   ]);
 in
 {
