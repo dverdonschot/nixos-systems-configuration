@@ -53,8 +53,8 @@ let
   registerArgs = lib.concatStringsSep " " ([
     "${pkgs.forgejo-runner}/bin/forgejo-runner register"
     "--config ${configFile}"
+    "--instance ${escapeShellArg cfg.url}"
     "--token $(cat ${cfg.tokenFile})"
-    "--no-interactive"
     "--name ${escapeShellArg cfg.name}"
     "--labels ${escapeShellArg (lib.concatStringsSep "," cfg.labels)}"
   ]);
