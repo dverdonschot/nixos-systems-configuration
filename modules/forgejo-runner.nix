@@ -24,11 +24,11 @@ let
       insecure:       false
       fetch_timeout:  ${toString cfg.fetchTimeoutSeconds}s
 
+    # Cache is disabled for v1. The `cache.host` field expects a string
+    # (the cache server hostname), not a map. Setting enabled: true with
+    # no host fails the unmarshal. Re-enable when we actually need it.
     cache:
-      enabled: true
-      dir:     /var/lib/forge-runner/cache
-      host:
-        port: 0
+      enabled: false
 
     container:
       # Rootless Docker is already enabled on the host. The runner
@@ -46,13 +46,18 @@ let
 
   '' + cfg.extraConfig);
 
+  # forgejo-runner register takes ONE --labels flag whose value is a
+  # comma-separated list (matches the server-side `forgejo-cli actions
+  # register` and the interactive prompt). Repeating --label fails
+  # with `unknown flag: --label`.
   registerArgs = lib.concatStringsSep " " ([
     "${pkgs.forgejo-runner}/bin/forgejo-runner register"
     "--config ${configFile}"
     "--token $(cat ${cfg.tokenFile})"
     "--no-interactive"
     "--name ${escapeShellArg cfg.name}"
-  ] ++ map (l: "--label ${escapeShellArg l}") cfg.labels);
+    "--labels ${escapeShellArg (lib.concatStringsSep "," cfg.labels)}"
+  ]);
 in
 {
   options.services.forgejo-runner = {
@@ -168,6 +173,11 @@ in
       wantedBy    = [ "multi-user.target" ];
       after       = [ "network-online.target" ];
       wants       = [ "network-online.target" ];
+      # Idempotent: skip if already registered. This is a [Unit]-level
+      # directive in systemd, NOT a [Service] one. Putting it in
+      # serviceConfig causes systemd to log
+      # 'Unknown key ConditionPathExists in section [Service], ignoring'.
+      unitConfig.ConditionPathExists = "!/var/lib/forge-runner/.runner";
 
       serviceConfig = {
         Type            = "oneshot";
@@ -178,11 +188,15 @@ in
         # LoadCredential= mounts the token file at
         # $CREDENTIALS_DIRECTORY/token inside the unit. systemd sets
         # $CREDENTIALS_DIRECTORY=/run/credentials/<unitname> automatically.
-        # The mounted copy is owned by the unit's User.
+        # The mounted copy is owned by the unit's User, mode preserved.
         LoadCredential  = "token:${cfg.tokenFile}";
-        ExecStart       = "${pkgs.bash}/bin/bash -c 'exec ${pkgs.forgejo-runner}/bin/forgejo-runner register --config ${configFile} --token \"$(cat \"$CREDENTIALS_DIRECTORY/token\")\" --no-interactive --name ${escapeShellArg cfg.name} ${concatMapStringsSep " " (l: "--label ${escapeShellArg l}") cfg.labels}'";
-        # Belt-and-braces: if .runner exists, skip cleanly.
-        ConditionPathExists = "!/var/lib/forge-runner/.runner";
+        # Bash wrapper: registerArgs references $(cat ${cfg.tokenFile})
+        # which is the path on the host filesystem, but the unit sees the
+        # mounted copy at $CREDENTIALS_DIRECTORY/token. We rewrite at
+        # Nix-eval time so bash receives the in-unit path as a literal.
+        ExecStart = let
+          registerForUnit = lib.replaceStrings [cfg.tokenFile] ["\"\$CREDENTIALS_DIRECTORY/token\""] registerArgs;
+        in "${pkgs.bash}/bin/bash -c 'exec ${registerForUnit}'";
       };
     };
 
