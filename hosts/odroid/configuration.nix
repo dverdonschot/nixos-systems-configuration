@@ -503,6 +503,7 @@
   };
   services.forgejo-runner = {
     enable = true;
+    url = "https://forgejo.tail5bbc4.ts.net";
     name = "odroid-runner";
     labels = [ "self-hosted" "linux" "x86_64" "host=odroid" "size=small" ];
     capacity = 1;
