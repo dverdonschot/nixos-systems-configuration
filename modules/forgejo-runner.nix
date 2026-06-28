@@ -304,7 +304,13 @@ in
         NoNewPrivileges        = "true";
         PrivateTmp             = "true";
         ProtectSystem          = "strict";
-        ProtectHome            = "true";
+        # ProtectHome=true hides /run/user/, which prevents the daemon
+        # from seeing its own rootless docker socket at
+        # /run/user/<UID>/docker.sock. read-only still hides /home and
+        # /root from writes but leaves /run/user/ visible (read-only).
+        # The socket is a unix-domain socket — we connect to it; we
+        # never need to write into /run/user/.
+        ProtectHome            = "read-only";
         ProtectKernelTunables  = "true";
         ProtectKernelModules   = "true";
         ProtectControlGroups   = "true";
