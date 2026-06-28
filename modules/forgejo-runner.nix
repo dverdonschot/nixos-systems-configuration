@@ -47,9 +47,15 @@ let
       # dynamically at activation time, and the runner's empty docker_host
       # in config means "use DOCKER_HOST env var".
       # docker_host:    ""
-      options:        >-
-        --userns=keep-id
-
+      # container.options is left empty. Earlier we passed
+      # `--userns=keep-id` here to keep host UIDs in the container,
+      # but that flag is not a valid `--userns` mode (the valid modes
+      # are host|container|private|none) and docker rejects it with
+      # `--userns: invalid USER mode`. The runner passes `-u UID:GID`
+      # at container creation time using forge-runner's host UID
+      # (resolved via the wrapper ExecStart), so per-job UIDs align
+      # without us having to specify userns-mode here.
+      options:        ""
     host:
       workdir_parent: ${cfg.hostWorkdirParent}
 
