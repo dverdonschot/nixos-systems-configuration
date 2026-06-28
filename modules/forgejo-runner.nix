@@ -238,17 +238,12 @@ in
     systemd.services.forgejo-runner = {
       description = "Forgejo Actions runner daemon";
       wantedBy    = [ "multi-user.target" ];
-      after       = [
-        "network-online.target"
-        "forgejo-runner-register.service"
-      ];
-      wants       = [ "network-online.target" ];
-      # Note: we deliberately do NOT depend on the system `docker.service`.
-      # The runner uses forge-runner's per-user rootless dockerd, which
-      # lives at /run/user/<UID>/docker.sock and is launched via the
-      # user's systemd --user instance (set up by linger=true + the
-      # post-deploy steps below).
-
+      # We deliberately do NOT add an `After=user@<UID>.service` here.
+      # users.users.forge-runner.uid is null at eval time (NixOS assigns
+      # it via useradd at activation), so we cannot compute the unit
+      # name. Instead, linger=true ensures user-mode systemd runs the
+      # rootless dockerd at boot, and the ExecStartPre wait script
+      # discovers the socket with verbose logging.
       serviceConfig = {
         Type             = "simple";
         User             = "forge-runner";
@@ -267,27 +262,42 @@ in
             exec ${pkgs.forgejo-runner}/bin/forgejo-runner daemon --config ${configFile}
           '';
         in "${startScript}";
-        # Wait for the rootless docker socket to appear before starting
-        # the daemon. The socket is created by the user's systemd --user
-        # instance after the rootless dockerd is enabled. Without this,
-        # the daemon races the socket and fails on first boot.
-        #
-        # Written to a separate script in /nix/store to avoid systemd's
-        # unit-file parser getting confused by single quotes inside an
-        # ExecStart value.
         ExecStartPre = let
+          # Use Nix-provided store paths for the binaries so the script
+          # has no PATH dependency. systemd unit PATH is minimal and
+          # NixOS's /usr/bin/seq may not resolve correctly inside the
+          # hardened service environment.
+          idBin = "${pkgs.coreutils}/bin/id";
+          sleepBin = "${pkgs.coreutils}/bin/sleep";
+          curlBin = "${pkgs.curl}/bin/curl";
           waitScript = pkgs.writeShellScript "forgejo-runner-wait-docker" ''
-            set -e
-            uid=$(id -u forge-runner)
+            set -eu
+            uid=$(${idBin} -u forge-runner)
             socket="/run/user/$uid/docker.sock"
+            echo "forgejo-runner wait-docker: uid=$uid socket=$socket"
             for i in $(seq 1 120); do
-              if [ -S "$socket" ]; then exit 0; fi
-              sleep 1
+              if [ -S "$socket" ]; then
+                # Socket inode exists. Probe with curl to confirm the
+                # dockerd-rootless is actually listening. A stale
+                # socket (no listener) makes the runner fail later
+                # with a confusing "Cannot connect" error.
+                if ${curlBin} --unix-socket "$socket" -sS --max-time 2 \
+                     http://localhost/_ping >/dev/null 2>&1; then
+                  echo "forgejo-runner wait-docker: dockerd is listening (iter $i)"
+                  exit 0
+                else
+                  echo "forgejo-runner wait-docker: socket present but no listener (iter $i)"
+                fi
+              else
+                echo "forgejo-runner wait-docker: socket not present yet (iter $i)"
+              fi
+              ${sleepBin} 1
             done
-            echo "rootless docker socket $socket did not appear within 30s" >&2
+            echo "forgejo-runner wait-docker: gave up after 120s waiting on $socket" >&2
             exit 1
           '';
         in "${waitScript}";
+        TimeoutStartSec = "180";
         Restart          = "on-failure";
         RestartSec       = "5";
         # Hardening
