@@ -245,26 +245,40 @@ in
       # post-deploy steps below).
 
       serviceConfig = {
+        # We explicitly unset DOCKER_HOST here so the v12 runner's
+        # precedence order (env var > config) doesn't override our
+        # config.yaml `docker_host` setting. The runner's
+        # `setSocketVariable = true` host config sets DOCKER_HOST to
+        # /var/run/docker.sock in login sessions, and that env would
+        # otherwise leak into the daemon.
+        UnsetEnvironment = [ "DOCKER_HOST" ];
         Type             = "simple";
-        User             = "forge-runner";
         Group            = "forge-runner";
         WorkingDirectory = "/var/lib/forge-runner";
         # Wait for the rootless docker socket to appear before starting
         # the daemon. The socket is created by the user's systemd --user
         # instance after the rootless dockerd is enabled. Without this,
         # the daemon races the socket and fails on first boot.
+        # Wait for the rootless docker socket to appear before starting
+        # the daemon. The socket is created by the user's systemd --user
+        # instance after the rootless dockerd is enabled. Without this,
+        # the daemon races the socket and fails on first boot.
+        #
+        # Written to a separate script in /nix/store to avoid systemd's
+        # unit-file parser getting confused by single quotes inside an
+        # ExecStart value. (We've been bitten by this; see commit history.)
         ExecStartPre = let
           socket = "/run/user/${toString config.users.users.forge-runner.uid}/docker.sock";
-          waitScript = ''
+          waitScript = pkgs.writeShellScript "forgejo-runner-wait-docker" ''
             set -e
             for i in $(seq 1 30); do
-              if [ -S ${socket} ]; then exit 0; fi
+              if [ -S "${socket}" ]; then exit 0; fi
               sleep 1
             done
             echo "rootless docker socket ${socket} did not appear within 30s" >&2
             exit 1
           '';
-        in "${pkgs.bash}/bin/bash -c '${waitScript}'";
+        in "${waitScript}";
         ExecStart        = "${pkgs.forgejo-runner}/bin/forgejo-runner daemon --config ${configFile}";
         Restart          = "on-failure";
         RestartSec       = "5";
