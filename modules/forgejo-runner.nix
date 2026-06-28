@@ -41,7 +41,12 @@ let
       force_pull:     false
       runtime:        ""
       workdir_parent: ${cfg.containerWorkdirParent}
-      docker_host:    "unix:///run/user/${toString config.users.users.forge-runner.uid}/docker.sock"
+      # docker_host is left empty intentionally: users.users.forge-runner.uid
+      # is null at eval time (NixOS assigns UIDs at activation), so we
+      # can't bake a value in here. The wrapper ExecStart sets DOCKER_HOST
+      # dynamically at activation time, and the runner's empty docker_host
+      # in config means "use DOCKER_HOST env var".
+      # docker_host:    ""
       options:        >-
         --userns=keep-id
 
@@ -245,20 +250,23 @@ in
       # post-deploy steps below).
 
       serviceConfig = {
-        # We explicitly unset DOCKER_HOST here so the v12 runner's
-        # precedence order (env var > config) doesn't override our
-        # config.yaml `docker_host` setting. The runner's
-        # `setSocketVariable = true` host config sets DOCKER_HOST to
-        # /var/run/docker.sock in login sessions, and that env would
-        # otherwise leak into the daemon.
-        UnsetEnvironment = [ "DOCKER_HOST" ];
         Type             = "simple";
+        User             = "forge-runner";
         Group            = "forge-runner";
         WorkingDirectory = "/var/lib/forge-runner";
-        # Wait for the rootless docker socket to appear before starting
-        # the daemon. The socket is created by the user's systemd --user
-        # instance after the rootless dockerd is enabled. Without this,
-        # the daemon races the socket and fails on first boot.
+        # Wrapper script: resolves forge-runner's runtime UID via
+        # `id -u`, exports DOCKER_HOST pointing at the rootless socket,
+        # and execs the actual daemon. We can't bake the UID into the
+        # unit file at eval time because users.users.forge-runner.uid is
+        # null until NixOS activates the user record.
+        ExecStart = let
+          startScript = pkgs.writeShellScript "forgejo-runner-start" ''
+            set -e
+            uid=$(id -u forge-runner)
+            export DOCKER_HOST="unix:///run/user/$uid/docker.sock"
+            exec ${pkgs.forgejo-runner}/bin/forgejo-runner daemon --config ${configFile}
+          '';
+        in "${startScript}";
         # Wait for the rootless docker socket to appear before starting
         # the daemon. The socket is created by the user's systemd --user
         # instance after the rootless dockerd is enabled. Without this,
@@ -266,20 +274,20 @@ in
         #
         # Written to a separate script in /nix/store to avoid systemd's
         # unit-file parser getting confused by single quotes inside an
-        # ExecStart value. (We've been bitten by this; see commit history.)
+        # ExecStart value.
         ExecStartPre = let
-          socket = "/run/user/${toString config.users.users.forge-runner.uid}/docker.sock";
           waitScript = pkgs.writeShellScript "forgejo-runner-wait-docker" ''
             set -e
+            uid=$(id -u forge-runner)
+            socket="/run/user/$uid/docker.sock"
             for i in $(seq 1 30); do
-              if [ -S "${socket}" ]; then exit 0; fi
+              if [ -S "$socket" ]; then exit 0; fi
               sleep 1
             done
-            echo "rootless docker socket ${socket} did not appear within 30s" >&2
+            echo "rootless docker socket $socket did not appear within 30s" >&2
             exit 1
           '';
         in "${waitScript}";
-        ExecStart        = "${pkgs.forgejo-runner}/bin/forgejo-runner daemon --config ${configFile}";
         Restart          = "on-failure";
         RestartSec       = "5";
         # Hardening
