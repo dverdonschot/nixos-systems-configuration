@@ -31,18 +31,22 @@ let
       enabled: false
 
     container:
-      # Rootless Docker is already enabled on the host. The runner
-      # spawns one ephemeral container per job as UID `forge` (1000)
-      # with --userns=keep-id so bind mounts map back to forge-runner.
-      network:     ""
-      options:     >-
+      # Rootless Docker. The runner uses forge-runner's per-user dockerd
+      # (set up via the systemd --user instance, see the post-deploy
+      # steps in docs/runners.md). The socket lives at
+      # /run/user/<UID>/docker.sock. Container workdir_parent defaults
+      # to /workspace inside the container.
+      network:        ""
+      privileged:     false
+      force_pull:     false
+      runtime:        ""
+      workdir_parent: ${cfg.containerWorkdirParent}
+      docker_host:    "unix:///run/user/${toString config.users.users.forge-runner.uid}/docker.sock"
+      options:        >-
         --userns=keep-id
-      privileged:  false
-      force_pull:  false
-      runtime:     ""
 
     host:
-      workdir_parent: /var/lib/forge-runner/work
+      workdir_parent: ${cfg.hostWorkdirParent}
 
   '' + cfg.extraConfig);
 
@@ -121,9 +125,25 @@ in
       default = 300;
       description = "Timeout for fetching the runner's repository checkout.";
     };
+    hostWorkdirParent = mkOption {
+      type = types.str;
+      default = "/var/lib/forge-runner/work";
+      description = ''
+        Where job working directories live on the host (not the
+        container). Per the v12 schema, this is the `host.workdir_parent`.
+      '';
+    };
+
+    containerWorkdirParent = mkOption {
+      type = types.str;
+      default = "/var/lib/forge-runner/container-work";
+      description = ''
+        Container-side workdir parent. Per the v12 schema, this is
+        the `container.workdir_parent`. Must be an absolute path.
+      '';
+    };
 
     extraConfig = mkOption {
-      type = types.lines;
       default = "";
       description = ''
         Extra YAML to append to the generated config.yaml verbatim.
@@ -160,9 +180,17 @@ in
       createHome   = true;
       homeMode     = "0750";
       description  = "Forgejo Actions runner daemon account";
-      shell        = pkgs.runtimeShell;  # /bin/sh for systemd only; no interactive login
-      # No password. Member of 'docker' so rootless Docker works for spawned job containers.
-      extraGroups  = [ "docker" ];
+      shell        = pkgs.runtimeShell;
+      # Rootless Docker setup:
+      #   linger = true      → enables user-mode systemd at boot, so the
+      #                        rootless dockerd can run as a user service.
+      #   subUid/subGidRanges → namespaced UID/GID range for rootless
+      #                        Docker. Standard 65k range starting at
+      #                        100000. This range is written to /etc/subuid
+      #                        and /etc/subgid by NixOS at activation.
+      linger       = true;
+      subUidRanges = [{ startUid = 100000; count = 65536; }];
+      subGidRanges = [{ startGid = 100000; count = 65536; }];
     };
 
     users.groups.forge-runner = { };
@@ -207,17 +235,36 @@ in
       wantedBy    = [ "multi-user.target" ];
       after       = [
         "network-online.target"
-        "docker.service"
         "forgejo-runner-register.service"
       ];
       wants       = [ "network-online.target" ];
-      requires    = [ "docker.service" ];
+      # Note: we deliberately do NOT depend on the system `docker.service`.
+      # The runner uses forge-runner's per-user rootless dockerd, which
+      # lives at /run/user/<UID>/docker.sock and is launched via the
+      # user's systemd --user instance (set up by linger=true + the
+      # post-deploy steps below).
 
       serviceConfig = {
         Type             = "simple";
         User             = "forge-runner";
         Group            = "forge-runner";
         WorkingDirectory = "/var/lib/forge-runner";
+        # Wait for the rootless docker socket to appear before starting
+        # the daemon. The socket is created by the user's systemd --user
+        # instance after the rootless dockerd is enabled. Without this,
+        # the daemon races the socket and fails on first boot.
+        ExecStartPre = let
+          socket = "/run/user/${toString config.users.users.forge-runner.uid}/docker.sock";
+          waitScript = ''
+            set -e
+            for i in $(seq 1 30); do
+              if [ -S ${socket} ]; then exit 0; fi
+              sleep 1
+            done
+            echo "rootless docker socket ${socket} did not appear within 30s" >&2
+            exit 1
+          '';
+        in "${pkgs.bash}/bin/bash -c '${waitScript}'";
         ExecStart        = "${pkgs.forgejo-runner}/bin/forgejo-runner daemon --config ${configFile}";
         Restart          = "on-failure";
         RestartSec       = "5";
@@ -229,7 +276,10 @@ in
         ProtectKernelTunables  = "true";
         ProtectKernelModules   = "true";
         ProtectControlGroups   = "true";
-        RestrictAddressFamilies = "AF_INET AF_INET6 AF_NETLINK";
+        # AF_UNIX is needed to reach the docker socket. The runner
+        # only talks to forge-runner's rootless socket at
+        # /run/user/<UID>/docker.sock — no other AF_UNIX endpoints.
+        RestrictAddressFamilies = "AF_UNIX AF_INET AF_INET6 AF_NETLINK";
         UMask                  = "0077";
       };
     };
