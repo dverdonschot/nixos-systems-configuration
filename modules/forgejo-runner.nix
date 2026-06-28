@@ -280,7 +280,7 @@ in
             set -e
             uid=$(id -u forge-runner)
             socket="/run/user/$uid/docker.sock"
-            for i in $(seq 1 30); do
+            for i in $(seq 1 120); do
               if [ -S "$socket" ]; then exit 0; fi
               sleep 1
             done
