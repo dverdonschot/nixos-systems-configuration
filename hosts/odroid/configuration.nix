@@ -11,6 +11,7 @@
       ../../modules/unbound-dns.nix
       ../../modules/persistant-udp-gro-tailscale.nix
       ../../modules/tailscale-lan-router.nix
+      ../../modules/forgejo-runner.nix
       #<home-manager/nixos>
       ../../nix-containers/search-container.nix
       ../../nix-containers/forgejo-container.nix
@@ -500,7 +501,17 @@
     tailNet = "tail5bbc4.ts.net";
     ipAddress = "192.168.100.26";
   };
-
+  services.forgejo-runner = {
+    enable = true;
+    url = "https://forgejo.tail5bbc4.ts.net";
+    name = "odroid-runner";
+    labels = [ "self-hosted" "linux" "x86_64" "host=odroid" "size=small" ];
+    capacity = 1;
+    # Token file at default path; must be created out-of-band:
+    #   sudo install -m 600 -o forge-runner -g forge-runner \
+    #     /dev/null /etc/nixos/secrets/forgejo-runner-token
+    #   sudo -u forge-runner vi /etc/nixos/secrets/forgejo-runner-token
+  };
   services.prometheus-container = {
     enable = true;
     tailNet = "tail5bbc4.ts.net";
