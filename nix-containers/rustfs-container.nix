@@ -163,7 +163,10 @@ in {
             RUSTFS_VOLUMES = "/${cfg.containerName}/data";
             RUSTFS_ADDRESS = "0.0.0.0:9000";
             RUSTFS_CONSOLE_ENABLE = "true";
-            RUSTFS_CONSOLE_ADDRESS = "127.0.0.1:9001";
+            # Bind to 0.0.0.0 so the in-container Caddy can reverse-proxy
+            # /gui on the rustfs.<tailNet> vhost to the console. nspawn
+            # `privateNetwork` keeps the port off the host firewall.
+            RUSTFS_CONSOLE_ADDRESS = "0.0.0.0:9001";
             RUST_LOG = "info";
             RUSTFS_ACCESS_KEY_FILE = "%d/access-key";
             RUSTFS_SECRET_KEY_FILE = "%d/secret-key";
@@ -179,7 +182,24 @@ in {
           enable = true;
           extraConfig = ''
             ${cfg.containerName}.${cfg.tailNet} {
-              reverse_proxy ${cfg.ipAddress}:9000
+              # Path matcher matches /gui exactly AND /gui/* (anything
+              # with a slash after /gui). The strip_prefix /gui then
+              # removes the /gui prefix before the request is forwarded
+              # to the upstream console, so the SPA sees paths like /
+              # and /static/app.js instead of /gui and /gui/static/app.js.
+              #
+              # Edge case: a future S3 bucket whose name starts with
+              # /gui (e.g. /guidelines) is sent to the console instead
+              # of S3. Acceptable for this lab; tighten with `path
+              # /gui /gui/*` -> `path /gui /gui/` if it ever matters.
+              @gui path /gui /gui/*
+              handle @gui {
+                uri strip_prefix /gui
+                reverse_proxy localhost:9001
+              }
+              handle {
+                reverse_proxy ${cfg.ipAddress}:9000
+              }
             }
           '';
         };
