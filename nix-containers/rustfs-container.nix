@@ -163,7 +163,10 @@ in {
             RUSTFS_VOLUMES = "/${cfg.containerName}/data";
             RUSTFS_ADDRESS = "0.0.0.0:9000";
             RUSTFS_CONSOLE_ENABLE = "true";
-            RUSTFS_CONSOLE_ADDRESS = "127.0.0.1:9001";
+            # Bind to 0.0.0.0 so the in-container Caddy can reverse-proxy
+            # /gui on the rustfs.<tailNet> vhost to the console. nspawn
+            # `privateNetwork` keeps the port off the host firewall.
+            RUSTFS_CONSOLE_ADDRESS = "0.0.0.0:9001";
             RUST_LOG = "info";
             RUSTFS_ACCESS_KEY_FILE = "%d/access-key";
             RUSTFS_SECRET_KEY_FILE = "%d/secret-key";
@@ -179,7 +182,31 @@ in {
           enable = true;
           extraConfig = ''
             ${cfg.containerName}.${cfg.tailNet} {
-              reverse_proxy ${cfg.ipAddress}:9000
+              # The rustfs console and its admin/SigV4 API must share the
+              # same origin (host + port + path base). The console's JS
+              # hard-codes /rustfs/admin/v3/* and /rustfs/console/*, and
+              # the SigV4 middleware on port 9000 (built via s3s) only
+              # honors signatures when the request lands on that origin.
+              # Reverse-proxying /gui to a *different* port (9001) breaks
+              # this — see rustfs/rustfs issues #2433, #3062, #151, and
+              # the "Signature is required" error reproduced from issue
+              # #2924. So: send /rustfs/* (and everything else) to 9000
+              # and only use a 302 redirect for the /gui convenience
+              # alias. Port 9001 stays bound for tailscale-internal
+              # debugging only — the public path always lands on 9000.
+              handle /rustfs/* {
+                reverse_proxy ${cfg.ipAddress}:9000
+              }
+              # /gui -> canonical rustfs console entrypoint, same origin.
+              # Caddyfile: only one matcher token is allowed in the
+              # directive position. Multi-path OR uses a named @block.
+              @gui path /gui /gui/*
+              handle @gui {
+                redir https://{host}/rustfs/console/ 302
+              }
+              handle {
+                reverse_proxy ${cfg.ipAddress}:9000
+              }
             }
           '';
         };
