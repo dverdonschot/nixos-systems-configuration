@@ -163,7 +163,11 @@ in {
             RUSTFS_VOLUMES = "/${cfg.containerName}/data";
             RUSTFS_ADDRESS = "0.0.0.0:9000";
             RUSTFS_CONSOLE_ENABLE = "true";
-            RUSTFS_CONSOLE_ADDRESS = "127.0.0.1:9001";
+            # Bind to 0.0.0.0 so the in-container Caddy (reverse-proxied via
+            # the rustfs-gui.<tailNet> vhost) can reach the console. The
+            # nspawn `privateNetwork` ensures only the container bridge can
+            # hit 9001, so this is not externally exposed.
+            RUSTFS_CONSOLE_ADDRESS = "0.0.0.0:9001";
             RUST_LOG = "info";
             RUSTFS_ACCESS_KEY_FILE = "%d/access-key";
             RUSTFS_SECRET_KEY_FILE = "%d/secret-key";
@@ -180,6 +184,9 @@ in {
           extraConfig = ''
             ${cfg.containerName}.${cfg.tailNet} {
               reverse_proxy ${cfg.ipAddress}:9000
+            }
+            ${cfg.containerName}-gui.${cfg.tailNet} {
+              reverse_proxy localhost:9001
             }
           '';
         };
