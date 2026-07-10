@@ -163,7 +163,7 @@ in {
             RUSTFS_VOLUMES = "/${cfg.containerName}/data";
             RUSTFS_ADDRESS = "0.0.0.0:9000";
             RUSTFS_CONSOLE_ENABLE = "true";
-            RUSTFS_CONSOLE_ADDRESS = "127.0.0.1:9001";
+            RUSTFS_CONSOLE_ADDRESS = "0.0.0.0:8443";
             RUST_LOG = "info";
             RUSTFS_ACCESS_KEY_FILE = "%d/access-key";
             RUSTFS_SECRET_KEY_FILE = "%d/secret-key";
@@ -178,14 +178,28 @@ in {
         services.caddy = {
           enable = true;
           extraConfig = ''
+            # S3+admin stack on :9000, standalone console listener on :8443.
+            # All paths other than /rustfs/console/* and /favicon.ico go to :9000
+            # (which serves the SigV4-signed S3 API + admin endpoints). Console
+            # static assets and discovery endpoints under /rustfs/console/*
+            # are routed to :8443 (the standalone console listener). The path-
+            # based split is required: rustfs's console and admin API must
+            # share the same origin or s3s SigV4 will reject signed
+            # cross-origin calls. See upstream issue #2433.
             ${cfg.containerName}.${cfg.tailNet} {
-              reverse_proxy ${cfg.ipAddress}:9000
+              @console path /rustfs/console/* /rustfs/console /favicon.ico
+              handle @console {
+                reverse_proxy ${cfg.ipAddress}:8443
+              }
+              handle {
+                reverse_proxy ${cfg.ipAddress}:9000
+              }
             }
           '';
         };
 
         # open https port
-        networking.firewall.allowedTCPPorts = [ 443 9000 ];
+        networking.firewall.allowedTCPPorts = [ 443 8443 9000 ];
 
         system.stateVersion = "25.05";
       };

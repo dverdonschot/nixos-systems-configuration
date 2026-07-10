@@ -86,11 +86,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1779522750,
-        "narHash": "sha256-IhAhPWYMomohxWmh/u/x8B44hIkt3IcuL2bsKb+vl5U=",
+        "lastModified": 1781317333,
+        "narHash": "sha256-qnjeFFELEyOO0vkubMB96WCuFzkvftTZ/LE/VctU+SE=",
         "owner": "rustfs",
         "repo": "rustfs-flake",
-        "rev": "31e193047ef40f702261a93f47889c1b1962d10a",
+        "rev": "1d3ef7296a7b22b4b9849d0766f53a0300bce893",
         "type": "github"
       },
       "original": {
