@@ -86,14 +86,18 @@
         ]
       },
       "locked": {
-        "path": "./nix/pkgs/rustfs-patched",
-        "type": "path"
+        "lastModified": 1781317333,
+        "narHash": "sha256-qnjeFFELEyOO0vkubMB96WCuFzkvftTZ/LE/VctU+SE=",
+        "owner": "rustfs",
+        "repo": "rustfs-flake",
+        "rev": "1d3ef7296a7b22b4b9849d0766f53a0300bce893",
+        "type": "github"
       },
       "original": {
-        "path": "./nix/pkgs/rustfs-patched",
-        "type": "path"
-      },
-      "parent": []
+        "owner": "rustfs",
+        "repo": "rustfs-flake",
+        "type": "github"
+      }
     },
     "spectrum": {
       "flake": false,
