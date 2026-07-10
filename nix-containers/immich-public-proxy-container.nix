@@ -1,9 +1,9 @@
 { lib, pkgs, config, ... }:
 with lib;
 let
-  cfg = config.services.immich-public-proxy;
+  cfg = config.services.immich-public-proxy-container;
 in {
-  options.services.immich-public-proxy = {
+  options.services.immich-public-proxy-container = {
     enable = mkEnableOption "Enable immich-public-proxy service";
     tailNet = mkOption {
       type = types.str;
