@@ -15,7 +15,7 @@ in {
     };
     ipAddress = mkOption {
       type = types.str;
-      default = "192.168.100.12";
+      default = "192.168.100.42";
     };
     hostAddress = mkOption {
       type = types.str;
