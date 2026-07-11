@@ -2,6 +2,12 @@
 with lib;
 let
   cfg = config.services.immich-public-proxy-container;
+  ipp301 = pkgs.callPackage (pkgs.fetchFromGitHub {
+    owner = "alangrainger";
+    repo = "immich-public-proxy";
+    rev = "v3.0.1";
+    hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+  }) {};
 in {
   options.services.immich-public-proxy-container = {
     enable = mkEnableOption "Enable immich-public-proxy service";
@@ -84,6 +90,7 @@ in {
 
         services.immich-public-proxy = {
           enable = true;
+          package = ipp301;
           port = 3000;
           immichUrl = "https://immich.${cfg.tailNet}";
           openFirewall = false;
