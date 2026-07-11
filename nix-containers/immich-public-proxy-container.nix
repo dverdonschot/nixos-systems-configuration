@@ -2,12 +2,19 @@
 with lib;
 let
   cfg = config.services.immich-public-proxy-container;
-  ipp301 = pkgs.callPackage (pkgs.fetchFromGitHub {
-    owner = "alangrainger";
-    repo = "immich-public-proxy";
-    rev = "v3.0.1";
-    hash = "sha256-y7y21AEMGHtynsguKp8HmTqZni5dIc7qjt2PQnsxN90=";
-  }) {};
+  ipp301 = pkgs.buildNpmPackage rec {
+    pname = "immich-public-proxy";
+    version = "3.0.1";
+
+    src = pkgs.fetchFromGitHub {
+      owner = "alangrainger";
+      repo = "immich-public-proxy";
+      rev = "v${version}";
+      hash = "sha256-y7y21AEMGHtynsguKp8HmTqZni5dIc7qjt2PQnsxN90=";
+    };
+
+    npmDepsHash = "sha256-REPLACE_ME_TOO";
+  };
 in {
   options.services.immich-public-proxy-container = {
     enable = mkEnableOption "Enable immich-public-proxy service";
