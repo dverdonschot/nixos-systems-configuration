@@ -12,8 +12,6 @@ let
       rev = "v${version}";
       hash = "sha256-y7y21AEMGHtynsguKp8HmTqZni5dIc7qjt2PQnsxN90=";
     };
-
-    npmDepsHash = "sha256-REPLACE_ME_TOO";
   };
 in {
   options.services.immich-public-proxy-container = {
