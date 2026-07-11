@@ -85,7 +85,7 @@ in {
         services.immich-public-proxy = {
           enable = true;
           port = 3000;
-          immichUrl = "immich.${cfg.tailNet}";
+          immichUrl = "https://immich.${cfg.tailNet}";
           openFirewall = false;
         };
         services.tailscale = {
