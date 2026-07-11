@@ -17,8 +17,17 @@ let
 
     npmDepsHash = "sha256-a7qiiIvkDqxj1ZUBONLlZ49LSM8UpGIis/NXt5wEDjw=";
 
+    # The upstream `bin` stub from package.json has a `#!/usr/bin/env node`
+    # shebang, which won't resolve at runtime. Replace it with a binary wrapper
+    # that invokes nodejs from a known path, and set `mainProgram` to the
+    # bin entry name so `lib.getExe` in the upstream NixOS service resolves.
+    nativeBuildInputs = [ pkgs.makeBinaryWrapper ];
+    postInstall = ''
+      wrapProgram $out/bin/immich-public-proxy \
+        --prefix PATH : ${lib.makeBinPath [ pkgs.nodejs ]}
+    '';
 
-    meta.mainProgram = "node";
+    meta.mainProgram = "immich-public-proxy";
   };
 in {
   options.services.immich-public-proxy-container = {
