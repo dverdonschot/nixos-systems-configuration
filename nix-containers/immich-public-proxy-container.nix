@@ -12,6 +12,12 @@ let
       rev = "v${version}";
       hash = "sha256-y7y21AEMGHtynsguKp8HmTqZni5dIc7qjt2PQnsxN90=";
     };
+
+    # The npm project lives in the `app/` subdirectory of the repo.
+    npmDepsHash = "sha256-a7qiiIvkDqxj1ZUBONLlZ49LSM8UpGIis/NXt5wEDjw=";
+
+
+    meta.mainProgram = "node";
   };
 in {
   options.services.immich-public-proxy-container = {
