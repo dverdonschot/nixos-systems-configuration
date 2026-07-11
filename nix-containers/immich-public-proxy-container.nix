@@ -6,7 +6,7 @@ let
     owner = "alangrainger";
     repo = "immich-public-proxy";
     rev = "v3.0.1";
-    hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+    hash = "sha256-y7y21AEMGHtynsguKp8HmTqZni5dIc7qjt2PQnsxN90=";
   }) {};
 in {
   options.services.immich-public-proxy-container = {
