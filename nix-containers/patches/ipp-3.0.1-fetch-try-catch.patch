@@ -1,5 +1,5 @@
---- immich-public-proxy-3.0.1.orig/app/src/immich.ts	2026-07-12 10:25:36.711425985 +0200
-+++ immich-public-proxy-3.0.1.new/app/src/immich.ts	2026-07-12 10:26:47.733762644 +0200
+--- a/app/src/immich.ts
++++ b/app/src/immich.ts
 @@ -245,7 +245,19 @@
      [keyType]: key
    })
