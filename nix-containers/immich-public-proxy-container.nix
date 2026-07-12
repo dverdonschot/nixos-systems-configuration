@@ -129,26 +129,20 @@ in {
         };
         services.tailscale = {
           enable = true;
-          # permit caddy to get certs from tailscale
-          permitCertUid = "caddy";
+          # Tailscale Serve handles TLS termination for the container's
+          # tailnet identity on port 443. tailscaled reads the cert from
+          # its own state, so no permitCertUid is needed.
+          serve = {
+            enable = true;
+            services.${cfg.containerName} = {
+              endpoints = {
+                "tcp:443" = "http://localhost:3000";
+              };
+            };
+          };
         };
 
 
-
-        services.caddy = {
-          enable = true;
-          extraConfig = ''
-
-            immich-public-proxy.${cfg.tailNet} {
-              reverse_proxy localhost:3000
-            }
-
-          '';
-        };
-
-
-        # open https port
-        networking.firewall.allowedTCPPorts = [ 443 ];
 
         system.stateVersion = "25.05";
 
