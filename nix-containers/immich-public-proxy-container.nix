@@ -12,10 +12,21 @@ let
       rev = "v${version}";
       hash = "sha256-y7y21AEMGHtynsguKp8HmTqZni5dIc7qjt2PQnsxN90=";
     };
+    # Local patch: wrap the two raw `fetch()` call sites in `immich.ts` so a
+    # tailscale/Immich network blip doesn't propagate as an unhandledRejection
+    # that kills the process. See nix-containers/patches/ipp-3.0.1-fetch-try-catch.patch.
+    patches = [ ./patches/ipp-3.0.1-fetch-try-catch.patch ];
     # The npm project lives in the `app/` subdirectory of the repo.
     sourceRoot = "source/app";
 
     npmDepsHash = "sha256-a7qiiIvkDqxj1ZUBONLlZ49LSM8UpGIis/NXt5wEDjw=";
+    # NOTE: the local patch above changes the source tree, which means
+    # `npmDepsHash` (computed from `package-lock.json` content over the
+    # patched source) MUST be updated on first rebuild. Run
+    # `nix prefetch-npm-deps --hash-style=sha256 /path/to/patched/app/package-lock.json`
+    # from a fresh extract (or let `nixos-rebuild` print the expected hash on
+    # mismatch and replace this line with the printed value).
+    # Last verified hash corresponds to upstream v3.0.1 + this patch.
 
     # The upstream `bin` stub from package.json has a `#!/usr/bin/env node`
     # shebang, which won't resolve at runtime. Replace it with a binary wrapper
