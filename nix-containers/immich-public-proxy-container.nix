@@ -40,6 +40,16 @@ let
 
     meta.mainProgram = "immich-public-proxy";
   };
+  # Tailscale Serve configuration for this container. Built here (rather than
+  # via services.tailscale.serve.configFile) so the path is a plain file
+  # derivation we can reference directly from our own systemd unit. Format
+  # documented at https://tailscale.com/kb/1589/tailscale-services-configuration-file
+  ippServeConfigFile = pkgs.writeText "tailscale-serve-config.json" (builtins.toJSON {
+    version = "0.0.1";
+    services."svc:${cfg.containerName}" = {
+      endpoints = { "tcp:443" = "http://localhost:3000"; };
+    };
+  });
 in {
   options.services.immich-public-proxy-container = {
     enable = mkEnableOption "Enable immich-public-proxy service";
@@ -131,15 +141,47 @@ in {
           enable = true;
           # Tailscale Serve handles TLS termination for the container's
           # tailnet identity on port 443. tailscaled reads the cert from
-          # its own state, so no permitCertUid is needed.
-          serve = {
-            enable = true;
-            services.${cfg.containerName} = {
-              endpoints = {
-                "tcp:443" = "http://localhost:3000";
-              };
-            };
+          # its own state, so no permitCertUid is needed. We disable the
+          # upstream `serve` submodule (see below) and own the config +
+          # systemd unit ourselves, because the upstream unit runs
+          # `tailscale serve set-config` immediately after tailscaled
+          # starts, before tailscaled has reached `Running` state. That
+          # fails with `unexpected state: NoState` on first boot.
+          serve.enable = false;
+        };
+
+        # Replace the upstream tailscale-serve.service with our own that
+        # polls for state == Running before applying the config.
+        systemd.services.tailscale-serve.enable = false;
+        systemd.services.ipp-tailscale-serve = {
+          description = "Tailscale Serve Configuration (with state wait)";
+          after = [ "tailscaled.service" "tailscaled-autoconnect.service" ];
+          wants = [ "tailscaled.service" ];
+          wantedBy = [ "multi-user.target" ];
+          restartTriggers = [ ippServeConfigFile ];
+          serviceConfig = let
+            tsBin = lib.getExe config.services.tailscale.package;
+            jqBin = "${pkgs.jq}/bin/jq";
+            script = ''
+              state=NoState
+              for i in $(seq 1 60); do
+                state=$(${tsBin} status --json --peers=false 2>/dev/null \
+                  | ${jqBin} -r .BackendState)
+                [ "$state" = Running ] && break
+                sleep 1
+              done
+              if [ "$state" != Running ]; then
+                echo "ipp-tailscale-serve: tailscaled did not reach Running in 60s (state=$state)" >&2
+                exit 1
+              fi
+              exec ${tsBin} serve set-config --all ${ippServeConfigFile}
+            '';
+          in {
+            Type = "oneshot";
+            RemainAfterExit = true;
+            ExecStart = "/bin/sh -c ${pkgs.lib.escapeShellArg script}";
           };
+          path = [ pkgs.coreutils pkgs.jq config.services.tailscale.package ];
         };
 
 
