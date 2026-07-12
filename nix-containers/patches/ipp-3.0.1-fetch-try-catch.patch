@@ -1,5 +1,5 @@
---- a/app/src/immich.ts
-+++ b/app/src/immich.ts
+--- a/src/immich.ts
++++ b/src/immich.ts
 @@ -245,7 +245,19 @@
      [keyType]: key
    })
