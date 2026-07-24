@@ -20,7 +20,6 @@
       ../../nix-containers/grafana-container.nix
       ../../nix-containers/hoarder-container.nix
       ../../nix-containers/homepage.nix
-      ../../nix-containers/immich-public-proxy-container.nix
       ../../nix-containers/jellyfin-container.nix
       ../../nix-containers/metube-container.nix
       ../../nix-containers/pinchflat-container.nix
@@ -536,11 +535,6 @@
   };
 
   services.homepage = {
-    enable = true;
-    tailNet = "tail5bbc4.ts.net";
-  };
-
-  services.immich-public-proxy-container = {
     enable = true;
     tailNet = "tail5bbc4.ts.net";
   };
