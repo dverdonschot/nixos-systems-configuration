@@ -455,6 +455,11 @@
     openFirewall = true;
   };
 
+  services.duplicati = {
+    enable = true;
+    interface = "any";
+    user = "root";
+  };
 
 #  services.caddy = {
 #    enable = true;
