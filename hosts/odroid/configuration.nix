@@ -246,6 +246,7 @@
     gnome-terminal
     tree
     nix-index
+    duplicati
     niv
     bottom
     # images
